@@ -1,0 +1,6 @@
+activisionCodeMessage: |
+  <p>
+    کد فعال سازی شما
+    <strong>{{ code }}</strong>
+    می‌باشد.
+  </p>

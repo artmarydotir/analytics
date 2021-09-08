@@ -1,0 +1,8 @@
+# api
+app/api/coverage/
+app/api/node_modules/
+
+# front-cp
+app/front-cp/.nuxt/
+app/front-cp/dist/
+app/front-cp/node_modules/

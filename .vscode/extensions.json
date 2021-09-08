@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "EditorConfig.EditorConfig",
+    "esbenp.prettier-vscode",
+    "graphql.vscode-graphql",
+    "mikestead.dotenv",
+    "streetsidesoftware.code-spell-checker",
+    "octref.vetur"
+  ]
+}

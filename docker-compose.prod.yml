@@ -1,0 +1,37 @@
+# Copyright(c) 2021 aasaam software development group
+version: "3"
+
+services:
+  # backend
+  analytic-backend:
+    container_name: analytic-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    working_dir: /app/backend
+    environment:
+      ASM_PUBLIC_APP_TEST: "false"
+
+  # front and nginx
+  analytic-web:
+    container_name: analytic-web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - 80:80
+    environment:
+      ASM_NGINX_WORKER_PROCESSES: ${ASM_NGINX_WORKER_PROCESSES:-2}
+      ASM_NGINX_WORKER_RLIMIT_NOFILE: ${ASM_NGINX_WORKER_RLIMIT_NOFILE:-1024}
+      ASM_NGINX_WORKER_CONNECTIONS: ${ASM_NGINX_WORKER_CONNECTIONS:-512}
+      ASM_NGINX_ERROR_LOG_LEVEL: ${ASM_NGINX_ERROR_LOG_LEVEL:-warn}
+      ASM_NGINX_TMPFS_CACHE_SIZE_MB: ${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-128}
+      ASM_APP_PORT: ${ASM_APP_PORT:-3001}
+      ASM_PUBLIC_BASE_URL: ${ASM_PUBLIC_BASE_URL:-/}
+    tmpfs:
+      - /nginx-tmpfs:rw,nodev,nosuid,noexec,noatime,size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-192}m
+
+  # databases
+  analytic-redis:
+    container_name: analytic-redis
+    image: redis:6

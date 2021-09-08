@@ -1,0 +1,140 @@
+# Copyright(c) 2021 aasaam software development group
+version: "3"
+
+services:
+  analytic-api:
+    container_name: analytic-api
+    depends_on:
+      - analytic-redis
+      - analytic-postgres
+    build:
+      context: .
+      dockerfile: Dockerfile.dev.api
+      args:
+        PROXY_HTTP: ${PROXY_HTTP}
+    working_dir: /app/api
+    ports:
+      - ${ASM_APP_PORT:-3000}:${ASM_APP_PORT:-3000}
+
+    volumes:
+      - ./storage:/storage
+
+      # development
+      - ./app/api:/app/api
+
+      # cache
+      - ./tmp/.npm:/.npm
+
+      # logs
+      - ./tmp/logs:/logs
+    environment:
+      ASM_PUBLIC_APP_TEST: "true"
+    command: tail -f /dev/null
+
+  analytic-front-cp:
+    container_name: analytic-front-cp
+    depends_on:
+      - analytic-api
+    environment:
+      ASM_FRONT_CP_PORT: ${ASM_FRONT_CP_PORT:-3000}
+      ASM_FRONT_CP_PATH: ${ASM_FRONT_CP_PATH:-_cp}
+    image: node:16-bullseye-slim
+    working_dir: /app/front-cp
+
+    volumes:
+      # development
+      - ./app/front-cp:/app/front-cp
+
+      # cache
+      - ./tmp/.npm:/root/.npm
+    command: tail -f /dev/null
+
+  analytic-nginx:
+    container_name: analytic-nginx
+    image: nginx:1
+    depends_on:
+      - analytic-api
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      ASM_NGINX_WORKER_PROCESSES: ${ASM_NGINX_WORKER_PROCESSES:-2}
+      ASM_NGINX_WORKER_RLIMIT_NOFILE: ${ASM_NGINX_WORKER_RLIMIT_NOFILE:-1024}
+      ASM_NGINX_WORKER_CONNECTIONS: ${ASM_NGINX_WORKER_CONNECTIONS:-512}
+      ASM_NGINX_ERROR_LOG_LEVEL: ${ASM_NGINX_ERROR_LOG_LEVEL:-debug}
+      ASM_NGINX_TMPFS_CACHE_SIZE_MB: ${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-128}
+      ASM_NGINX_LARGE_CACHE_SIZE_MB: ${ASM_NGINX_LARGE_CACHE_SIZE_MB:-2048}
+      ASM_NGINX_LIMIT_CONNECTION: ${ASM_NGINX_LIMIT_CONNECTION:-16}
+      ASM_NGINX_LIMIT_RPS: ${ASM_NGINX_LIMIT_RPS:-4}
+      ASM_NGINX_LIMIT_RATE_KBS: ${ASM_NGINX_LIMIT_RATE_KBS:-32}
+      ASM_NGINX_LIMIT_BURST: ${ASM_NGINX_LIMIT_BURST:-64}
+      ASM_NGINX_LIMIT_RATE_AFTER_MB: ${ASM_NGINX_LIMIT_RATE_AFTER_MB:-1}
+      ASM_APP_PORT: ${ASM_APP_PORT:-3001}
+      ASM_FRONT_CP_PORT: ${ASM_FRONT_CP_PORT:-3000}
+      ASM_FRONT_CP_PATH: ${ASM_FRONT_CP_PATH:-_cp}
+
+      # public
+      ASM_PUBLIC_APP_NS: ${ASM_PUBLIC_APP_NS:-test}
+      ASM_PUBLIC_BASE_URL: ${ASM_PUBLIC_BASE_URL:-/}
+      ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES: ${ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES:-4194304}
+    tmpfs:
+      - /nginx-tmpfs:rw,nodev,nosuid,noexec,noatime,size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-192}m
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/mime.types:/etc/nginx/mime.types:ro
+      - ./nginx/common-server.conf:/etc/nginx/common-server.conf:ro
+      - ./nginx/common-proxy.conf:/etc/nginx/common-proxy.conf:ro
+      - ./nginx/common-http.conf:/etc/nginx/common-http.conf:ro
+      - ./nginx/common-protected.conf:/etc/nginx/common-protected.conf:ro
+      - ./nginx/templates/default.dev.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./nginx/cert-local:/cert:ro
+      - ./storage:/storage
+
+  ###############
+  # Dependencies #
+  ###############
+  analytic-redis:
+    container_name: analytic-redis
+    image: redis:6
+
+  analytic-postgres:
+    container_name: analytic-postgres
+    environment:
+      POSTGRES_DB: ${ASM_POSTGRES_DB:-pg-db}
+      POSTGRES_USER: ${ASM_POSTGRES_USER:-pg-user}
+      POSTGRES_PASSWORD: ${ASM_POSTGRES_PASSWORD:-pg-password}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    image: postgres:13
+
+  ##########
+  # Web UI #
+  ##########
+
+  analytic-adminer:
+    container_name: analytic-adminer
+    depends_on:
+      - analytic-postgres
+    image: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: analytic-postgres
+    ports:
+      - 8080:8080
+
+  # analytic-redis-commander:
+  #   container_name: analytic-redis-commander
+  #   depends_on:
+  #     - analytic-redis
+  #   image: rediscommander/redis-commander
+  #   restart: always
+  #   environment:
+  #     REDIS_HOSTS: analytic-redis
+  #   ports:
+  #     - 8082:8081
+
+  # analytic-mail:
+  #   container_name: analytic-mail
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - 8083:8025

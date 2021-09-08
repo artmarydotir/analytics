@@ -1,0 +1,13 @@
+{
+  "CN": "aasaam localhost development",
+  "hosts": ["localhost", "*.localhost"],
+  "names": [
+    {
+      "C": "IR",
+      "L": "Tehran",
+      "O": "Dadeh Pardazan Ati Prozheh",
+      "OU": "aasaam",
+      "ST": "Tehran"
+    }
+  ]
+}

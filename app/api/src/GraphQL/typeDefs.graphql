@@ -1,0 +1,53 @@
+# https://github.com/Urigo/graphql-scalars
+scalar BigInt
+scalar Byte
+scalar Currency
+scalar Date
+scalar DateTime
+scalar Duration
+scalar EmailAddress
+scalar GUID
+scalar HexColorCode
+scalar HSL
+scalar HSLA
+scalar IPv4
+scalar IPv6
+scalar ISBN
+scalar JSON
+scalar JSONObject
+scalar LocalDate
+scalar LocalEndTime
+scalar LocalTime
+scalar Long
+scalar MAC
+scalar NegativeFloat
+scalar NegativeInt
+scalar NonEmptyString
+scalar NonNegativeFloat
+scalar NonNegativeInt
+scalar NonPositiveFloat
+scalar NonPositiveInt
+scalar ObjectID
+scalar PhoneNumber
+scalar Port
+scalar PositiveFloat
+scalar PositiveInt
+scalar PostalCode
+scalar RGB
+scalar RGBA
+scalar SafeInt
+scalar Time
+scalar UnsignedFloat
+scalar UnsignedInt
+scalar URL
+scalar USCurrency
+scalar UtcOffset
+scalar UUID
+scalar Void
+
+# custom
+
+# queries
+type Query {
+  add(x: Int, y: Int): Int
+}

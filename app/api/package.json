@@ -1,0 +1,103 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "authors": [
+    {
+      "name": "Muhammad Hussein Fattahizadeh"
+    }
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --project jsconfig.json --noEmit",
+    "test:cover": "jest --detectOpenHandles --runInBand --collectCoverage",
+    "test": "jest --detectOpenHandles --runInBand"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "ISC",
+  "jest": {
+    "testRegex": ".spec.js$",
+    "testSequencer": "./test/order.js",
+    "setupFiles": [
+      "<rootDir>/test/setupENV.js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "moduleNameMapper": {
+      "^jose/(.*)$": "<rootDir>/node_modules/jose/dist/node/cjs/$1"
+    },
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "json",
+      "json-summary",
+      "text",
+      "lcov",
+      "html",
+      "clover"
+    ],
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "@jest/test-sequencer": "^26",
+    "@types/ioredis": "^4",
+    "@types/jest": "^26",
+    "@types/json-schema": "^7",
+    "@types/node": "^14",
+    "eslint": "^7",
+    "eslint-config-airbnb": "^18",
+    "eslint-config-prettier": "^8",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jsx-a11y": "^6",
+    "eslint-plugin-node": "^11",
+    "eslint-plugin-prettier": "^3",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-security": "^1",
+    "eslint-plugin-sonarjs": "^0",
+    "eslint-plugin-sql": "^1",
+    "jest": "^26",
+    "prettier": "^2",
+    "typescript": "^4"
+  },
+  "dependencies": {
+    "@aasaam/information": "0",
+    "@graphql-tools/schema": "^7",
+    "@nearform/sql": "^1",
+    "altair-fastify-plugin": "^4",
+    "argon2": "^0",
+    "await-to-js": "^3",
+    "awilix": "^4",
+    "chalk": "^4",
+    "commander": "^7",
+    "comment-parser": "^1",
+    "cookie": "^0",
+    "env-schema": "^3",
+    "fastify": "^3",
+    "fastify-multipart": "^4",
+    "fastify-rate-limit": "^5",
+    "fastify-swagger": "^4",
+    "graphql-scalars": "^1",
+    "i18next": "^20",
+    "ioredis": "^4",
+    "ipaddr.js": "^2",
+    "jose": "^3",
+    "libphonenumber-js": "^1",
+    "lodash": "^4",
+    "mercurius": "^7",
+    "mime-types": "^2",
+    "mjml": "^4",
+    "mqemitter-redis": "^4",
+    "nodemailer": "^6",
+    "nunjucks": "^3",
+    "object-hash": "^2.1.1",
+    "otplib": "^12",
+    "pg": "^8",
+    "randomcolor": "^0",
+    "sharp": "^0",
+    "svg-captcha": "^1",
+    "validator": "^13",
+    "yaml": "^2.0.0-4"
+  }
+}

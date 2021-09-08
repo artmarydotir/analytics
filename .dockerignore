@@ -1,0 +1,11 @@
+# api
+app/api/node_modules/
+app/api/coverage/
+app/api/package-lock.json
+
+# front-cp
+app/front-cp/.nuxt/
+app/front-cp/dist/
+app/front-cp/coverage/
+app/front-cp/node_modules/
+app/front-cp/package-lock.json

@@ -1,0 +1,20 @@
+# Copyright(c) 2021 aasaam software development group
+FROM node:16-bullseye-slim
+
+RUN export DEBIAN_FRONTEND=noninteractive ; \
+  export LANG=en_US.utf8 ; \
+  export LC_ALL=C.UTF-8 ; \
+  apt-get update -y \
+  && apt-get autoremove -y \
+  && apt-get -y upgrade && apt-get install -y --no-install-recommends \
+    curl build-essential python3 ca-certificates pkg-config \
+    build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
+  && curl -sf https://gobinaries.com/tj/node-prune | sh \
+  && echo 'cache = "/tmp/npm"' > /root/.npmrc \
+  && npm -g update \
+  && node-prune /usr/local/lib/node_modules \
+  && mkdir /app \
+  && rm -r /var/lib/apt/lists/* && rm -rf /tmp && mkdir /tmp && chmod 777 /tmp && truncate -s 0 /var/log/*.log
+
+ADD app/backend /app/backend
+WORKDIR /app/backend

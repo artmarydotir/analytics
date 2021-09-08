@@ -1,0 +1,122 @@
+worker_processes ${ASM_NGINX_WORKER_PROCESSES};
+
+worker_rlimit_nofile ${ASM_NGINX_WORKER_RLIMIT_NOFILE};
+
+error_log /dev/stdout ${ASM_NGINX_ERROR_LOG_LEVEL};
+
+events {
+  worker_connections ${ASM_NGINX_WORKER_CONNECTIONS};
+  use epoll;
+  multi_accept on;
+}
+
+http {
+
+  userid_name ${ASM_PUBLIC_APP_NS}_hid;
+
+  limit_req_zone $binary_remote_addr zone=app_req_limit_per_ip:16m rate=${ASM_NGINX_LIMIT_RPS}r/s;
+  limit_conn_zone $binary_remote_addr zone=app_conn_limit_per_ip:16m;
+  limit_conn_status 429;
+
+  # development access log
+  log_format dev_combined '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $server_port';
+  access_log /dev/stdout dev_combined;
+
+  include /etc/nginx/common-http.conf;
+
+  proxy_cache_path /nginx-tmpfs
+    levels=1:2
+    keys_zone=PROXY_CACHE:1m
+    use_temp_path=off
+    max_size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB}m
+    inactive=30m;
+
+  proxy_cache_path /storage/nginx-cache
+    levels=1:2
+    keys_zone=PROXY_CACHE_LARGE:1m
+    use_temp_path=off
+    max_size=${ASM_NGINX_LARGE_CACHE_SIZE_MB}m
+    inactive=120m;
+
+  server {
+    listen 80 default_server;
+    listen 443 ssl http2 default_server;
+
+    ssl_certificate /cert/fullchan.pem;
+    ssl_certificate_key /cert/privkey.pem;
+    ssl_trusted_certificate /cert/ca.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:DockerNginx:10m;
+    ssl_session_tickets off;
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    server_name _;
+
+    include /etc/nginx/common-server.conf;
+
+    # http flood prevent
+    # limit_req zone=app_req_limit_per_ip burst=${ASM_NGINX_LIMIT_BURST} nodelay;
+    # limit_conn app_conn_limit_per_ip ${ASM_NGINX_LIMIT_CONNECTION};
+
+    location ${ASM_PUBLIC_BASE_URL} {
+      return 503;
+    }
+
+    # frontend: control panel
+    location ${ASM_PUBLIC_BASE_URL}${ASM_FRONT_CP_PATH} {
+      include /etc/nginx/common-proxy.conf;
+      # include /etc/nginx/common-protected.conf;
+      sub_filter '<!--[__NGINX__ENV_REPLACEMENT_RUNTIME__]-->' "<script>var applicationBaseURL = '${ASM_PUBLIC_BASE_URL}';</script>";
+      proxy_pass http://analytic-front-cp:${ASM_FRONT_CP_PORT};
+    }
+
+
+
+    # backend: with auth token using backend appliction
+    location = ${ASM_PUBLIC_BASE_URL}api/upload-resumable-auth {
+      internal;
+
+      proxy_cache_methods GET HEAD POST;
+      proxy_pass_request_body off;
+      proxy_set_header Content-Length "";
+
+      include /etc/nginx/common-proxy.conf;
+      include /etc/nginx/common-protected.conf;
+      proxy_pass http://analytic-api:${ASM_APP_PORT};
+    }
+
+    # backend: normal upload
+    location ~ ^${ASM_PUBLIC_BASE_URL}api/upload-normal {
+      client_max_body_size ${ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES};
+
+      include /etc/nginx/common-proxy.conf;
+      include /etc/nginx/common-protected.conf;
+      proxy_request_buffering off;
+      proxy_buffering off;
+      proxy_pass http://analytic-api:${ASM_APP_PORT};
+    }
+
+    # backend
+    location ${ASM_PUBLIC_BASE_URL}api {
+      proxy_read_timeout 4h;
+      include /etc/nginx/common-proxy.conf;
+      include /etc/nginx/common-protected.conf;
+      proxy_pass http://analytic-api:${ASM_APP_PORT};
+    }
+
+    # backend: static content for using cdn
+    location ${ASM_PUBLIC_BASE_URL}static {
+      include /etc/nginx/common-proxy.conf;
+      proxy_pass http://analytic-api:${ASM_APP_PORT};
+    }
+
+    # backend: direct serve from storage
+    location ${ASM_PUBLIC_BASE_URL}storage {
+      internal;
+      limit_rate ${ASM_NGINX_LIMIT_RATE_KBS}k;
+      limit_rate_after ${ASM_NGINX_LIMIT_RATE_AFTER_MB}m;
+      alias /storage;
+    }
+  }
+}

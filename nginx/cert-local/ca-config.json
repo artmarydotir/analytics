@@ -1,0 +1,14 @@
+{
+  "signing": {
+    "profiles": {
+      "server": {
+        "expiry": "175200h",
+        "key": {
+          "algo": "ecdsa",
+          "size": 256
+        },
+        "usages": ["signing", "key encipherment", "server auth"]
+      }
+    }
+  }
+}

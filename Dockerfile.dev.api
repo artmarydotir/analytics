@@ -1,0 +1,33 @@
+# Copyright(c) 2021 aasaam software development group
+FROM node:16-bullseye-slim
+
+ARG PROXY_HTTP
+
+RUN export DEBIAN_FRONTEND=noninteractive ; \
+  export LANG=en_US.utf8 ; \
+  export LC_ALL=C.UTF-8 ; \
+  export HTTP_PROXY=$PROXY_HTTP ; \
+  export HTTPS_PROXY=$PROXY_HTTP ; \
+  echo "You are using proxy: $PROXY_HTTP"; \
+  apt-get update -y \
+  && apt-get autoremove -y \
+  && apt-get -y upgrade && apt-get install -y --no-install-recommends \
+    curl file build-essential python3 ca-certificates ffmpeg fonts-noto-ui-core \
+  && curl -sf https://gobinaries.com/tj/node-prune | sh \
+  && echo 'cache = "/.npm"' > /root/.npmrc \
+  && mkdir /.npm \
+  && chown node:node /.npm -R \
+  && npm -g update \
+  && npm install -g npm \
+  && npm install -g pm2 \
+  && node-prune /usr/local/lib/node_modules \
+  && echo "Versions: " \
+  && node -v \
+  && npm -v \
+  && mkdir /app \
+  && rm -rf /.npm \
+  && mkdir /.npm \
+  && chown node:node /.npm -R \
+  && rm -r /var/lib/apt/lists/* && rm -rf /tmp && mkdir /tmp && chmod 777 /tmp && truncate -s 0 /var/log/*.log
+
+WORKDIR /app/api

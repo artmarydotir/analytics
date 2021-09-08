@@ -1,0 +1,5 @@
+activisionCodeMessage: |
+  <p>
+    Your activision code is
+    <strong>{{ code }}</strong>
+  </p>

@@ -1,0 +1,74 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+
+variables:
+  DOCKER_DRIVER: overlay2
+  TEST_CI_NAMESPACE: analytic-demo
+  CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM: $AASAAM_REGISTRY_HUB_NAME/analytic-demo-backend:latest
+  CONTAINER_WEB_RELEASE_IMAGE_AASAAM: $AASAAM_REGISTRY_HUB_NAME/analytic-demo-web:latest
+
+before_script:
+  - docker login -u $AASAAM_REGISTRY_USER -p $AASAAM_REGISTRY_PASSWORD $AASAAM_REGISTRY_HUB_ENDPOINT
+
+test:
+  stage: test
+  script:
+    # gc
+    - docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
+    - docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
+    - docker rmi $TEST_CI_NAMESPACE || true
+    - docker network rm $TEST_CI_NAMESPACE || true
+
+    # build
+    - docker build -f Dockerfile.ci -t $TEST_CI_NAMESPACE .
+
+    # network
+    - docker network create $TEST_CI_NAMESPACE
+
+    ################
+    # Dependencies #
+    ################
+    # redis
+    - docker run --name $TEST_CI_NAMESPACE-redis --network=$TEST_CI_NAMESPACE -d redis:6
+    # postgres
+    - |
+      docker run --name $TEST_CI_NAMESPACE-postgres --network=$TEST_CI_NAMESPACE \
+        -e POSTGRES_DB="pg-db" \
+        -e POSTGRES_USER="pg-user" \
+        -e POSTGRES_PASSWORD="pg-password" \
+        -e POSTGRES_HOST_AUTH_METHOD="true" \
+        -d postgres:13
+
+    # run ci
+    - |
+      docker run --name $TEST_CI_NAMESPACE --network=$TEST_CI_NAMESPACE \
+        -e ASM_REDIS_URI="redis://$TEST_CI_NAMESPACE-redis" \
+        -e ASM_POSTGRES_URI="postgres://pg-user:pg-password@$TEST_CI_NAMESPACE-postgres:5432/pg-db" \
+        -e ASM_PUBLIC_APP_TEST='true' \
+        $TEST_CI_NAMESPACE /app/backend/ci.sh
+
+    # gc
+    - docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
+    - docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
+    - docker rmi $TEST_CI_NAMESPACE || true
+    - docker network rm $TEST_CI_NAMESPACE || true
+  coverage: '/TOTAL_COVERAGE_FOR_CI_F: \d+\.\d+/'
+
+build:
+  stage: build
+  script:
+    # build
+    - docker build -f Dockerfile.backend -t $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM .
+    - docker build -f Dockerfile.web -t $CONTAINER_WEB_RELEASE_IMAGE_AASAAM .
+    # push
+    - docker push $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM
+    - docker push $CONTAINER_WEB_RELEASE_IMAGE_AASAAM
+    # remove image
+    - docker rmi $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM
+    - docker rmi $CONTAINER_WEB_RELEASE_IMAGE_AASAAM

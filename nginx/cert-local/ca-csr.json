@@ -1,0 +1,19 @@
+{
+  "CN": "aasaam localhost development Root CA",
+  "key": {
+    "algo": "ecdsa",
+    "size": 256
+  },
+  "ca": {
+    "expiry": "262800h"
+  },
+  "names": [
+    {
+      "C": "IR",
+      "L": "Tehran",
+      "O": "Dadeh Pardazan Ati Prozheh",
+      "OU": "aasaam",
+      "ST": "Tehran"
+    }
+  ]
+}
