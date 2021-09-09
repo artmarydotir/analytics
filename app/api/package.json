@@ -57,6 +57,7 @@
     "eslint-plugin-security": "^1",
     "eslint-plugin-sonarjs": "^0",
     "eslint-plugin-sql": "^1",
+    "faker": "^5.5.3",
     "jest": "^26",
     "prettier": "^2",
     "typescript": "^4"
