@@ -16,7 +16,7 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const pg = container.resolve('pgClient');
 
-    const query4 = 'TRUNCATE TABLE users CASCADE';
+    const query4 = 'TRUNCATE TABLE users RESTART IDENTITY CASCADE';
     await pg.query(query4);
   });
 
