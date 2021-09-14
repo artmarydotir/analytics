@@ -15,6 +15,21 @@ class GraphQL {
         typeDefs: container.graphqlTypeDefs,
         resolvers: container.graphqlResolvers,
       }),
+      errorFormatter(gqlContext) {
+        const [e] = gqlContext.errors;
+        let statusCode = 500;
+        if (e.extensions && e.extensions.statusCode) {
+          statusCode = e.extensions.statusCode;
+        }
+        return {
+          statusCode,
+          response: {
+            data: gqlContext.data,
+            errors: gqlContext.errors,
+            extensions: gqlContext.extensions,
+          },
+        };
+      },
       prefix: fastify.baseURL('/graphql'),
       async context(req) {
         return {

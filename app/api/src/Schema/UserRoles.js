@@ -1,7 +1,7 @@
 const constants = {
-  ADMINISTRATOR: 'A',
-  MODERATOR: 'M',
-  REGISTERED: 'R',
+  SUPERADMIN: 'SA',
+  ADMIN: 'AD',
+  VIEWER: 'VI',
 };
 
 const list = Object.values(constants);

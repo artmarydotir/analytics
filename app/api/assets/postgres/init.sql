@@ -2,14 +2,15 @@ CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   created timestamp default NOW(),
   username VARCHAR NOT NULL UNIQUE,
-  password VARCHAR,
   email VARCHAR NOT NULL UNIQUE,
+  password VARCHAR,
   role CHAR(2),
-  otp_secret CHAR(16),
+  otp_secret CHAR(32),
   lang CHAR(2),
   options integer[] NOT NULL,
+  country CHAR(2),
   mobile VARCHAR(24) NULL UNIQUE,
-  aditional JSON
+  additional JSON
 );
 
 CREATE TABLE IF NOT EXISTS projects (
@@ -19,7 +20,7 @@ CREATE TABLE IF NOT EXISTS projects (
   title VARCHAR NOT NULL,
   description VARCHAR(200),
   options integer[] NOT NULL,
-  aditional JSON
+  additional JSON
 );
 
 
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS domains (
   domain VARCHAR NOT NULL,
   description VARCHAR(200),
   options integer[] NOT NULL,
-  aditional JSON,
+  additional JSON,
   project_id INT REFERENCES projects (id)
 );
 

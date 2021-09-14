@@ -37,6 +37,12 @@ const ConfigSchema = {
       minimum: 0,
     },
 
+    ASM_DEFAULT_ADMIN_USERNAME: {
+      type: 'string',
+      description: 'Default administrator username',
+      default: 'superadmin',
+    },
+
     ASM_PUBLIC_DOMAIN: {
       type: 'string',
       description: 'Domain of project',
@@ -199,7 +205,6 @@ const ConfigSchema = {
       description: 'Connection URI for Postgres',
       default: 'postgres://pg-user:pg-password@analytic-postgres:5432/pg-db',
     },
-
   },
 };
 

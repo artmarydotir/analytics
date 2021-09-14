@@ -12,7 +12,6 @@ class Sequential {
    * @returns {Promise<Number>}
    */
   async getNextSequentialIdentifier(model) {
-
     const r = await this.pg.query('SELECT get_next_sequential_identifier($1)', [
       model,
     ]);

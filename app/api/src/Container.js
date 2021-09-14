@@ -40,7 +40,6 @@ const initContainer = async (Config) => {
   const redisClient = await container.resolve('Redis').getRedis();
   const mQEmitter = await container.resolve('Redis').getMQEmitter();
 
-
   // Postgres
   container.register({
     Postgres: asClass(Postgres, {
@@ -64,10 +63,17 @@ const initContainer = async (Config) => {
   });
 
   // Repository
-  container.loadModules([`${resolve(__dirname, 'Repository/*.js')}`], {
+  container.loadModules([`${resolve(__dirname, 'Repository/**/*.js')}`], {
     formatName(name) {
       return `${name}Repository`;
     },
+    resolverOptions: {
+      lifetime: Lifetime.SINGLETON,
+    },
+  });
+
+  // OpenAPI
+  container.loadModules([`${resolve(__dirname, 'OpenAPI/**/*REST.js')}`], {
     resolverOptions: {
       lifetime: Lifetime.SINGLETON,
     },
