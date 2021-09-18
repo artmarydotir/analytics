@@ -5,7 +5,7 @@ const {
 } = require('../../Schema/ErrorMessage');
 const { constants: userRoleObject } = require('../../Schema/UserRoles');
 
-const { CreateUserSchema } = require('../../JoySchema/User');
+const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
 
 class CreateUser {
   constructor({ pgClient, UserProcessRepository }) {
@@ -43,7 +43,7 @@ class CreateUser {
       additional = {},
     } = data;
 
-    const schema = CreateUserSchema();
+    const schema = userJoiSchema();
 
     try {
       await schema.validateAsync(data, { abortEarly: false });

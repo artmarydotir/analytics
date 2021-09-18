@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS projects (
   id SERIAL NOT NULL PRIMARY KEY,
   created timestamp default NOW(),
-  hash CHAR(12) NOT NULL UNIQUE,
+  privateToken CHAR(64) NOT NULL,
+  publicToken CHAR(12) NOT NULL UNIQUE,
   title VARCHAR NOT NULL,
   description VARCHAR(200),
   options integer[] NOT NULL,
@@ -27,7 +28,7 @@ CREATE TABLE IF NOT EXISTS projects (
 CREATE TABLE IF NOT EXISTS user_project (
   user_id INT,
   project_id INT,
-  role INT default 0,
+  role TEXT [] NOT NULL,
   PRIMARY KEY (user_id, project_id),
   CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id),
   CONSTRAINT fk_project FOREIGN KEY(project_id) REFERENCES projects(id)

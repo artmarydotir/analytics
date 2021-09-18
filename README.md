@@ -28,5 +28,3 @@ For development:
 ALTER SEQUENCE users_id_seq RESTART;
 UPDATE users SET id = DEFAULT;
 ```
-
-npm run test -- -i BulkUser
