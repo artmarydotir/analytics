@@ -4,10 +4,9 @@ const { constantsMerge: errorConstMerge } = require('../Schema/ErrorMessage');
 const CreateProjectSchema = () =>
   Joi.object({
     title: Joi.string()
-      .min(3)
-      .max(40)
-      .pattern(/^[a-zA-Z0-9_]{3,}[a-zA-Z]+[0-9]*$/)
       .required()
+      .max(50)
+      .regex(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/)
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
         'string.min': errorConstMerge.MIN_LENGTH,

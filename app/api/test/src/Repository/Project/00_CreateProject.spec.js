@@ -45,32 +45,69 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   it('add project', async () => {
-    const createProject = container.resolve('CreateProjectRepository');
+    const createProject = container.resolve('ProjectCreateRepository');
+    const createUser = container.resolve('UserCreateRepository');
+    const user = await createUser.addUser({
+      username: 'addproject',
+      email: 'addproject@gmail.com',
+      password: 'a1asQW12!@AS',
+      role: 'AD',
+      lang: 'fa',
+      options: [1],
+      country: 'IR',
+      mobile: '09017744145',
+      additional: {
+        gender: 'female',
+      },
+    });
 
-    try {
-      const b = await createProject.addProject({
-        title: 'donyayeEghtesad',
+    expect(
+      await createProject.addProject({
+        title: 'donyaye Eghtesad',
         publicToken: '123654',
+        description: 'hey hello',
         userAndRoles: [
           {
-            userID: 1,
-            roles: ['0', '1'],
-          },
-          {
-            userID: 3,
-            roles: ['0'],
-          },
-          {
-            userID: 4,
-            roles: ['4'],
+            UserId: user.dataValues.id,
+            role: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
-      });
-      console.log(b);
-    } catch (error) {
-      console.log(error);
-      // console.log(error.extensions);
-    }
+      }),
+    ).toBeTruthy();
+
+    expect(
+      await createProject.addProject({
+        title: 'donyayeEf',
+        description: 'hey this is a description',
+        userAndRoles: [
+          {
+            UserId: user.dataValues.id,
+            role: ['ALL', 'VIEW_A'],
+          },
+        ],
+        additional: {},
+      }),
+    ).toBeTruthy();
+
+    await expect(
+      createProject.addProject({
+        title: 'donyayeEf',
+        description: 'hey hello there',
+        additional: {},
+      }),
+    ).rejects.toThrowError();
+
+    await expect(
+      createProject.addProject({
+        description: 'hey hello there',
+        userAndRoles: [
+          {
+            UserId: user.dataValues.id,
+            role: ['ALL', 'VIEW_A'],
+          },
+        ],
+      }),
+    ).rejects.toThrowError();
   });
 });

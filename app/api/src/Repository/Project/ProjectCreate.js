@@ -5,13 +5,9 @@ const {
   CreateProjectSchema: projectJoiSchema,
 } = require('../../JoySchema/Project');
 
-class CreateProject {
-  constructor({ pgClient }) {
-    /**
-     * @private
-     * @type {import('pg').Client}
-     */
-    this.pg = pgClient;
+class ProjectCreate {
+  constructor({ sequelize }) {
+    this.sequelize = sequelize;
   }
 
   /**
@@ -36,7 +32,6 @@ class CreateProject {
 
     const schema = projectJoiSchema();
 
-    // console.log(role);
     try {
       await schema.validateAsync(data, { abortEarly: false });
     } catch (e) {
@@ -93,29 +88,25 @@ class CreateProject {
      ***
      */
 
+    const t = await this.sequelize.transaction();
+    const { Project, UserProject } = this.sequelize.models;
     try {
-      await this.pg.query('BEGIN');
-      const projectQuery = `INSERT INTO projects(${Object.keys(
-        initialValues,
-      ).join(',')}) VALUES($1, $2, $3, $4, $5, $6) RETURNING id`;
+      const project = await Project.create(initialValues, { transaction: t });
 
-      const queryValues = Object.values(initialValues);
+      const readyData = middleTable.userAndRoles.map((obj) => ({
+        ...obj,
+        ProjectId: project.dataValues.id,
+      }));
 
-      const res = await this.pg.query(projectQuery, queryValues);
-
-      const insertPromises = [];
-      middleTable.userAndRoles.forEach((element) => {
-        const queryText =
-          'INSERT INTO user_project(user_id, project_id, role) VALUES ($1, $2, $3)';
-        const queryValue = [element.userID, res.rows[0].id, element.roles];
-        insertPromises.push(this.pg.query(queryText, queryValue));
+      const projectData = await UserProject.bulkCreate(readyData, {
+        transaction: t,
       });
 
-      Promise.all(insertPromises);
-      await this.pg.query('COMMIT');
-    } catch (e) {
-      await this.pg.query('ROLLBACK');
-      throw e;
+      await t.commit();
+      return projectData['0'];
+    } catch (error) {
+      await t.rollback();
+      throw error;
     }
   }
 
@@ -136,4 +127,4 @@ class CreateProject {
   }
 }
 
-module.exports = CreateProject;
+module.exports = ProjectCreate;
