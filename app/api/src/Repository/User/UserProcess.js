@@ -5,15 +5,11 @@ const { authenticator } = require('otplib');
 const { parsePhoneNumber } = require('libphonenumber-js/max');
 const crypto = require('crypto');
 const { to } = require('await-to-js');
+const { Op } = require('sequelize');
 
 class UserProcess {
-  constructor({ pgClient }) {
-    /**
-     * @private
-     * @type {import('pg').PoolClient}
-     */
-
-    this.pg = pgClient;
+  constructor({ sequelize }) {
+    this.sequelize = sequelize;
   }
 
   /**
@@ -47,14 +43,17 @@ class UserProcess {
    * @param {String} param.username
    * @returns  {Promise<Boolean>}
    */
-  async isUserExistAndActive({ email, username }) {
-    const query = {
-      name: 'fetch-user',
-      text: 'SELECT id FROM users WHERE email = $1 or username = $2',
-      values: [email, username],
-    };
-    const res = await this.pg.query(query);
-    if (res.rows.length === 1) {
+  async isUserExistAndActive({ email = null, username = null }) {
+    const { User } = this.sequelize.models;
+
+    const res = await User.findOne({
+      attributes: ['id'],
+      where: {
+        [Op.or]: [{ email }, { username }],
+        options: { [Op.contains]: [1] },
+      },
+    });
+    if (res) {
       return true;
     }
     return false;
@@ -62,10 +61,35 @@ class UserProcess {
 
   /**
    *
-   * @param {*} username
-   * @returns {Promise<string>}
+   * @param {Object} param
+   * @param {String} param.email
+   * @param {String} param.username
+   * @returns  {Promise<String>}
    */
-  async generatePassword(username) {
+
+  async returnActiveUserID({ email = null, username = null }) {
+    const { User } = this.sequelize.models;
+
+    const user = await User.findOne({
+      attributes: ['id'],
+      where: {
+        [Op.or]: [{ email }, { username }],
+        options: { [Op.contains]: [1] },
+      },
+    });
+
+    if (!user) {
+      throw new Error('User Not Exist.');
+    }
+
+    return user.dataValues.id;
+  }
+
+  /**
+   *
+   * @returns  {Promise<string>}
+   */
+  async generatePassword() {
     const shuffleNoneAlphaList = shuffle('!@#$%^&*(*)_+=-~'.split(''));
 
     const shuffleAlphaList = shuffle(
@@ -77,22 +101,35 @@ class UserProcess {
         .split(''),
     );
 
-    const generatedPassword = shuffle(
-      uniq(`${shuffleAlphaList}${shuffleNoneAlphaList}`.split('')),
-    )
+    return shuffle(uniq(`${shuffleAlphaList}${shuffleNoneAlphaList}`.split('')))
       .join('')
       .substr(0, 16);
+  }
 
-    const exist = await this.isUserExistAndActive(username);
-    if (exist) {
-      const newPassword = await this.setPassword(generatedPassword);
-      const query = {
-        name: 'update-user',
-        text: 'UPDATE users SET password = $1 where username = $2',
-        values: [newPassword, username],
-      };
+  /**
+   *
+   * @param {Object} param
+   * @param {String} param.username
+   * @param {String} param.email
+   * @returns  {Promise<string>}
+   */
+  async updatePasswordForExistingUser({ username = null, email = null }) {
+    const generatedPassword = await this.generatePassword();
 
-      await this.pg.query(query);
+    const userID = await this.returnActiveUserID({ username, email });
+
+    if (userID) {
+      const { User } = this.sequelize.models;
+      const hashed = await this.setPassword(generatedPassword);
+
+      await User.update(
+        { password: hashed },
+        {
+          where: {
+            id: userID,
+          },
+        },
+      );
     }
     return generatedPassword;
   }

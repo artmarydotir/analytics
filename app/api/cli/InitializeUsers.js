@@ -17,10 +17,11 @@ module.exports = {
     const userExist = await userProcess.isUserExistAndActive({
       username: config.ASM_DEFAULT_ADMIN_USERNAME,
     });
+
     if (userExist) {
-      const result = await userProcess.generatePassword(
-        config.ASM_DEFAULT_ADMIN_USERNAME,
-      );
+      const result = await userProcess.updatePasswordForExistingUser({
+        username: config.ASM_DEFAULT_ADMIN_USERNAME,
+      });
 
       log(
         `😇 Username is: ${chalk.white.bgMagenta.bold(
@@ -29,9 +30,9 @@ module.exports = {
       );
       log(`👉 Generated Password is: ${chalk.white.bgBlue.bold(result)} 👈`);
     } else {
-      const newPassword = await userProcess.generatePassword(
-        config.ASM_DEFAULT_ADMIN_USERNAME,
-      );
+      const newPassword = await userProcess.generatePassword({
+        username: config.ASM_DEFAULT_ADMIN_USERNAME,
+      });
 
       const user = await userRepository.addUser({
         username: config.ASM_DEFAULT_ADMIN_USERNAME,

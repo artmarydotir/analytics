@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const validator = require('validator').default;
 const { ErrorWithProps } = require('mercurius').default;
 const {
@@ -8,12 +9,8 @@ const { constants: userRoleObject } = require('../../Schema/UserRoles');
 const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
 
 class CreateUser {
-  constructor({ pgClient, UserProcessRepository }) {
-    /**
-     * @private
-     * @type {import('pg').PoolClient}
-     */
-    this.pg = pgClient;
+  constructor({ sequelize, UserProcessRepository }) {
+    this.sequelize = sequelize;
     this.process = UserProcessRepository;
   }
 
@@ -90,7 +87,7 @@ class CreateUser {
 
     initialValues.lang = lang;
 
-    initialValues.otp_secret = this.process.generateNewOtpSecret();
+    initialValues.otpSecret = this.process.generateNewOtpSecret();
 
     initialValues.country = country;
 
@@ -115,18 +112,11 @@ class CreateUser {
 
     /**
      ***
-     *** QUERY BUILDING ***
+     *** INSERT ***
      ***
      */
-
-    const queryText = `INSERT INTO users(${Object.keys(initialValues).join(
-      ',',
-    )}) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`;
-
-    const queryValues = Object.values(initialValues);
-
-    const res = await this.pg.query(queryText, queryValues);
-    return res.rows[0].id;
+    const { User } = this.sequelize.models;
+    return User.create(initialValues);
   }
 }
 

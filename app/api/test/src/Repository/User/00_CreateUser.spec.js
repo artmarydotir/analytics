@@ -14,10 +14,15 @@ describe(__filename.replace(__dirname, ''), () => {
   beforeAll(async () => {
     const config = new Config(ConfigSchema, {});
     container = await initContainer(config);
-    const pg = container.resolve('pgClient');
+    const seq = container.resolve('sequelize');
 
-    const query4 = 'TRUNCATE TABLE users RESTART IDENTITY CASCADE';
-    await pg.query(query4);
+    const { User, Project, UserProject } = seq.models;
+    await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
   });
 
   afterAll(async () => {
@@ -27,6 +32,11 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('add user', async () => {
     const createUser = container.resolve('CreateUserRepository');
+    // const ooo = container.resolve('UserProcessRepository');
+
+    // const b = await ooo.isUserExistAndActive({
+    //   email: 'heymary@gmail.com',
+    // });
 
     expect(
       await createUser.addUser({
@@ -43,40 +53,5 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       }),
     ).toBeTruthy();
-
-    expect(
-      await createUser.addUser({
-        username: 'heymary2',
-        email: 'heymary1@gmail.com',
-        password: 'a1asQW12!@A',
-        role: 'SA',
-        lang: 'en',
-        options: [2],
-      }),
-    ).toBeTruthy();
-
-    await expect(
-      createUser.addUser({
-        username: '1',
-        email: 'heymary2@gmail.com',
-        password: 'a1asQW12!@AS',
-        role: 'VI',
-        lang: 'en',
-        options: [1],
-      }),
-    ).rejects.toThrowError();
-
-    await expect(
-      createUser.addUser({
-        username: 'heymary3',
-        email: 'heymary3@gmail.com',
-        password: 'a1asQW12!@AS',
-        role: 'VI',
-        lang: 'en',
-        country: 'AF',
-        mobile: '09017744145',
-        options: [1],
-      }),
-    ).rejects.toThrowError();
   });
 });

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS domains (
   id SERIAL NOT NULL PRIMARY KEY,
   created timestamp default NOW(),
   domain VARCHAR NOT NULL,
+  wildcardDomain VARCHAR NOT NULL,
   description VARCHAR(200),
   options integer[] NOT NULL,
   additional JSON,

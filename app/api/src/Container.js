@@ -10,7 +10,7 @@ const graphqlResolvers = require('./GraphQL/resolvers');
 
 // dependencies
 const Redis = require('./Connections/Redis');
-const Postgres = require('./Connections/Postgres');
+const EntityManager = require('./Connections/EntityManager');
 
 /**
  * @param {import('./Config').Config} Config
@@ -37,24 +37,25 @@ const initContainer = async (Config) => {
       },
     }),
   });
-  const redisClient = await container.resolve('Redis').getRedis();
-  const mQEmitter = await container.resolve('Redis').getMQEmitter();
 
-  // Postgres
   container.register({
-    Postgres: asClass(Postgres, {
+    EntityManager: asClass(EntityManager, {
       lifetime: Lifetime.SINGLETON,
       async dispose(i) {
-        await i.end();
+        await i.quit();
       },
     }),
   });
-  const pgClient = await container.resolve('Postgres').getClient();
+
+  const redisClient = await container.resolve('Redis').getRedis();
+  const mQEmitter = await container.resolve('Redis').getMQEmitter();
+
+  const sequelize = await container.resolve('EntityManager').getSequelize();
 
   const graphqlTypeDefs = await graphqlTypeDefsLoader();
 
   container.register({
-    pgClient: asValue(pgClient),
+    sequelize: asValue(sequelize),
     redisClient: asValue(redisClient),
     mQEmitter: asValue(mQEmitter),
 
