@@ -8,7 +8,7 @@ const { constants: userRoleObject } = require('../../Schema/UserRoles');
 
 const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
 
-class CreateUser {
+class UserCreate {
   constructor({ sequelize, UserProcessRepository }) {
     this.sequelize = sequelize;
     this.process = UserProcessRepository;
@@ -120,4 +120,4 @@ class CreateUser {
   }
 }
 
-module.exports = CreateUser;
+module.exports = UserCreate;

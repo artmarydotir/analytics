@@ -111,27 +111,24 @@ class UserProcess {
    * @param {Object} param
    * @param {String} param.username
    * @param {String} param.email
-   * @returns  {Promise<string>}
+   * @returns  {Promise<{}>}
    */
-  async updatePasswordForExistingUser({ username = null, email = null }) {
+  async setGeneratedPassword({ username = null, email = null }) {
     const generatedPassword = await this.generatePassword();
 
-    const userID = await this.returnActiveUserID({ username, email });
-
-    if (userID) {
-      const { User } = this.sequelize.models;
-      const hashed = await this.setPassword(generatedPassword);
-
-      await User.update(
-        { password: hashed },
-        {
-          where: {
-            id: userID,
-          },
+    const { User } = this.sequelize.models;
+    const user = await User.update(
+      {
+        password: await this.generatePassword(),
+      },
+      {
+        where: {
+          [Op.or]: [{ email }, { username }],
         },
-      );
-    }
-    return generatedPassword;
+      },
+    );
+
+    return { found: user[0] > 0, generatedPassword };
   }
 }
 

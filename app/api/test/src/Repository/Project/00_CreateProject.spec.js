@@ -14,12 +14,29 @@ describe(__filename.replace(__dirname, ''), () => {
   beforeAll(async () => {
     const config = new Config(ConfigSchema, {});
     container = await initContainer(config);
-    const pg = container.resolve('pgClient');
+    const seq = container.resolve('sequelize');
 
-    const query4 = 'TRUNCATE TABLE projects RESTART IDENTITY CASCADE';
-    const query5 = 'TRUNCATE TABLE user_project RESTART IDENTITY CASCADE';
-    await pg.query(query4);
-    await pg.query(query5);
+    const { User, Project, UserProject } = seq.models;
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
   });
 
   afterAll(async () => {

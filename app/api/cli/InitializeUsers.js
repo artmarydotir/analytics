@@ -11,7 +11,7 @@ module.exports = {
    */
 
   async runAction(container) {
-    const userRepository = container.resolve('CreateUserRepository');
+    const userRepository = container.resolve('UserCreateRepository');
     const userProcess = container.resolve('UserProcessRepository');
     const config = container.resolve('Config');
     const userExist = await userProcess.isUserExistAndActive({
@@ -19,7 +19,7 @@ module.exports = {
     });
 
     if (userExist) {
-      const result = await userProcess.updatePasswordForExistingUser({
+      const { generatedPassword } = await userProcess.setGeneratedPassword({
         username: config.ASM_DEFAULT_ADMIN_USERNAME,
       });
 
@@ -28,7 +28,11 @@ module.exports = {
           config.ASM_DEFAULT_ADMIN_USERNAME,
         )}`,
       );
-      log(`👉 Generated Password is: ${chalk.white.bgBlue.bold(result)} 👈`);
+      log(
+        `👉 Generated Password is: ${chalk.white.bgBlue.bold(
+          generatedPassword,
+        )} 👈`,
+      );
     } else {
       const newPassword = await userProcess.generatePassword({
         username: config.ASM_DEFAULT_ADMIN_USERNAME,

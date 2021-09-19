@@ -21,10 +21,15 @@ describe(__filename.replace(__dirname, ''), () => {
   beforeAll(async () => {
     const config = new Config(ConfigSchema, {});
     container = await initContainer(config);
-    const pg = container.resolve('pgClient');
+    const seq = container.resolve('sequelize');
 
-    const query4 = 'TRUNCATE TABLE users RESTART IDENTITY CASCADE';
-    await pg.query(query4);
+    const { User } = seq.models;
+    await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
   });
 
   afterAll(async () => {
@@ -33,7 +38,7 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   it('it should insert fake user', async () => {
-    const createUser = container.resolve('CreateUserRepository');
+    const createUser = container.resolve('UserCreateRepository');
 
     const roles = userRoles;
     const lang = ['fa', 'en'];
