@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 const validator = require('validator').default;
 const { ErrorWithProps } = require('mercurius').default;
 const {

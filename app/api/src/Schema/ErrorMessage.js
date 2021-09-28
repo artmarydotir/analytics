@@ -8,6 +8,10 @@ const constants = {
   INVALID_LANG: '',
   INVALID_COUNTRY: '',
   INVALID_MOBILE: '',
+  INVALID_DOMAIN: '',
+  NOT_REQUIRED_BOTH: '',
+  REQUIRED_ONLY: '',
+  INVALID_WILDCARD_DOMAIN: '',
 };
 
 const list = Object.values(constants);

@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 const crypto = require('crypto');
 const { ErrorWithProps } = require('mercurius').default;
 const {
@@ -84,10 +83,9 @@ class ProjectCreate {
 
     /**
      ***
-     *** QUERY BUILDING ***
+     *** INSERT ***
      ***
      */
-
     const t = await this.sequelize.transaction();
     const { Project, UserProject } = this.sequelize.models;
     try {
@@ -98,18 +96,20 @@ class ProjectCreate {
         ProjectId: project.dataValues.id,
       }));
 
-      const projectData = await UserProject.bulkCreate(readyData, {
+      await UserProject.bulkCreate(readyData, {
         transaction: t,
       });
 
       await t.commit();
-      return projectData['0'];
+
+      return project.dataValues;
     } catch (error) {
       await t.rollback();
       throw error;
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   generatePrivateToken() {
     return crypto
       .randomBytes(48)
@@ -118,6 +118,7 @@ class ProjectCreate {
       .substr(0, 32);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   generatePublicToken() {
     return crypto
       .randomBytes(48)
