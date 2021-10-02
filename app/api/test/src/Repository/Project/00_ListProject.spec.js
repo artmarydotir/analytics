@@ -16,27 +16,34 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    // const { User, Project, UserProject } = seq.models;
-    // await UserProject.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
+    const { User, Project, UserProject, Domain } = seq.models;
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
 
-    // await Project.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
 
-    // await User.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
+    await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Domain.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
   });
 
   afterAll(async () => {
@@ -44,10 +51,61 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add project', async () => {
-    const project = container.resolve('ProjectListRepository');
+  it('fetch project list', async () => {
+    const createProject = container.resolve('ProjectCreateRepository');
+    const createUser = container.resolve('UserCreateRepository');
+    const createDomain = container.resolve('DomainCreateRepository');
+    const projectList = container.resolve('ProjectListRepository');
 
-    const b = await project.getProjectDomainList();
-    console.log(b);
+    const userData = await createUser.addUser({
+      username: 'forlist',
+      email: 'forlist@gmail.com',
+      password: 'a1asQW12!@AS*&',
+      role: 'AD',
+      lang: 'fa',
+      options: [1],
+      country: 'IR',
+      mobile: '09017744147',
+      additional: {
+        gender: 'female',
+      },
+    });
+
+    const projectData = await createProject.addProject({
+      title: 'my project for list',
+      publicToken: 'project00001',
+      description: 'hello test for list',
+      userAndRoles: [
+        {
+          UserId: userData.dataValues.id,
+          role: ['ALL', 'VIEW_B'],
+        },
+      ],
+      additional: {},
+    });
+
+    await createDomain.addDomain({
+      domain: 'forlist.com',
+      wildcardDomain: '',
+      description: 'there for list',
+      options: [1],
+      projectId: projectData.id,
+      additional: {
+        alexaRank: '21',
+      },
+    });
+
+    await createDomain.addDomain({
+      domain: '',
+      wildcardDomain: '*.mine.tld',
+      description: 'there for list',
+      options: [1],
+      projectId: projectData.id,
+      additional: {
+        alexaRank: '10',
+      },
+    });
+
+    expect(await projectList.getProjectDomainList()).toBeTruthy();
   });
 });

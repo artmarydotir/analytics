@@ -16,7 +16,7 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    const { User, Project, UserProject } = seq.models;
+    const { User } = seq.models;
     await User.destroy({
       where: {},
       truncate: true,
