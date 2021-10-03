@@ -2,10 +2,11 @@
 const argon2 = require('argon2');
 const { shuffle, uniq } = require('lodash');
 const { authenticator } = require('otplib');
-const { parsePhoneNumber } = require('libphonenumber-js/max');
 const crypto = require('crypto');
 const { to } = require('await-to-js');
 const { Op } = require('sequelize');
+const { parsePhoneNumber } = require('libphonenumber-js/max');
+const { constants: userStatus } = require('../../Schema/UserStatus');
 
 class UserProcess {
   constructor({ sequelize }) {
@@ -50,7 +51,7 @@ class UserProcess {
       attributes: ['id'],
       where: {
         [Op.or]: [{ email }, { username }],
-        options: { [Op.contains]: [1] },
+        options: { [Op.contains]: [userStatus.ACTIVE] },
       },
     });
     if (res) {
@@ -74,7 +75,7 @@ class UserProcess {
       attributes: ['id'],
       where: {
         [Op.or]: [{ email }, { username }],
-        options: { [Op.contains]: [1] },
+        options: { [Op.contains]: [userStatus.ACTIVE] },
       },
     });
 

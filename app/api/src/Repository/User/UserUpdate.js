@@ -4,7 +4,6 @@ const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 const { constants: userRoleObject } = require('../../Schema/UserRoles');
-const { constants: userStatus } = require('../../Schema/UserStatus');
 
 const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
 
@@ -34,7 +33,7 @@ class UserCreate {
       password,
       role = userRoleObject.VIEWER,
       lang = 'fa',
-      options = [userStatus.ACTIVE],
+      options = [1],
       country = 'IR',
       mobile,
       additional = {},

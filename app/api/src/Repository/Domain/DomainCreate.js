@@ -9,6 +9,8 @@ const {
   CreateDomainSchema: domainJoiSchema,
 } = require('../../JoySchema/Domain');
 
+const { constants: domainStatus } = require('../../Schema/DomainStatus');
+
 class DomainCreate {
   constructor({ sequelize }) {
     this.sequelize = sequelize;
@@ -26,13 +28,14 @@ class DomainCreate {
    * @returns {Promise<object>}
    */
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async addDomain(data) {
     const {
       domain,
       wildcardDomain,
       projectId,
       description,
-      options = [1],
+      options = [domainStatus.ACTIVE],
       additional = {},
     } = data;
 

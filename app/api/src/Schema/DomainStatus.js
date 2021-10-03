@@ -7,9 +7,9 @@ const list = Object.values(constants);
 
 /** @type {import('json-schema').JSONSchema7} */
 const schema = {
-  $id: 'UserStatus',
-  title: 'User Status',
-  description: 'Possible values for user Status',
+  $id: 'DomainStatus',
+  title: 'Domain Status',
+  description: 'Possible values for Domain Status',
   type: 'string',
   enum: list,
 };

@@ -1,4 +1,6 @@
 const { Op } = require('sequelize');
+const { constants: projectStatus } = require('../../Schema/ProjectStatus');
+const { constants: domainStatus } = require('../../Schema/DomainStatus');
 
 class ProjectList {
   constructor({ sequelize }) {
@@ -11,14 +13,14 @@ class ProjectList {
     const allProject = await Domain.findAll({
       attributes: ['domain', 'wildcardDomain'],
       where: {
-        options: { [Op.contains]: [1] },
+        options: { [Op.contains]: [domainStatus.ACTIVE] },
       },
       include: [
         {
           model: Project,
           attributes: ['publicToken'],
           where: {
-            options: { [Op.contains]: [1] },
+            options: { [Op.contains]: [projectStatus.ACTIVE] },
           },
           required: false,
         },

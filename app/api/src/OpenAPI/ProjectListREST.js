@@ -17,7 +17,7 @@ class ProjectListREST {
         tags: ['Collector'],
         response: {
           200: {
-            $ref: 'CollectorList#',
+            $ref: 'ProjectDomainList#',
           },
           404: e404.getSchema(),
         },
