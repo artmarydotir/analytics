@@ -121,6 +121,24 @@ class Decorate {
     });
   }
 
+  // /**
+  //  * @private
+  //  * @param {import('fastify').FastifyInstance} fastify
+  //  * @param {Object} container
+  //  */
+  // static collector(fastify, container) {
+  //   const { Config } = container;
+  //   fastify.decorate('collectorApiKeyCheck', async (req, reply) => {
+  //     if (
+  //       req.headers['x-collector-api-key'] &&
+  //       req.headers['x-collector-api-key'] === Config.ASM_COLLECTOR_API_KEY
+  //     ) {
+  //       return true;
+  //     }
+  //     reply.send(403);
+  //   });
+  // }
+
   /**
    * @private
    * @param {import('fastify').FastifyInstance} fastify

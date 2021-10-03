@@ -12,6 +12,12 @@ const init = require('./init');
 
   const app = Fastify.getFastify();
 
+  Object.keys(container.registrations).forEach((dep) => {
+    if (dep.match(/REST$/)) {
+      container.resolve(dep);
+    }
+  });
+
   await app.listen(Config.ASM_APP_PORT, '0.0.0.0');
 })();
 

@@ -23,6 +23,7 @@ const ConfigSchema = {
     'ASM_AUTH_HMAC_SECRET',
     'ASM_AUTH_HMAC_ALG',
     'ASM_LOG_LEVEL',
+    'ASM_COLLECTOR_API_KEY',
 
     // resource
     'ASM_REDIS_URI',
@@ -147,6 +148,12 @@ const ConfigSchema = {
       type: 'string',
       description: 'Header that carry the stored user token.',
       default: 'x-user-api-key',
+    },
+
+    ASM_COLLECTOR_API_KEY: {
+      type: 'string',
+      description: 'Header that carry the stored collector.',
+      default: 'x-collector-api-key',
     },
 
     ASM_APP_PORT: {

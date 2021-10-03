@@ -4,6 +4,7 @@ const { schema: LanguageCodes } = require('./LanguageCodes');
 const { schema: LogLevels } = require('./LogLevels');
 const { schema: UserActions } = require('./UserActions');
 const { schema: UserRoles } = require('./UserRoles');
+const { schema: CollectorProjectList } = require('./CollectorProjectList');
 
 module.exports = [
   CountryCodes,
@@ -12,4 +13,5 @@ module.exports = [
   LogLevels,
   UserActions,
   UserRoles,
+  CollectorProjectList,
 ];

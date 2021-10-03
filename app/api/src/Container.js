@@ -73,15 +73,15 @@ const initContainer = async (Config) => {
     },
   });
 
-  // OpenAPI
-  container.loadModules([`${resolve(__dirname, 'OpenAPI/**/*REST.js')}`], {
+  // Core
+  container.loadModules([`${resolve(__dirname, 'Core/*.js')}`], {
     resolverOptions: {
       lifetime: Lifetime.SINGLETON,
     },
   });
 
-  // Core
-  container.loadModules([`${resolve(__dirname, 'Core/*.js')}`], {
+  // OpenAPI
+  container.loadModules([`${resolve(__dirname, 'OpenAPI/**/*REST.js')}`], {
     resolverOptions: {
       lifetime: Lifetime.SINGLETON,
     },

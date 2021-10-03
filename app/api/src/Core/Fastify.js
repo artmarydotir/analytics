@@ -1,10 +1,11 @@
 const { fastify } = require('fastify');
 
-const { Decorate } = require('./Fastify/Decorate.js');
-const { ErrorHandler } = require('./Fastify/ErrorHandler.js');
-const { GraphQL } = require('./Fastify/GraphQL.js');
-const { OpenAPI } = require('./Fastify/OpenAPI.js');
-const { RateLimit } = require('./Fastify/RateLimit.js');
+const { Decorate } = require('./Fastify/Decorate');
+const { ErrorHandler } = require('./Fastify/ErrorHandler');
+const { GraphQL } = require('./Fastify/GraphQL');
+const { OpenAPI } = require('./Fastify/OpenAPI');
+const { RateLimit } = require('./Fastify/RateLimit');
+const { GenericResponse } = require('./Fastify/GenericResponse');
 
 const schemaList = require('../Schema');
 
@@ -43,6 +44,16 @@ class Fastify {
    */
   getFastify() {
     return this.fastify;
+  }
+
+  /**
+   * @param {Number} statusCode
+   * @param {String} message
+   * @returns {GenericResponse}
+   */
+  // eslint-disable-next-line class-methods-use-this
+  getGenericError(statusCode, message = undefined) {
+    return new GenericResponse(statusCode, message);
   }
 }
 

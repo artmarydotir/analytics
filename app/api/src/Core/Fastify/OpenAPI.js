@@ -1,10 +1,8 @@
-const os = require('os');
-
 const { Organization } = require('@aasaam/information');
 
 const fastifySwagger = require('fastify-swagger').default;
 
-const { GenericResponse } = require('./GenericResponse.js');
+const { GenericResponse } = require('./GenericResponse');
 
 const description = `
 ### Disclaimer
@@ -54,13 +52,8 @@ class OpenAPI {
       handler: async () => {
         /** @type {import('ioredis').Redis} */
         const redis = container.redisClient;
-        /** @type {import('pg').Client} */
-        const pg = container.pgClient;
-        const pgResult = await (await pg.query('SELECT 1 as one')).rows[0].one;
+
         await redis.info('stats');
-        const threads = os.cpus().length;
-        const [t1] = os.loadavg();
-        return pgResult === 1 && (t1 / threads) * 100 <= 100;
       },
     });
   }
