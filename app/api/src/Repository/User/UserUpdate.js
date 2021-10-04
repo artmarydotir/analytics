@@ -3,22 +3,23 @@ const { ErrorWithProps } = require('mercurius').default;
 const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
-const { constants: userRoleObject } = require('../../Schema/UserRoles');
 
-const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
+const {
+  UpdateUserSchemaSA: updateJoiSchemaSA,
+  UpdateUserSchemaME: updateJoiSchemaME,
+} = require('../../JoySchema/User');
 
-class UserCreate {
+class UserUpdate {
   constructor({ sequelize, UserProcessRepository }) {
     this.sequelize = sequelize;
     this.process = UserProcessRepository;
   }
 
   /**
+   * @param {Number} id
    * @param {Object} data
    * @param {String} data.username
    * @param {String} data.email
-   * @param {String} data.password
-   * @param {String} data.password
    * @param {String} data.role
    * @param {String} data.lang
    * @param {Number[]} data.options
@@ -26,21 +27,159 @@ class UserCreate {
    * @param {String} data.mobile
    * @param {Object} data.additional
    */
-  async addUser(data) {
+
+  async updateUserBySuperAdmin(id, data) {
     const {
       username,
       email,
-      password,
-      role = userRoleObject.VIEWER,
-      lang = 'fa',
-      options = [1],
-      country = 'IR',
+      role,
+      lang,
+      options,
+      country,
       mobile,
-      additional = {},
+      additional,
     } = data;
 
-    const schema = userJoiSchema();
+    const schema = updateJoiSchemaSA();
 
+    if (!id) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
+    const isUserExist = await this.process.isUserExistByID(id);
+
+    if (isUserExist) {
+      await this.validateShema(schema, data);
+    }
+
+    const initialValues = {
+      username: null,
+    };
+
+    initialValues.username = username.toLowerCase();
+
+    if (email && validator.isEmail(email)) {
+      initialValues.email = validator.normalizeEmail(email);
+    }
+
+    initialValues.role = role;
+
+    initialValues.lang = lang;
+
+    initialValues.country = country;
+
+    if (mobile) {
+      const validMobile = this.process.setMobile(mobile, country);
+      if (validMobile) {
+        initialValues.mobile = validMobile;
+      } else {
+        throw new ErrorWithProps(errorConstMerge.INVALID_MOBILE, {
+          statusCode: 400,
+        });
+      }
+    }
+
+    initialValues.options = options;
+
+    if (additional && typeof additional === 'object') {
+      initialValues.additional = additional;
+    }
+
+    /**
+     ***
+     *** UPDATE ***
+     ***
+     */
+
+    const { User } = this.sequelize.models;
+
+    const affectedRow = await User.update(initialValues, {
+      where: {
+        id,
+      },
+    });
+
+    return { affectedRow, id };
+  }
+
+  /**
+   * @param {Number} id
+   * @param {Object} data
+   * @param {String} data.username
+   * @param {String} data.email
+   * @param {String} data.lang
+   * @param {String} data.country
+   * @param {String} data.mobile
+   * @param {Object} data.additional
+   */
+  async updateUserByMembers(id, data) {
+    const { username, email, lang, country, mobile, additional } = data;
+
+    const schema = updateJoiSchemaME();
+
+    if (!id) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
+    const isUserExist = await this.process.isUserExistByID(id);
+
+    if (isUserExist) {
+      await this.validateShema(schema, data);
+    }
+
+    const initialValues = {
+      username: null,
+    };
+
+    initialValues.username = username.toLowerCase();
+
+    if (email && validator.isEmail(email)) {
+      initialValues.email = validator.normalizeEmail(email);
+    }
+
+    initialValues.lang = lang;
+
+    initialValues.country = country;
+
+    if (mobile) {
+      const validMobile = this.process.setMobile(mobile, country);
+      if (validMobile) {
+        initialValues.mobile = validMobile;
+      } else {
+        throw new ErrorWithProps(errorConstMerge.INVALID_MOBILE, {
+          statusCode: 400,
+        });
+      }
+    }
+
+    if (additional && typeof additional === 'object') {
+      initialValues.additional = additional;
+    }
+
+    /**
+     ***
+     *** UPDATE ***
+     ***
+     */
+
+    const { User } = this.sequelize.models;
+
+    const affectedRow = await User.update(initialValues, {
+      attributes: ['username'],
+      where: {
+        id,
+      },
+    });
+
+    return { affectedRow, id };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async validateShema(schema, data) {
     try {
       await schema.validateAsync(data, { abortEarly: false });
     } catch (e) {
@@ -57,66 +196,7 @@ class UserCreate {
         statusCode: 422,
       });
     }
-
-    const initialValues = {
-      username: null,
-      email: null,
-      password: null,
-      role: null,
-      otp_secret: null,
-      lang: null,
-      options: null,
-      country: null,
-      mobile: null,
-      additional: null,
-    };
-
-    initialValues.username = username.toLowerCase();
-
-    if (email && validator.isEmail(email)) {
-      initialValues.email = validator.normalizeEmail(email);
-    }
-
-    const passwordHash = await this.process.setPassword(password);
-    if (passwordHash) {
-      initialValues.password = passwordHash;
-    }
-
-    initialValues.role = role;
-
-    initialValues.lang = lang;
-
-    initialValues.otpSecret = this.process.generateNewOtpSecret();
-
-    initialValues.country = country;
-
-    if (mobile) {
-      const validMobile = this.process.setMobile(mobile, country);
-      if (validMobile) {
-        initialValues.mobile = validMobile;
-      } else {
-        throw new ErrorWithProps(errorConstMerge.INVALID_MOBILE, {
-          statusCode: 400,
-        });
-      }
-    }
-
-    if (options) {
-      initialValues.options = options;
-    }
-
-    if (additional && typeof additional === 'object') {
-      initialValues.additional = additional;
-    }
-
-    /**
-     ***
-     *** INSERT ***
-     ***
-     */
-    const { User } = this.sequelize.models;
-    return User.create(initialValues);
   }
 }
 
-module.exports = UserCreate;
+module.exports = UserUpdate;

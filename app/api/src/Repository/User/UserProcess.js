@@ -5,8 +5,12 @@ const { authenticator } = require('otplib');
 const crypto = require('crypto');
 const { to } = require('await-to-js');
 const { Op } = require('sequelize');
+const { ErrorWithProps } = require('mercurius').default;
 const { parsePhoneNumber } = require('libphonenumber-js/max');
 const { constants: userStatus } = require('../../Schema/UserStatus');
+const {
+  constantsMerge: errorConstMerge,
+} = require('../../Schema/ErrorMessage');
 
 class UserProcess {
   constructor({ sequelize }) {
@@ -80,10 +84,39 @@ class UserProcess {
     });
 
     if (!user) {
-      throw new Error('User Not Exist.');
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
     }
 
     return user.dataValues.id;
+  }
+
+  /**
+   * @param {Number} userId
+   * @returns  {Promise<Boolean>}
+   */
+  async isUserExistByID(userId) {
+    const { User } = this.sequelize.models;
+    let isExist = false;
+
+    const user = await User.findOne({
+      where: {
+        id: userId,
+        options: { [Op.contains]: [userStatus.ACTIVE] },
+      },
+    });
+
+    if (!user) {
+      isExist = false;
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    } else {
+      isExist = true;
+    }
+
+    return isExist;
   }
 
   /**
