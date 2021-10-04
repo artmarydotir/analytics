@@ -4,9 +4,9 @@ const { schema: LanguageCodes } = require('./LanguageCodes');
 const { schema: LogLevels } = require('./LogLevels');
 const { schema: UserActions } = require('./UserActions');
 const { schema: UserRoles } = require('./UserRoles');
-const { schema: UserStatus } = require('./UserStatus');
-const { schema: ProjectStatus } = require('./ProjectStatus');
-const { schema: DomainStatus } = require('./DomainStatus');
+const { schema: UserOption } = require('./UserOption');
+const { schema: ProjectOption } = require('./ProjectOption');
+const { schema: DomainOption } = require('./DomainOption');
 const { schema: ProjectDomainList } = require('./ProjectDomainList');
 
 module.exports = [
@@ -16,8 +16,8 @@ module.exports = [
   LogLevels,
   UserActions,
   UserRoles,
-  UserStatus,
-  ProjectStatus,
-  DomainStatus,
+  UserOption,
+  ProjectOption,
+  DomainOption,
   ProjectDomainList,
 ];

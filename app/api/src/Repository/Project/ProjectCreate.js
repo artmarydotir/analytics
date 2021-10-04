@@ -4,7 +4,7 @@ const {
   CreateProjectSchema: projectJoiSchema,
 } = require('../../JoySchema/Project');
 
-const { constants: projectStatus } = require('../../Schema/ProjectStatus');
+const { constants: projectOption } = require('../../Schema/ProjectOption');
 
 class ProjectCreate {
   constructor({ sequelize }) {
@@ -27,7 +27,7 @@ class ProjectCreate {
       publicToken,
       description,
       userAndRoles,
-      options = [projectStatus.ACTIVE],
+      options = [projectOption.ACTIVE],
       additional = {},
     } = data;
 

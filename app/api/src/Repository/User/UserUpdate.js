@@ -1,9 +1,11 @@
+const { uniq } = require('lodash');
 const validator = require('validator').default;
 const { ErrorWithProps } = require('mercurius').default;
 const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 
+const { constants: userOption } = require('../../Schema/UserOption');
 const {
   UpdateUserSchemaSA: updateJoiSchemaSA,
   UpdateUserSchemaME: updateJoiSchemaME,
@@ -169,7 +171,6 @@ class UserUpdate {
     const { User } = this.sequelize.models;
 
     const affectedRow = await User.update(initialValues, {
-      attributes: ['username'],
       where: {
         id,
       },
@@ -196,6 +197,54 @@ class UserUpdate {
         statusCode: 422,
       });
     }
+  }
+
+  /**
+   *
+   * @param {Number} id
+   * @param {Object.<string, boolean>} props
+   */
+  async patchUserOptions(id, props) {
+    if (!id) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
+    const { User } = this.sequelize.models;
+    const user = await User.findOne({
+      attributes: ['options'],
+      where: {
+        id,
+      },
+    });
+
+    let newOption = user.dataValues.options;
+
+    Object.keys(props).forEach((name) => {
+      const booleanStatus = props[`${name}`];
+      const value = userOption[`${name}`];
+      if (booleanStatus) {
+        newOption.push(value);
+      } else {
+        newOption = newOption.filter((v) => v !== value);
+      }
+    });
+
+    newOption = uniq(newOption);
+
+    const affectedRow = await User.update(
+      {
+        options: newOption,
+      },
+      {
+        where: {
+          id,
+        },
+      },
+    );
+
+    return { affectedRow, id };
   }
 }
 

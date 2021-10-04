@@ -4,6 +4,7 @@ const constants = {
 };
 
 const list = Object.values(constants);
+const names = Object.keys(constants);
 
 /** @type {import('json-schema').JSONSchema7} */
 const schema = {
@@ -16,6 +17,7 @@ const schema = {
 
 module.exports = {
   constants,
+  names,
   list,
   schema,
 };

@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
-const { constants: projectStatus } = require('../../Schema/ProjectStatus');
-const { constants: domainStatus } = require('../../Schema/DomainStatus');
+const { constants: userOption } = require('../../Schema/UserOption');
+const { constants: projectOption } = require('../../Schema/ProjectOption');
+const { constants: domainOption } = require('../../Schema/DomainOption');
 
 class ProjectList {
   constructor({ sequelize }) {
@@ -8,21 +9,52 @@ class ProjectList {
   }
 
   async getProjectDomainList() {
-    const { Project, Domain } = this.sequelize.models;
+    const { Project, Domain, User } = this.sequelize.models;
 
     const allProject = await Domain.findAll({
       attributes: ['domain', 'wildcardDomain'],
       where: {
-        options: { [Op.contains]: [domainStatus.ACTIVE] },
+        [Op.not]: {
+          options: {
+            [Op.contains]: [domainOption.DELETED],
+          },
+        },
+        options: {
+          [Op.contains]: [domainOption.ACTIVE],
+        },
       },
       include: [
         {
           model: Project,
           attributes: ['publicToken'],
           where: {
-            options: { [Op.contains]: [projectStatus.ACTIVE] },
+            [Op.not]: {
+              options: {
+                [Op.contains]: [projectOption.DELETED],
+              },
+            },
+            options: {
+              [Op.contains]: [projectOption.ACTIVE],
+            },
           },
-          required: false,
+          required: true,
+          include: [
+            {
+              model: User,
+              attributes: [],
+              where: {
+                [Op.not]: {
+                  options: {
+                    [Op.contains]: [userOption.DELETED],
+                  },
+                },
+                options: {
+                  [Op.contains]: [userOption.ACTIVE],
+                },
+              },
+              required: true,
+            },
+          ],
         },
       ],
     });
@@ -38,7 +70,6 @@ class ProjectList {
         result[r.Project.dataValues.publicToken].push(r.wildcardDomain);
       }
     });
-
     return result;
   }
 }

@@ -88,8 +88,17 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).toBeTruthy();
 
+    expect(
+      await user.patchUserOptions(user1.dataValues.id, {
+        ACTIVE: false,
+        DELETED: true,
+      }),
+    ).toBeTruthy();
+
     await expect(user.updateUserBySuperAdmin(null, {})).rejects.toThrowError();
     await expect(user.updateUserByMembers(null, {})).rejects.toThrowError();
+    await expect(user.patchUserOptions(null, {})).rejects.toThrowError();
+
     await expect(
       user.updateUserByMembers(user2.dataValues.id, {
         username: '+',
