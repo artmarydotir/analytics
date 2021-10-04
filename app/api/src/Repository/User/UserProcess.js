@@ -7,7 +7,7 @@ const { to } = require('await-to-js');
 const { Op } = require('sequelize');
 const { ErrorWithProps } = require('mercurius').default;
 const { parsePhoneNumber } = require('libphonenumber-js/max');
-const { constants: userStatus } = require('../../Schema/UserStatus');
+const { constants: UserOption } = require('../../Schema/UserOption');
 const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
@@ -55,7 +55,7 @@ class UserProcess {
       attributes: ['id'],
       where: {
         [Op.or]: [{ email }, { username }],
-        options: { [Op.contains]: [userStatus.ACTIVE] },
+        options: { [Op.contains]: [UserOption.ACTIVE] },
       },
     });
     if (res) {
@@ -79,7 +79,7 @@ class UserProcess {
       attributes: ['id'],
       where: {
         [Op.or]: [{ email }, { username }],
-        options: { [Op.contains]: [userStatus.ACTIVE] },
+        options: { [Op.contains]: [UserOption.ACTIVE] },
       },
     });
 
@@ -103,7 +103,7 @@ class UserProcess {
     const user = await User.findOne({
       where: {
         id: userId,
-        options: { [Op.contains]: [userStatus.ACTIVE] },
+        options: { [Op.contains]: [UserOption.ACTIVE] },
       },
     });
 

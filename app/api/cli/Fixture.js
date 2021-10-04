@@ -76,7 +76,7 @@ module.exports = {
             email: `user${index}@example.tld`,
             role: roles[`${roleIndex}`],
             lang: lang[Math.floor(Math.random() * lang.length)],
-            options: [1],
+            options: [Math.floor(Math.random() * 2) + 1],
           })
           .then(() => cb())
           .catch((e) => cb(e));
@@ -103,6 +103,7 @@ module.exports = {
             title: `project${index}`,
             publicToken: `project${index.toString().padStart(5, '0')}`,
             description: 'project dear project',
+            options: [Math.floor(Math.random() * 2) + 1],
             userAndRoles: [
               {
                 UserId: Math.floor(Math.random() * 10) + 1,
@@ -140,7 +141,7 @@ module.exports = {
             domain: `domain${index}.tld`,
             wildcardDomain: '',
             description: `there you go domain number ${index}`,
-            options: [1],
+            options: [Math.floor(Math.random() * 2) + 1],
             projectId: Math.floor(Math.random() * 30) + 1,
             additional: {
               alexaRank: `${index}`,

@@ -9,7 +9,7 @@ const {
   CreateDomainSchema: domainJoiSchema,
 } = require('../../JoySchema/Domain');
 
-const { constants: domainStatus } = require('../../Schema/DomainStatus');
+const { constants: domainOption } = require('../../Schema/DomainOption');
 
 class DomainCreate {
   constructor({ sequelize }) {
@@ -35,7 +35,7 @@ class DomainCreate {
       wildcardDomain,
       projectId,
       description,
-      options = [domainStatus.ACTIVE],
+      options = [domainOption.ACTIVE],
       additional = {},
     } = data;
 
