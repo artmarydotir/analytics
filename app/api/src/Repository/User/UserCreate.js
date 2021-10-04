@@ -19,7 +19,6 @@ class UserCreate {
    * @param {String} data.username
    * @param {String} data.email
    * @param {String} data.password
-   * @param {String} data.password
    * @param {String} data.role
    * @param {String} data.lang
    * @param {Number[]} data.options
@@ -64,7 +63,7 @@ class UserCreate {
       email: null,
       password: null,
       role: null,
-      otp_secret: null,
+      otpSecret: null,
       lang: null,
       options: null,
       country: null,

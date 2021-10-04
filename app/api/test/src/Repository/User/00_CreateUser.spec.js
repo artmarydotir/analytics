@@ -32,11 +32,6 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('add user', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    // const ooo = container.resolve('UserProcessRepository');
-
-    // const b = await ooo.isUserExistAndActive({
-    //   email: 'heymary@gmail.com',
-    // });
 
     expect(
       await createUser.addUser({

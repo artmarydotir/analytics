@@ -1,5 +1,6 @@
 const constants = {
   ISREQUIRE_FIELD: '',
+  ISREQUIRE_ID: '',
   MIN_LENGTH: '',
   MAX_LENGTH: '',
   INVALID_REGEX: '',
@@ -12,6 +13,7 @@ const constants = {
   NOT_REQUIRED_BOTH: '',
   REQUIRED_ONLY: '',
   INVALID_WILDCARD_DOMAIN: '',
+  NOT_EXIST: '',
 };
 
 const list = Object.values(constants);
