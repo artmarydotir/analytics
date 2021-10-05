@@ -1,5 +1,5 @@
 class ProjectListREST {
-  constructor({ Config, Fastify, ProjectListRepository }) {
+  constructor({ Config, Fastify, ProjectDomainListRepository }) {
     /** @type {import('fastify').FastifyInstance} */
     this.fastify = Fastify.getFastify();
 
@@ -39,7 +39,7 @@ class ProjectListREST {
         return e403.reply(reply);
       },
       handler: async (req, reply) => {
-        const result = await ProjectListRepository.getProjectDomainList();
+        const result = await ProjectDomainListRepository.getProjectDomainList();
         if (!result) {
           return e404.reply(reply);
         }

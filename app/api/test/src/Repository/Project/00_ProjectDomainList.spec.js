@@ -55,7 +55,7 @@ describe(__filename.replace(__dirname, ''), () => {
     const createProject = container.resolve('ProjectCreateRepository');
     const createUser = container.resolve('UserCreateRepository');
     const createDomain = container.resolve('DomainCreateRepository');
-    const projectList = container.resolve('ProjectListRepository');
+    const projectList = container.resolve('ProjectDomainListRepository');
 
     const enableUser = await createUser.addUser({
       username: 'enableuser',
@@ -77,7 +77,7 @@ describe(__filename.replace(__dirname, ''), () => {
       password: 'ba1asQW12!@AS*&',
       role: 'SA',
       lang: 'en',
-      options: [1],
+      options: [1, 2],
       country: 'IR',
       mobile: '09017744148',
       additional: {
@@ -85,45 +85,81 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
-    const projectData = await createProject.addProject({
+    const enableProject = await createProject.addProject({
       title: 'my project for list',
       publicToken: 'project00080',
+      options: [1],
       description: 'hello test for list',
       userAndRoles: [
         {
-          UserId: userData.dataValues.id,
+          UserId: enableUser.dataValues.id,
           role: ['ALL', 'VIEW_B'],
         },
       ],
       additional: {},
     });
 
-    // await createDomain.addDomain({
-    //   domain: 'forlist.com',
-    //   wildcardDomain: '',
-    //   description: 'there for list',
-    //   options: [1, 2],
-    //   projectId: projectData.id,
-    //   additional: {
-    //     alexaRank: '21',
-    //   },
-    // });
+    const disableProject = await createProject.addProject({
+      title: 'my disable project',
+      publicToken: 'project00090',
+      description: 'hello test for list',
+      options: [1, 2],
+      userAndRoles: [
+        {
+          UserId: disableUser.dataValues.id,
+          role: ['ALL', 'VIEW_B'],
+        },
+      ],
+      additional: {},
+    });
 
-    // await createDomain.addDomain({
-    //   domain: '',
-    //   wildcardDomain: '*.mine.tld',
-    //   description: 'there for list',
-    //   options: [1, 2],
-    //   projectId: projectData.id,
-    //   additional: {
-    //     alexaRank: '10',
-    //   },
-    // });
+    await createDomain.addDomain({
+      domain: 'enabledomain.com',
+      wildcardDomain: '',
+      description: 'enable domain there for list',
+      options: [1],
+      projectId: enableProject.id,
+      additional: {
+        alexaRank: '21',
+      },
+    });
 
-    // expect(await projectList.getProjectDomainList()).toBeTruthy();
-    // console.log(await projectList.getProjectDomainList());
+    await createDomain.addDomain({
+      domain: 'disabledomain.com',
+      wildcardDomain: '',
+      description: 'disable domain there for list',
+      options: [2],
+      projectId: enableProject.id,
+      additional: {
+        alexaRank: '21',
+      },
+    });
+
+    await createDomain.addDomain({
+      domain: 'domainwithdisableproject.com',
+      wildcardDomain: '',
+      description: 'there for list',
+      options: [1],
+      projectId: disableProject.id,
+      additional: {
+        alexaRank: '21',
+      },
+    });
+
+    await createDomain.addDomain({
+      domain: '',
+      wildcardDomain: '*.mine.tld',
+      description: 'there for list',
+      options: [1],
+      projectId: enableProject.id,
+      additional: {
+        alexaRank: '10',
+      },
+    });
+
+    expect(await projectList.getProjectDomainList()).toBeTruthy();
     const c = await projectList.getProjectDomainList();
-    console.log(c);
-    console.log(Object.keys(c).length);
+
+    expect(Object.keys(c).length).toBe(1);
   });
 });

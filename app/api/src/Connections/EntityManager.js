@@ -26,7 +26,7 @@ class EntityManager {
       UserProjectEntity(this.sequelize);
       DomainEntity(this.sequelize);
       await this.sequelize.authenticate();
-      // await this.sequelize.sync({ force: this.testMode });
+      await this.sequelize.sync({ force: this.testMode });
     }
     return this.sequelize;
   }
