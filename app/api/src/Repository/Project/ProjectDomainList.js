@@ -3,7 +3,7 @@ const { constants: userOption } = require('../../Schema/UserOption');
 const { constants: projectOption } = require('../../Schema/ProjectOption');
 const { constants: domainOption } = require('../../Schema/DomainOption');
 
-class ProjectList {
+class ProjectDomainList {
   constructor({ sequelize }) {
     this.sequelize = sequelize;
   }
@@ -74,4 +74,4 @@ class ProjectList {
   }
 }
 
-module.exports = ProjectList;
+module.exports = ProjectDomainList;
