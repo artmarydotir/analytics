@@ -24,7 +24,7 @@ class UserUpdate {
    * @param {String} data.email
    * @param {String} data.role
    * @param {String} data.lang
-   * @param {Number[]} data.options
+   * @param {Object.<string, boolean>} data.options
    * @param {String} data.country
    * @param {String} data.mobile
    * @param {Object} data.additional
@@ -83,7 +83,10 @@ class UserUpdate {
       }
     }
 
-    initialValues.options = options;
+    if (options) {
+      const getOptions = await this.retrieveUserOptions(id, options);
+      initialValues.options = getOptions;
+    }
 
     if (additional && typeof additional === 'object') {
       initialValues.additional = additional;
@@ -145,7 +148,9 @@ class UserUpdate {
 
     initialValues.lang = lang;
 
-    initialValues.country = country;
+    if (country) {
+      initialValues.country = country;
+    }
 
     if (mobile) {
       const validMobile = this.process.setMobile(mobile, country);
@@ -211,6 +216,35 @@ class UserUpdate {
       });
     }
 
+    const getOptions = await this.retrieveUserOptions(id, props);
+    const { User } = this.sequelize.models;
+
+    const affectedRow = await User.update(
+      {
+        options: getOptions,
+      },
+      {
+        where: {
+          id,
+        },
+      },
+    );
+
+    return { affectedRow, id };
+  }
+
+  /**
+   *
+   * @param {Number} id
+   * @param {Object.<string, boolean>} props
+   */
+  async retrieveUserOptions(id, props) {
+    if (!id) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
     const { User } = this.sequelize.models;
     const user = await User.findOne({
       attributes: ['options'],
@@ -233,18 +267,7 @@ class UserUpdate {
 
     newOption = uniq(newOption);
 
-    const affectedRow = await User.update(
-      {
-        options: newOption,
-      },
-      {
-        where: {
-          id,
-        },
-      },
-    );
-
-    return { affectedRow, id };
+    return newOption;
   }
 }
 

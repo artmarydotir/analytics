@@ -109,7 +109,7 @@ const UpdateUserSchemaSA = () =>
     mobile: Joi.string().messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),
-    options: Joi.array().allow(null).optional(),
+    options: Joi.object().allow(null).optional(),
     additional: Joi.object().allow(null).optional(),
   });
 

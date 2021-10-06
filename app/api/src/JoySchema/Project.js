@@ -20,7 +20,7 @@ const CreateProjectSchema = () =>
       'string.max': errorConstMerge.MAX_LENGTH,
     }),
     userAndRoles: Joi.array().allow(null).optional(),
-    options: Joi.array().allow(null).optional(),
+    options: Joi.any().allow(null).optional(),
     additional: Joi.object().allow(null).optional(),
   });
 

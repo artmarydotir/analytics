@@ -66,7 +66,10 @@ describe(__filename.replace(__dirname, ''), () => {
         email: 'heymary@gmail.com',
         role: 'AD',
         lang: 'fa',
-        options: [1],
+        options: {
+          ACTIVE: true,
+          DELETED: true,
+        },
         country: 'IR',
         mobile: '09017744145',
         additional: {
@@ -87,17 +90,6 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       }),
     ).toBeTruthy();
-
-    expect(
-      await user.patchUserOptions(user1.dataValues.id, {
-        ACTIVE: false,
-        DELETED: true,
-      }),
-    ).toBeTruthy();
-
-    await expect(user.updateUserBySuperAdmin(null, {})).rejects.toThrowError();
-    await expect(user.updateUserByMembers(null, {})).rejects.toThrowError();
-    await expect(user.patchUserOptions(null, {})).rejects.toThrowError();
 
     await expect(
       user.updateUserByMembers(user2.dataValues.id, {
@@ -124,5 +116,17 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       }),
     ).rejects.toThrowError();
+
+    expect(
+      await user.patchUserOptions(user2.dataValues.id, {
+        ACTIVE: false,
+        DELETED: true,
+      }),
+    ).toBeTruthy();
+
+    await expect(user.retrieveUserOptions(null, {})).rejects.toThrowError();
+    await expect(user.updateUserBySuperAdmin(null, {})).rejects.toThrowError();
+    await expect(user.updateUserByMembers(null, {})).rejects.toThrowError();
+    await expect(user.patchUserOptions(null, {})).rejects.toThrowError();
   });
 });

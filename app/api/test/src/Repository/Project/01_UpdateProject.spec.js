@@ -46,6 +46,8 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('add project', async () => {
     const createProject = container.resolve('ProjectCreateRepository');
+    const updateProject = container.resolve('ProjectUpdateRepository');
+
     const createUser = container.resolve('UserCreateRepository');
     const user = await createUser.addUser({
       username: 'addproject',
@@ -75,72 +77,79 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
+    const res = await createProject.addProject({
+      title: 'donyaye Eghtesad',
+      publicToken: '123654',
+      description: 'hey hello',
+      userAndRoles: [
+        {
+          UserId: user.dataValues.id,
+          role: ['ALL', 'VIEW_A'],
+        },
+      ],
+      additional: {},
+    });
+
     expect(
-      await createProject.addProject({
-        title: 'donyaye Eghtesad',
-        publicToken: '123654',
-        description: 'hey hello',
-        userAndRoles: [
-          {
-            UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
-          },
-        ],
-        additional: {},
+      await updateProject.patchProjectOptions(res.id, {
+        ACTIVE: true,
+        DELETED: false,
       }),
     ).toBeTruthy();
 
     expect(
-      await createProject.addProject({
-        title: 'test2',
+      await updateProject.updateProject(res.id, {
+        title: 'mosals news',
+        description: 'will change you too',
         publicToken: '123654a1s2',
-        description: 'hey hello',
+        additional: {
+          officeLocation: 'tehran',
+        },
+        options: {
+          ACTIVE: true,
+          DELETED: false,
+        },
         userAndRoles: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            role: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            role: ['NEWS_A'],
           },
         ],
-        additional: {},
       }),
     ).toBeTruthy();
 
-    expect(
-      await createProject.addProject({
-        title: 'donyayeEf',
-        description: 'hey this is a description',
+    await expect(updateProject.updateProject(null, {})).rejects.toThrowError();
+    await expect(
+      updateProject.updateProject(res.id, {
+        title: null,
+        description: 'will change you too',
+        options: {
+          ACTIVE: false,
+          DELETED: true,
+        },
         userAndRoles: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            role: ['ALL', 'VIEW_C'],
+          },
+          {
+            UserId: user2.dataValues.id,
+            role: ['NEWS_A'],
           },
         ],
-        additional: {},
-      }),
-    ).toBeTruthy();
-
-    await expect(
-      createProject.addProject({
-        title: 'donyayeEf',
-        description: 'hey hello there',
-        additional: {},
       }),
     ).rejects.toThrowError();
 
     await expect(
-      createProject.addProject({
-        description: 'hey hello there',
-        userAndRoles: [
-          {
-            UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
-          },
-        ],
-      }),
+      updateProject.patchProjectOptions(null, {}),
+    ).rejects.toThrowError();
+
+    await expect(
+      updateProject.retrieveProjectOptions(null, {}),
     ).rejects.toThrowError();
   });
 });
