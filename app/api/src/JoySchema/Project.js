@@ -6,6 +6,7 @@ const CreateProjectSchema = () =>
     title: Joi.string()
       .required()
       .max(50)
+      // eslint-disable-next-line security/detect-unsafe-regex
       .regex(/^\s*\w+(?:[^\w,]+\w+)*[^,\w]*$/)
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,

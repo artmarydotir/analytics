@@ -97,6 +97,13 @@ services:
     container_name: analytic-redis
     image: redis:6
 
+  analytic-rest-captcha:
+    container_name: analytic-captcha
+    image: aasaam/rest-captcha
+    command: -return-value
+    ports:
+      - 4000:4000
+
   analytic-postgres:
     container_name: analytic-postgres
     environment:

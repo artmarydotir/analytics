@@ -7,7 +7,7 @@ const DomainEntity = require('../Entities/Domain');
 
 class EntityManager {
   constructor({ Config, Logger }) {
-    this.testMode = Config.ASM_PUBLIC_APP_TEST;
+    this.Config = Config;
     this.connectionString = Config.ASM_POSTGRES_URI;
     this.sequelize = undefined;
     this.Logger = Logger;
@@ -26,7 +26,10 @@ class EntityManager {
       UserProjectEntity(this.sequelize);
       DomainEntity(this.sequelize);
       await this.sequelize.authenticate();
-      await this.sequelize.sync({ force: this.testMode });
+
+      await this.sequelize.sync({
+        force: this.Config.testMode && this.Config.ASM_PM_ID === 0,
+      });
     }
     return this.sequelize;
   }
