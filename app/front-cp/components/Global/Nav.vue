@@ -4,14 +4,14 @@
     :right="dirMode"
     app
     temporary
-    width="320px"
+    width="340px"
   >
     <v-sheet class="pa-4">
       <v-list-item-avatar>
         <v-icon color="green" large>mdi-alarm-light-outline</v-icon>
       </v-list-item-avatar>
       <div>
-        {{ $t('projectName') }}
+        {{ $t('projectDescription') }}
       </div>
     </v-sheet>
     <v-divider></v-divider>

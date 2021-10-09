@@ -2,7 +2,11 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
-$font-size-root: 16px;
+$font-size-root: 17px;
 $body-font-family: 'aasaam-Noto', sans-serif;
 $heading-font-family: 'aasaam-Noto', sans-serif;
 $btn-letter-spacing: 0;
+$border-radius-root: 0.25rem;
+$rounded: (
+  'xl': $border-radius-root * 14,
+);
