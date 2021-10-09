@@ -9,7 +9,7 @@
       origin="right right"
       transition="slide-y-transition"
     >
-      <template #activator="{ on }">
+      <template v-slot:activator="{ on }">
         <v-btn text color="white" dark class="nocase" v-on="on">
           <span v-if="$i18n.locale == 'fa'" class="fn-t inline-b"> فا </span>
           <span v-if="$i18n.locale == 'en'" class="fn-t inline-b mr-1">

@@ -1,11 +1,11 @@
-import { by639_1 as By639 } from 'iso-language-codes'
+import { by639_1 as By639 } from 'iso-language-codes';
 import {
   defaultLocale,
   supportedLocales,
   defaultLocaleProjectInfo,
-} from './init'
+} from './init';
 
-const locales = []
+const locales = [];
 
 supportedLocales.forEach((code) => {
   locales.push({
@@ -14,10 +14,10 @@ supportedLocales.forEach((code) => {
     name: By639[code].name,
     nativeName: By639[code].nativeName,
     file: `${code}/index.js`,
-  })
-})
+  });
+});
 
-export const localeProjectInfo = defaultLocaleProjectInfo
+export const localeProjectInfo = defaultLocaleProjectInfo;
 
 export const I18N = {
   vuex: {
@@ -36,10 +36,10 @@ export const I18N = {
   locales,
   lazy: true,
   // detectBrowserLanguage: true,
-  seo: false,
+  seo: true,
   langDir: './locales/',
   defaultLocale,
   parsePages: true,
   strategy: 'prefix',
   vueI18nLoader: true,
-}
+};

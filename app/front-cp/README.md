@@ -31,3 +31,5 @@ sudo apt-get install inkscape imagemagick pngquant
 5. Run `./manifest/build-icons.js`
 
 **Note:** Run icon generate follow when icon change not all time. It's will increase your git database size.
+
+curl -X POST -H 'Content-type: application/json' -d '{"lang":"fa","ttl":30, "level": "1"}' http://127.0.0.1:4000/new

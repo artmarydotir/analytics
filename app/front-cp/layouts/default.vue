@@ -1,19 +1,25 @@
 <template>
-  <v-app>
-    <GlobalNav />
-    <GlobalAppBar />
+  <v-app app>
+    <Nav />
+    <AppBar />
 
     <v-main>
-      <v-container>
+      <v-container fluid>
+        dsbsb
         <nuxt />
       </v-container>
     </v-main>
-    <GlobalFooter />
+    <Footer />
   </v-app>
 </template>
 <script>
 const rtlLanguages = ['ar', 'dv', 'fa', 'he', 'ps', 'ur', 'yi'];
 export default {
+  data() {
+    return {
+      polling: null,
+    };
+  },
   head() {
     const i18nSeo = this.$nuxtI18nSeo();
     return {
@@ -23,6 +29,15 @@ export default {
         ...i18nSeo.htmlAttrs,
       },
     };
+  },
+
+  computed: {
+    theme() {
+      return this.$vuetify.theme.dark ? 'dark' : 'light';
+    },
+  },
+  mounted() {
+    this.$vuetify.theme.dark = this.$store.state.helper.darkMode;
   },
 };
 </script>

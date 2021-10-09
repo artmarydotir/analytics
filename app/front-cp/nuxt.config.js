@@ -21,6 +21,7 @@ Object.keys(manifest.icons).forEach((name) => {
 
 export default {
   ssr: false,
+  target: 'static',
   router: {
     base: '/_cp',
     mode: 'hash',
@@ -33,15 +34,7 @@ export default {
   publicRuntimeConfig: {
     dir: localeProjectInfo.dir,
     lang: localeProjectInfo.lang,
-    axios: {
-      browserBaseURL: process.env.ASM_BUILD_FRONT_BASE_URL
-        ? process.env.ASM_BUILD_FRONT_BASE_URL
-        : '/api',
-    },
   },
-
-  target: 'static',
-
   head: {
     titleTemplate: `%s - ${localeProjectInfo.projectName}`,
     title: localeProjectInfo.loading,
@@ -68,21 +61,19 @@ export default {
 
   css: ['@aasaam/noto-font/dist/font-face.css', '~/assets/main.scss'],
 
-  plugins: [{ src: '~/plugins/vuex-persist.js' }],
-
+  plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
   components: {
-    dirs: ['~/components'],
+    dirs: ['~/components', '~/components/Global', '~/components/Auth'],
   },
 
   buildModules: [
     '@nuxtjs/eslint-module',
-
     '@nuxtjs/stylelint-module',
-
     '@nuxtjs/vuetify',
   ],
 
   modules: ['@nuxtjs/axios', ['nuxt-i18n', I18N]],
+
   loading: {
     color: process.env.ASM_BUILD_NUXT_LOADING_COLOR
       ? process.env.ASM_BUILD_NUXT_LOADING_COLOR
@@ -94,7 +85,9 @@ export default {
     rtl: localeProjectInfo.dir === 'rtl',
   },
 
-  axios: {},
+  axios: {
+    baseURL: '',
+  },
 
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

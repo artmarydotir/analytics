@@ -11,7 +11,7 @@
       <span class="hidden-sm-and-down"> {{ $t('projectName') }} </span>
     </v-toolbar-title>
     <v-spacer />
-    <v-btn icon>
+    <v-btn :to="localePath('dashboard')" icon>
       <v-icon>mdi-apps</v-icon>
     </v-btn>
     <v-btn icon @click="changeTheme">
@@ -19,13 +19,14 @@
       <v-icon v-if="!$vuetify.theme.dark"> mdi-white-balance-sunny </v-icon>
     </v-btn>
 
-    <v-btn icon>
+    <!-- <v-btn icon>
       <v-icon>mdi-bell</v-icon>
-    </v-btn>
-
+    </v-btn> -->
     <template v-if="$i18n.locales.length > 1">
-      <GlobalLangSwitcher />
+      <LangSwitcher />
     </template>
+
+    <ToolbarMenu />
   </v-app-bar>
 </template>
 <script>
@@ -43,8 +44,8 @@ export default {
   },
   methods: {
     changeTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-      localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString());
+      this.$store.commit('helper/SWITCH_DARK');
+      this.$vuetify.theme.dark = this.$store.state.helper.darkMode;
     },
   },
 };

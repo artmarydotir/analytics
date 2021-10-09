@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless>
+  <v-footer padless fixed app>
     <v-col class="text-center" cols="12">
       <span class="caption">
         {{ $t('projectDescription') }}
@@ -9,5 +9,7 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'GlobalFooter',
+};
 </script>
