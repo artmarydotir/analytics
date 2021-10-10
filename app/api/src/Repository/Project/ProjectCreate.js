@@ -57,6 +57,7 @@ class ProjectCreate {
       privateToken: null,
       publicToken: null,
       additional: null,
+      enabled: true,
     };
     const middleTable = {
       userAndRoles: null,

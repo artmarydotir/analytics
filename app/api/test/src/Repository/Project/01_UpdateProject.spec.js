@@ -47,6 +47,7 @@ describe(__filename.replace(__dirname, ''), () => {
   it('add project', async () => {
     const createProject = container.resolve('ProjectCreateRepository');
     const updateProject = container.resolve('ProjectUpdateRepository');
+    const createDomain = container.resolve('DomainCreateRepository');
 
     const createUser = container.resolve('UserCreateRepository');
     const user = await createUser.addUser({
@@ -90,10 +91,61 @@ describe(__filename.replace(__dirname, ''), () => {
       additional: {},
     });
 
+    const res2 = await createProject.addProject({
+      title: 'analytic',
+      publicToken: '12365468',
+      description: 'hey htm',
+      userAndRoles: [
+        {
+          UserId: user.dataValues.id,
+          role: ['ALL'],
+        },
+      ],
+    });
+
     expect(
       await updateProject.patchProjectOptions(res.id, {
         ACTIVE: true,
         DELETED: false,
+      }),
+    ).toBeTruthy();
+
+    expect(
+      await createDomain.addDomain({
+        domain: 'check.com',
+        wildcardDomain: '',
+        description: 'new domain same project',
+        options: [1],
+        projectId: res.id,
+        additional: {
+          alexaRank: '21',
+        },
+      }),
+    ).toBeTruthy();
+
+    expect(
+      await createDomain.addDomain({
+        domain: 'mary.com',
+        wildcardDomain: '',
+        description: 'new domain same project',
+        options: [1],
+        projectId: res.id,
+        additional: {
+          alexaRank: '5',
+        },
+      }),
+    ).toBeTruthy();
+
+    expect(
+      await createDomain.addDomain({
+        domain: 'notrelated.com',
+        wildcardDomain: '',
+        description: 'new domain same project',
+        options: [1],
+        projectId: res2.id,
+        additional: {
+          alexaRank: '8',
+        },
       }),
     ).toBeTruthy();
 
@@ -107,7 +159,7 @@ describe(__filename.replace(__dirname, ''), () => {
         },
         options: {
           ACTIVE: true,
-          DELETED: false,
+          DELETED: true,
         },
         userAndRoles: [
           {

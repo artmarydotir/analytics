@@ -66,6 +66,7 @@ class DomainCreate {
       options: null,
       additional: null,
       ProjectId: null,
+      enabled: true,
     };
 
     if (domain && wildcardDomain) {
