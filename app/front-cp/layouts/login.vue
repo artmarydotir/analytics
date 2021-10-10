@@ -3,7 +3,7 @@
     <nuxt />
     <v-footer
       padless
-      color="transparent"
+      color="deep-purple"
       :fixed="$vuetify.breakpoint.lgAndUp ? true : false"
     >
       <v-col class="text-center" cols="12">

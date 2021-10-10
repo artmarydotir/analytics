@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 const validator = require('validator').default;
 const isValidHostname = require('is-valid-hostname');
 
@@ -91,8 +92,7 @@ class DomainCreate {
     }
 
     if (wildcardDomain) {
-      const desiredDomain = wildcardDomain.replace('*.', '');
-      const isValid = isValidHostname(desiredDomain);
+      const isValid = this.isValidWildcardDomain(wildcardDomain);
 
       if (isValid) {
         initialValues.wildcardDomain = wildcardDomain;
@@ -124,6 +124,24 @@ class DomainCreate {
     const result = await Domain.create(initialValues);
 
     return result.dataValues;
+  }
+
+  /**
+   *
+   * @param {*} input
+   * @returns {Boolean}
+   */
+  isValidWildcardDomain(input) {
+    let isValid = false;
+
+    if (input.startsWith('*.')) {
+      const desiredDomain = input.replace('*.', '');
+      isValid = isValidHostname(desiredDomain);
+    } else {
+      isValid = false;
+    }
+
+    return isValid;
   }
 }
 
