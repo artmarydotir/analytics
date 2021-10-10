@@ -12,7 +12,7 @@ const CreateDomainSchema = () =>
     description: Joi.string().max(200).optional().messages({
       'string.max': errorConstMerge.MAX_LENGTH,
     }),
-    options: Joi.array().allow(null).optional(),
+    options: Joi.any().allow(null).optional(),
     additional: Joi.object().allow(null).optional(),
   });
 

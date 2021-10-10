@@ -43,7 +43,7 @@ module.exports = {
         email: 'adminer@gmail.com',
         password: newPassword,
         role: 'SA',
-        lang: 'fa',
+        lang: 'en',
         options: [1],
       });
 
