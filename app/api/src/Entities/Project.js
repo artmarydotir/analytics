@@ -13,6 +13,10 @@ module.exports = (sequelize) =>
         primaryKey: true,
         autoIncrement: true,
       },
+      enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       privateToken: {
         type: DataTypes.CHAR(32),
         allowNull: false,

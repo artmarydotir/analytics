@@ -26,6 +26,7 @@ class ProjectUpdate {
     } = data;
 
     const schema = projectJoiSchema();
+    let changeDomainInability = false;
 
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -67,6 +68,10 @@ class ProjectUpdate {
     if (options) {
       const newOption = await this.retrieveProjectOptions(id, options);
       initialValues.options = newOption;
+      if (newOption.includes(projectOption.DELETED)) {
+        changeDomainInability = true;
+        initialValues.enabled = false;
+      }
     }
 
     if (description) {
@@ -87,7 +92,7 @@ class ProjectUpdate {
      ***
      */
     const t = await this.sequelize.transaction();
-    const { Project, UserProject } = this.sequelize.models;
+    const { Project, UserProject, Domain } = this.sequelize.models;
     try {
       const project = await Project.update(initialValues, {
         where: {
@@ -95,6 +100,19 @@ class ProjectUpdate {
         },
         transaction: t,
       });
+
+      // demoralizing
+      if (changeDomainInability) {
+        await Domain.update(
+          { enabled: false },
+          {
+            where: {
+              ProjectId: id,
+            },
+            transaction: t,
+          },
+        );
+      }
 
       const readyData = middleTable.userAndRoles.map((obj) => ({
         ...obj,
@@ -131,7 +149,7 @@ class ProjectUpdate {
       });
     }
 
-    const { Project } = this.sequelize.models;
+    const { Project, Domain } = this.sequelize.models;
     const project = await Project.findOne({
       attributes: ['options'],
       where: {
@@ -163,6 +181,16 @@ class ProjectUpdate {
         },
       },
     );
+
+    const c = await Domain.update(
+      { enabled: false },
+      {
+        where: {
+          ProjectId: id,
+        },
+      },
+    );
+    console.log(c);
 
     return { affectedRow, id };
   }

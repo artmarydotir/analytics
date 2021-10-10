@@ -38,6 +38,10 @@ module.exports = (sequelize) => {
         type: DataTypes.JSON,
         allowNull: true,
       },
+      enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       // Other model options go here
