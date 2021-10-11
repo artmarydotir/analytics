@@ -1,4 +1,5 @@
 const { uniq } = require('lodash');
+const { Op } = require('sequelize');
 const validator = require('validator').default;
 const { ErrorWithProps } = require('mercurius').default;
 const {
@@ -83,9 +84,18 @@ class UserUpdate {
       }
     }
 
+    let inabilityStatus = false;
     if (options) {
       const getOptions = await this.retrieveUserOptions(id, options);
       initialValues.options = getOptions;
+      if (
+        getOptions.includes(userOption.DELETED) ||
+        !getOptions.includes(userOption.ACTIVE)
+      ) {
+        inabilityStatus = false;
+      } else {
+        inabilityStatus = true;
+      }
     }
 
     if (additional && typeof additional === 'object') {
@@ -98,15 +108,49 @@ class UserUpdate {
      ***
      */
 
-    const { User } = this.sequelize.models;
+    const t = await this.sequelize.transaction();
+    const { User, Project, Domain } = this.sequelize.models;
+    const readyProjectList = await this.getProjectListBelongsUser(id);
 
-    const affectedRow = await User.update(initialValues, {
-      where: {
-        id,
-      },
-    });
+    try {
+      const affectedRow = await User.update(initialValues, {
+        where: {
+          id,
+        },
+        transaction: t,
+      });
 
-    return { affectedRow, id };
+      await Project.update(
+        { enabled: inabilityStatus },
+        {
+          where: {
+            id: {
+              [Op.in]: readyProjectList,
+            },
+          },
+          transaction: t,
+        },
+      );
+
+      await Domain.update(
+        { enabled: inabilityStatus },
+        {
+          where: {
+            ProjectId: {
+              [Op.in]: readyProjectList,
+            },
+          },
+          transaction: t,
+        },
+      );
+
+      await t.commit();
+
+      return { affectedRow, id };
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
   }
 
   /**
@@ -268,6 +312,29 @@ class UserUpdate {
     newOption = uniq(newOption);
 
     return newOption;
+  }
+
+  /**
+   *
+   * @param {Number} userId
+   * @returns {Promise<Array>}
+   */
+  async getProjectListBelongsUser(userId) {
+    const { UserProject } = this.sequelize.models;
+    const readyProjectList = [];
+
+    const projectList = await UserProject.findAll({
+      attributes: ['ProjectId'],
+      where: {
+        UserId: userId,
+      },
+    });
+
+    projectList.forEach((element) => {
+      readyProjectList.push(element.dataValues.ProjectId);
+    });
+
+    return readyProjectList;
   }
 }
 

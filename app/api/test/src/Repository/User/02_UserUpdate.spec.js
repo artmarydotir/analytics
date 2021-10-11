@@ -16,7 +16,27 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, UserProject, Project, Domain } = seq.models;
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Domain.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
     await User.destroy({
       where: {},
       truncate: true,
@@ -33,6 +53,8 @@ describe(__filename.replace(__dirname, ''), () => {
   it('update user', async () => {
     const user = container.resolve('UserUpdateRepository');
     const createUser = container.resolve('UserCreateRepository');
+    const createProject = container.resolve('ProjectCreateRepository');
+    const createDomain = container.resolve('DomainCreateRepository');
 
     const user1 = await createUser.addUser({
       username: 'heytester',
@@ -60,6 +82,75 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
+    const project1 = await createProject.addProject({
+      title: 'its test for enable mood',
+      publicToken: '1236s5721',
+      options: [1],
+      userAndRoles: [
+        {
+          UserId: user1.dataValues.id,
+          role: ['ALL', 'VIEW_A'],
+        },
+      ],
+      additional: {},
+    });
+
+    const project2 = await createProject.addProject({
+      title: 'its test',
+      publicToken: '1236s5730',
+      options: [2],
+      userAndRoles: [
+        {
+          UserId: user2.dataValues.id,
+          role: ['ALL'],
+        },
+        {
+          UserId: user1.dataValues.id,
+          role: ['ALL'],
+        },
+      ],
+      additional: {},
+    });
+
+    const project3 = await createProject.addProject({
+      title: 'its test hey',
+      publicToken: '1236s5asd',
+      options: [1],
+      userAndRoles: [
+        {
+          UserId: user2.dataValues.id,
+          role: ['ALL'],
+        },
+      ],
+      additional: {},
+    });
+
+    expect(
+      await createDomain.addDomain({
+        domain: 'forupdate.com',
+        wildcardDomain: '',
+        description: 'for update',
+        options: [1],
+        projectId: project1.id,
+        additional: {
+          alexaRank: '21',
+        },
+      }),
+    ).toBeTruthy();
+
+    expect(
+      await createDomain.addDomain({
+        domain: 'dontbe.com',
+        wildcardDomain: '',
+        description: 'for dontbe update',
+        options: [1],
+        projectId: project3.id,
+        additional: {
+          alexaRank: '40',
+        },
+      }),
+    ).toBeTruthy();
+
     expect(
       await user.updateUserBySuperAdmin(user1.dataValues.id, {
         username: 'heymary',
@@ -67,7 +158,7 @@ describe(__filename.replace(__dirname, ''), () => {
         role: 'AD',
         lang: 'fa',
         options: {
-          ACTIVE: true,
+          ACTIVE: false,
           DELETED: true,
         },
         country: 'IR',
@@ -79,17 +170,35 @@ describe(__filename.replace(__dirname, ''), () => {
     ).toBeTruthy();
 
     expect(
-      await user.updateUserByMembers(user2.dataValues.id, {
-        username: 'register',
-        email: 'heytestr2@gmail.com',
+      await user.updateUserBySuperAdmin(user2.dataValues.id, {
+        username: 'noupdatefield',
+        email: 'noupdate@gmail.com',
+        role: 'SA',
         lang: 'en',
+        options: {
+          ACTIVE: true,
+          DELETED: false,
+        },
         country: 'IR',
-        mobile: '09017744178',
+        mobile: '09336314586',
         additional: {
-          gender: 'male',
+          gender: 'robots',
         },
       }),
     ).toBeTruthy();
+
+    // expect(
+    //   await user.updateUserByMembers(user2.dataValues.id, {
+    //     username: 'register',
+    //     email: 'heytestr2@gmail.com',
+    //     lang: 'en',
+    //     country: 'IR',
+    //     mobile: '09017744178',
+    //     additional: {
+    //       gender: 'male',
+    //     },
+    //   }),
+    // ).toBeTruthy();
 
     await expect(
       user.updateUserByMembers(user2.dataValues.id, {
@@ -117,12 +226,19 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).rejects.toThrowError();
 
-    expect(
-      await user.patchUserOptions(user2.dataValues.id, {
-        ACTIVE: false,
-        DELETED: true,
-      }),
-    ).toBeTruthy();
+    // expect(
+    //   await user.patchUserOptions(user2.dataValues.id, {
+    //     ACTIVE: false,
+    //     DELETED: true,
+    //   }),
+    // ).toBeTruthy();
+
+    // expect(
+    //   await user.retrieveUserOptions(user2.dataValues.id, {
+    //     ACTIVE: false,
+    //     DELETED: false,
+    //   }),
+    // ).toStrictEqual([]);
 
     await expect(user.retrieveUserOptions(null, {})).rejects.toThrowError();
     await expect(user.updateUserBySuperAdmin(null, {})).rejects.toThrowError();

@@ -114,7 +114,7 @@ describe(__filename.replace(__dirname, ''), () => {
       await createDomain.addDomain({
         domain: 'check.com',
         wildcardDomain: '',
-        description: 'new domain same project',
+        description: 'new domain same projects',
         options: [1],
         projectId: res.id,
         additional: {
@@ -152,7 +152,7 @@ describe(__filename.replace(__dirname, ''), () => {
     expect(
       await updateProject.updateProject(res.id, {
         title: 'mosals news',
-        description: 'will change you too',
+        description: 'will change you',
         publicToken: '123654a1s2',
         additional: {
           officeLocation: 'tehran',
@@ -197,8 +197,35 @@ describe(__filename.replace(__dirname, ''), () => {
     ).rejects.toThrowError();
 
     await expect(
+      updateProject.updateProject(res.id, {
+        title: null,
+        description: 'will change you too',
+        options: {
+          ACTIVE: true,
+          DELETED: false,
+        },
+        userAndRoles: [
+          {
+            UserId: user.dataValues.id,
+            role: ['ALL', 'VIEW_C'],
+          },
+          {
+            UserId: user2.dataValues.id,
+            role: ['NEWS_A'],
+          },
+        ],
+      }),
+    ).rejects.toThrowError();
+
+    await expect(
       updateProject.patchProjectOptions(null, {}),
     ).rejects.toThrowError();
+
+    const b = await updateProject.patchProjectOptions(res.id, {
+      ACTIVE: true,
+      DELETED: false,
+    });
+    expect(b.projectId).toBe(res.id);
 
     await expect(
       updateProject.retrieveProjectOptions(null, {}),
