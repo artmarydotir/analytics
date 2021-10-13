@@ -95,7 +95,7 @@ describe(__filename.replace(__dirname, ''), () => {
       additional: {},
     });
 
-    const project2 = await createProject.addProject({
+    await createProject.addProject({
       title: 'its test',
       publicToken: '1236s5730',
       options: [2],
@@ -187,18 +187,18 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).toBeTruthy();
 
-    // expect(
-    //   await user.updateUserByMembers(user2.dataValues.id, {
-    //     username: 'register',
-    //     email: 'heytestr2@gmail.com',
-    //     lang: 'en',
-    //     country: 'IR',
-    //     mobile: '09017744178',
-    //     additional: {
-    //       gender: 'male',
-    //     },
-    //   }),
-    // ).toBeTruthy();
+    expect(
+      await user.updateUserByMembers(user2.dataValues.id, {
+        username: 'register',
+        email: 'heytestr2@gmail.com',
+        lang: 'en',
+        country: 'IR',
+        mobile: '09017744178',
+        additional: {
+          gender: 'male',
+        },
+      }),
+    ).toBeTruthy();
 
     await expect(
       user.updateUserByMembers(user2.dataValues.id, {
@@ -226,19 +226,19 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).rejects.toThrowError();
 
-    // expect(
-    //   await user.patchUserOptions(user2.dataValues.id, {
-    //     ACTIVE: false,
-    //     DELETED: true,
-    //   }),
-    // ).toBeTruthy();
+    expect(
+      await user.patchUserOptions(user2.dataValues.id, {
+        ACTIVE: false,
+        DELETED: true,
+      }),
+    ).toBeTruthy();
 
-    // expect(
-    //   await user.retrieveUserOptions(user2.dataValues.id, {
-    //     ACTIVE: false,
-    //     DELETED: false,
-    //   }),
-    // ).toStrictEqual([]);
+    expect(
+      await user.retrieveUserOptions(user2.dataValues.id, {
+        ACTIVE: false,
+        DELETED: false,
+      }),
+    ).toStrictEqual([]);
 
     await expect(user.retrieveUserOptions(null, {})).rejects.toThrowError();
     await expect(user.updateUserBySuperAdmin(null, {})).rejects.toThrowError();

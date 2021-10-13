@@ -31,6 +31,7 @@ class UserUpdate {
    * @param {Object} data.additional
    */
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   async updateUserBySuperAdmin(id, data) {
     const {
       username,
@@ -261,20 +262,64 @@ class UserUpdate {
     }
 
     const getOptions = await this.retrieveUserOptions(id, props);
-    const { User } = this.sequelize.models;
+    let inabilityStatus = false;
 
-    const affectedRow = await User.update(
-      {
-        options: getOptions,
-      },
-      {
-        where: {
-          id,
+    if (
+      getOptions.includes(userOption.DELETED) ||
+      !getOptions.includes(userOption.ACTIVE)
+    ) {
+      inabilityStatus = false;
+    } else {
+      inabilityStatus = true;
+    }
+
+    const t = await this.sequelize.transaction();
+    const { User, Project, Domain } = this.sequelize.models;
+    const readyProjectList = await this.getProjectListBelongsUser(id);
+    try {
+      const affectedRow = await User.update(
+        {
+          options: getOptions,
         },
-      },
-    );
+        {
+          where: {
+            id,
+          },
+          transaction: t,
+        },
+      );
 
-    return { affectedRow, id };
+      await Project.update(
+        { enabled: inabilityStatus },
+        {
+          where: {
+            id: {
+              [Op.in]: readyProjectList,
+            },
+          },
+          transaction: t,
+        },
+      );
+
+      await Domain.update(
+        { enabled: inabilityStatus },
+        {
+          where: {
+            ProjectId: {
+              [Op.in]: readyProjectList,
+            },
+          },
+          transaction: t,
+        },
+      );
+
+      await t.commit();
+
+      return { affectedRow, id };
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
   }
 
   /**

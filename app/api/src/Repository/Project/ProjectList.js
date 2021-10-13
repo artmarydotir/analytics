@@ -60,15 +60,9 @@ class ProjectList {
     const { User, Project } = this.sequelize.models;
 
     return Project.findAll({
-      attributes: [
-        'id',
-        'publicToken',
-        'title',
-        'description',
-        'options',
-        'additional',
-        'createdAt',
-      ],
+      attributes: {
+        exclude: ['updatedAt', 'privateToken'],
+      },
       where: query,
       include: [
         {

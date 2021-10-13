@@ -6,7 +6,6 @@ require('../../../../globals');
 const { initContainer } = require('../../../../src/Container');
 const { Config } = require('../../../../src/Config');
 const { ConfigSchema } = require('../../../../src/ConfigSchema');
-const { domain } = require('process');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
@@ -57,6 +56,7 @@ describe(__filename.replace(__dirname, ''), () => {
     const createUser = container.resolve('UserCreateRepository');
     const createDomain = container.resolve('DomainCreateRepository');
     const domainList = container.resolve('DomainListRepository');
+    const updateProject = container.resolve('ProjectUpdateRepository');
 
     const enableUser = await createUser.addUser({
       username: 'enableuser',
@@ -158,11 +158,20 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
-    const b = await domainList.fetchDomainList({ limit: 40 });
-    console.log(b);
-    // expect(await projectList.getProjectDomainList()).toBeTruthy();
-    // const c = await projectList.getProjectDomainList();
+    expect(
+      await updateProject.patchProjectOptions(2, {
+        ACTIVE: false,
+        DELETED: true,
+      }),
+    ).toBeTruthy();
 
-    // expect(Object.keys(c).length).toBe(1);
+    const b = await domainList.fetchDomainList({
+      limit: 40,
+      filter: {
+        arrIn_options: [1],
+      },
+    });
+
+    expect(b).toBeTruthy();
   });
 });

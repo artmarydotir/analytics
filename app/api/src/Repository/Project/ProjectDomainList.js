@@ -14,6 +14,7 @@ class ProjectDomainList {
     const allProject = await Domain.findAll({
       attributes: ['domain', 'wildcardDomain'],
       where: {
+        enabled: true,
         [Op.not]: {
           options: {
             [Op.contains]: [domainOption.DELETED],
