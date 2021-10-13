@@ -26,7 +26,8 @@ class ProjectUpdate {
     } = data;
 
     const schema = projectJoiSchema();
-    let changeDomainInability = false;
+
+    let changeDomainStatus = false;
 
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -68,9 +69,18 @@ class ProjectUpdate {
     if (options) {
       const newOption = await this.retrieveProjectOptions(id, options);
       initialValues.options = newOption;
-      if (newOption.includes(projectOption.DELETED)) {
-        changeDomainInability = true;
+
+      if (
+        newOption.includes(projectOption.DELETED) ||
+        !newOption.includes(projectOption.ACTIVE)
+      ) {
+        // systematic  enabled
+        changeDomainStatus = false;
         initialValues.enabled = false;
+      } else {
+        // systematic  enabled
+        changeDomainStatus = true;
+        initialValues.enabled = true;
       }
     }
 
@@ -101,18 +111,16 @@ class ProjectUpdate {
         transaction: t,
       });
 
-      // demoralizing
-      if (changeDomainInability) {
-        await Domain.update(
-          { enabled: false },
-          {
-            where: {
-              ProjectId: id,
-            },
-            transaction: t,
+      // demoralizing systematic enabled
+      await Domain.update(
+        { enabled: changeDomainStatus },
+        {
+          where: {
+            ProjectId: id,
           },
-        );
-      }
+          transaction: t,
+        },
+      );
 
       const readyData = middleTable.userAndRoles.map((obj) => ({
         ...obj,
@@ -171,28 +179,58 @@ class ProjectUpdate {
 
     newOption = uniq(newOption);
 
-    const affectedRow = await Project.update(
-      {
-        options: newOption,
-      },
-      {
+    const initialValues = {
+      options: newOption,
+    };
+
+    let domainStatus = null;
+
+    if (
+      newOption.includes(projectOption.DELETED) ||
+      !newOption.includes(projectOption.ACTIVE)
+    ) {
+      initialValues.enabled = false;
+      initialValues.options = newOption;
+      domainStatus = false;
+    } else {
+      initialValues.enabled = true;
+      initialValues.options = newOption;
+      domainStatus = true;
+    }
+
+    /**
+     ***
+     *** UPDATE ***
+     ***
+     */
+    const t = await this.sequelize.transaction();
+
+    try {
+      const affectedRow = await Project.update(initialValues, {
         where: {
           id,
         },
-      },
-    );
+        transaction: t,
+      });
 
-    const c = await Domain.update(
-      { enabled: false },
-      {
-        where: {
-          ProjectId: id,
+      // change enable mood for domain of this project
+      await Domain.update(
+        { enabled: domainStatus },
+        {
+          where: {
+            ProjectId: id,
+          },
+          transaction: t,
         },
-      },
-    );
-    console.log(c);
+      );
 
-    return { affectedRow, id };
+      await t.commit();
+
+      return { affectedRow, projectId: id };
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
   }
 
   /**

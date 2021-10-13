@@ -1,7 +1,4 @@
 const { Op } = require('sequelize');
-const { constants: userOption } = require('../../Schema/UserOption');
-const { constants: projectOption } = require('../../Schema/ProjectOption');
-const { constants: domainOption } = require('../../Schema/DomainOption');
 
 class DomainList {
   constructor({ sequelize }) {
@@ -28,7 +25,7 @@ class DomainList {
           const name = m[2];
 
           if (
-            ['arrIn', 'dts', 'dte', 'like'].includes(type) &&
+            ['arrIn', 'dts', 'dte', 'like', 'boolean'].includes(type) &&
             !query[`${name}`]
           ) {
             query[`${name}`] = {};
@@ -50,6 +47,8 @@ class DomainList {
             query[`${name}`] = {
               [Op.lte]: new Date(value),
             };
+          } else if (type === 'boolean') {
+            query[`${name}`] = value;
           }
         }
       });
@@ -65,22 +64,33 @@ class DomainList {
       };
     }
 
-    const { User, Project, Domain } = this.sequelize.models;
+    const { Project, Domain } = this.sequelize.models;
 
-    return Domain.findAll({
+    const result = await Domain.findAll({
       attributes: attribute,
       where: query,
       include: [
         {
           model: Project,
-          // attributes: [],
-          where: {},
+          attributes: ['title'],
           required: false,
         },
       ],
       limiting,
       order: [['id', 'DESC']],
     });
+
+    const c = result.map((element) => ({
+      ...element.dataValues,
+      projectName: element.Project.dataValues,
+    }));
+
+    c.forEach((x) => {
+      // eslint-disable-next-line no-param-reassign
+      delete x.Project;
+    });
+
+    return c;
   }
 }
 

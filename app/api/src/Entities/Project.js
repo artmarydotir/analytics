@@ -15,6 +15,7 @@ module.exports = (sequelize) =>
       },
       enabled: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
         defaultValue: true,
       },
       privateToken: {
@@ -42,6 +43,10 @@ module.exports = (sequelize) =>
         type: DataTypes.JSON,
         allowNull: true,
       },
+      // usersLst: {
+      //   type: DataTypes.ARRAY(DataTypes.INTEGER),
+      //   allowNull: true,
+      // },
     },
     {
       // Other model options go here

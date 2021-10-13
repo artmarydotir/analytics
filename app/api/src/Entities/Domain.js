@@ -16,6 +16,11 @@ module.exports = (sequelize) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      enabled: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
       domain: {
         type: DataTypes.STRING,
         unique: true,
@@ -37,10 +42,6 @@ module.exports = (sequelize) => {
       additional: {
         type: DataTypes.JSON,
         allowNull: true,
-      },
-      enabled: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
       },
     },
     {
