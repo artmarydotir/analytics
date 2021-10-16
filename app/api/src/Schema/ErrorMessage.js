@@ -13,6 +13,7 @@ const constants = {
   NOT_REQUIRED_BOTH: '',
   REQUIRED_ONLY: '',
   INVALID_WILDCARD_DOMAIN: '',
+  INVALID_CAPTCHA: '',
   NOT_EXIST: '',
 };
 

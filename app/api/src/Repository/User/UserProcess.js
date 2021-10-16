@@ -25,12 +25,47 @@ class UserProcess {
     return authenticator.generateSecret(12);
   }
 
+  /**
+   * @param {String} otpSecret
+   * @param {String} input
+   * @returns {Boolean}
+   */
+  verifyOtp(input, otpSecret) {
+    const isValid = authenticator.check(input, otpSecret);
+    if (isValid === true) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   *
+   * @param {String} rawPassword
+   */
   async setPassword(rawPassword) {
     const [err, data] = await to(argon2.hash(rawPassword));
     if (err) {
       return false;
     }
     return data;
+  }
+
+  /**
+   * @param {String} hashedPassword
+   * @param {String} rawPassword
+   * @returns {Promise<Boolean>}
+   */
+  async verifyPassword(hashedPassword, rawPassword) {
+    return new Promise((resolve) => {
+      argon2
+        .verify(hashedPassword, rawPassword)
+        .then((valid) => {
+          resolve(valid);
+        })
+        .catch(() => {
+          resolve(false);
+        });
+    });
   }
 
   setMobile(no, code) {
@@ -90,6 +125,57 @@ class UserProcess {
     }
 
     return user.dataValues.id;
+  }
+
+  /**
+   *
+   * @param {number} userId
+   * @returns  {Promise<object>}
+   */
+  async returnActiveUserDataByID(userId) {
+    const { User } = this.sequelize.models;
+
+    const user = await User.findOne({
+      where: {
+        id: userId,
+        options: { [Op.contains]: [UserOption.ACTIVE] },
+      },
+    });
+
+    if (!user) {
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    }
+
+    return user.dataValues;
+  }
+
+  /**
+   *
+   * @param {Object} param
+   * @param {String} param.email
+   * @param {String} param.username
+   * @returns  {Promise<object>}
+   */
+
+  async returnActiveUserData({ email = null, username = null }) {
+    const { User } = this.sequelize.models;
+
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ email }, { username }],
+        options: { [Op.contains]: [UserOption.ACTIVE] },
+      },
+    });
+
+    if (!user) {
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    }
+
+    return user.dataValues;
   }
 
   /**
