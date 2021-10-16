@@ -1,4 +1,5 @@
 const { fastify } = require('fastify');
+const { fastifyCookie } = require('fastify-cookie');
 
 const { Decorate } = require('./Fastify/Decorate');
 const { ErrorHandler } = require('./Fastify/ErrorHandler');
@@ -26,6 +27,8 @@ class Fastify {
       logger: false,
       maxParamLength: 256,
     });
+
+    this.fastify.register(fastifyCookie);
 
     Decorate.setup(this.fastify, container);
     ErrorHandler.setup(this.fastify, container);

@@ -29,6 +29,7 @@ const ConfigSchema = {
     'ASM_REDIS_URI',
     'ASM_SMTP_URI',
     // 'ASM_POSTGRES_URI',
+    // 'ASM_CAPTCHA_URI',
   ],
   properties: {
     ASM_PM_ID: {
@@ -129,6 +130,36 @@ const ConfigSchema = {
       default: TEST_MODE ? 'AuthToken' : '__Host-AuthToken',
     },
 
+    ASM_AUTH_REFRESH_COOKIE: {
+      type: 'string',
+      description: 'Authentication refresh cookie name',
+      default: TEST_MODE ? 'AuthRefreshToken' : '__Host-AuthRefreshToken',
+    },
+
+    ASM_PUBLIC_AUTH_TOKEN_TTL: {
+      type: 'number',
+      description: 'Time to live for main token in seconds',
+      minimum: 300,
+      maximum: 3600,
+      default: 900,
+    },
+
+    ASM_PUBLIC_AUTH_REFRESH_TOKEN_TTL: {
+      type: 'number',
+      description: 'Time to live for refresh token in seconds',
+      minimum: 14400,
+      maximum: 86400,
+      default: 43200,
+    },
+
+    ASM_PUBLIC_AUTH_REFRESH_TOKEN_REMEMBER_TTL: {
+      type: 'number',
+      description: 'Time to live for remember refresh token in seconds',
+      minimum: 86400,
+      maximum: 2592000,
+      default: 604800,
+    },
+
     ASM_AUTH_HMAC_ALG: {
       type: 'string',
       description: 'Application authentication HMAC algorithm',
@@ -211,6 +242,25 @@ const ConfigSchema = {
       type: 'string',
       description: 'Connection URI for Postgres',
       default: 'postgres://pg-user:pg-password@analytic-postgres:5432/pg-db',
+    },
+
+    ASM_CAPTCHA_URI: {
+      type: 'string',
+      description: 'Connection URI for rest captcha',
+      default: 'http://analytic-captcha:4000/new',
+    },
+
+    ASM_CAPTCHA_TTL: {
+      type: 'number',
+      description: 'captcha ttl',
+      default: 300,
+    },
+
+    ASM_CAPTCHA_LEVEL: {
+      type: 'string',
+      description: 'captcha level',
+      enum: ['0', '1', '2'],
+      default: '1',
     },
   },
 };

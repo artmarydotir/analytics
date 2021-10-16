@@ -1,10 +1,8 @@
 const cookie = require('cookie');
 const { to } = require('await-to-js');
 
-// eslint-disable-next-line node/no-missing-require, import/no-unresolved
-const { default: SignJWT } = require('jose/jwt/sign');
-// eslint-disable-next-line node/no-missing-require, import/no-unresolved
-const { default: jwtVerify } = require('jose/jwt/verify');
+const { SignJWT } = require('jose');
+const { jwtVerify } = require('jose');
 
 class JWT {
   constructor({ Config }) {

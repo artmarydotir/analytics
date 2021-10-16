@@ -129,16 +129,16 @@ services:
     ports:
       - 8080:8080
 
-  # analytic-redis-commander:
-  #   container_name: analytic-redis-commander
-  #   depends_on:
-  #     - analytic-redis
-  #   image: rediscommander/redis-commander
-  #   restart: always
-  #   environment:
-  #     REDIS_HOSTS: analytic-redis
-  #   ports:
-  #     - 8082:8081
+  analytic-redis-commander:
+    container_name: analytic-redis-commander
+    depends_on:
+      - analytic-redis
+    image: rediscommander/redis-commander
+    restart: always
+    environment:
+      REDIS_HOSTS: analytic-redis
+    ports:
+      - 8082:8081
 
   # analytic-mail:
   #   container_name: analytic-mail
