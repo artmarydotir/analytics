@@ -140,8 +140,8 @@ services:
     ports:
       - 8082:8081
 
-  # analytic-mail:
-  #   container_name: analytic-mail
-  #   image: mailhog/mailhog
-  #   ports:
-  #     - 8083:8025
+  analytic-mail:
+    container_name: analytic-mail
+    image: mailhog/mailhog
+    ports:
+      - 8083:8025
