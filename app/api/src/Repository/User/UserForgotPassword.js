@@ -31,6 +31,8 @@ class UserForgotPassword {
       },
     });
 
+    let success = false;
+
     if (user) {
       const { id } = user.dataValues;
       const token = Math.floor(1000 + Math.random() * 9000);
@@ -44,10 +46,11 @@ class UserForgotPassword {
         html: `<p>Your code is: <code>${token}</code></p>`,
       };
 
-      Promise.resolve((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const transport = nodemailer.createTransport(`${smtpUri}`);
         transport.sendMail(messageOption, (err) => {
           if (err) {
+            success = false;
             transport.close();
             reject(
               new ErrorWithProps(errorConstMerge.SMTP_ERROR, {
@@ -55,12 +58,14 @@ class UserForgotPassword {
               }),
             );
           } else {
+            success = true;
             resolve(true);
             transport.close();
           }
         });
       });
     }
+    return success;
   }
 }
 

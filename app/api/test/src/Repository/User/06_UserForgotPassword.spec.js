@@ -33,7 +33,7 @@ describe(__filename.replace(__dirname, ''), () => {
     const createUser = container.resolve('UserCreateRepository');
     const forgetPass = container.resolve('UserForgotPasswordRepository');
 
-    const user = await createUser.addUser({
+    await createUser.addUser({
       username: 'heymary',
       email: 'heymary@gmail.com',
       password: 'a1asQW12!@AS*&',
@@ -47,6 +47,8 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
-    await forgetPass.sendForgotPasswordCode('heymary@gmail.com');
+    expect(
+      await forgetPass.sendForgotPasswordCode('heymary@gmail.com'),
+    ).toBeTruthy();
   });
 });
