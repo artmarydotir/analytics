@@ -1,5 +1,4 @@
 /* eslint-env jest */
-
 // @ts-ignore
 require('../../../../globals');
 
@@ -28,16 +27,11 @@ describe(__filename.replace(__dirname, ''), () => {
   afterAll(async () => {
     await new Promise((r) => setTimeout(r, 100));
     await container.dispose();
-    await container.resolve('Redis').quit();
   });
 
-  it('add user', async () => {
+  it('add user and forget password check', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    const authUser = container.resolve('UserAuthRepository');
-    const captcha = container.resolve('CaptchaRepository');
-    const capResult = await captcha.generateCaptcha();
-    const redis = await container.resolve('Redis');
-    const red = await redis.getRedis();
+    const forgetPass = container.resolve('UserForgotPasswordRepository');
 
     await createUser.addUser({
       username: 'heymary',
@@ -53,26 +47,8 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
-    await expect(
-      authUser.signIn('AP', {
-        email: 'mary@gmail.com',
-        password: 'a',
-        captcha: {
-          id: capResult.id,
-          value: await red.get(`captcha:${capResult.id}`),
-        },
-      }),
-    ).rejects.toThrowError();
-
-    const b = await authUser.signIn('AP', {
-      email: 'heymary@gmail.com',
-      password: 'a1asQW12!@AS*&',
-      captcha: {
-        id: capResult.id,
-        value: await red.get(`captcha:${capResult.id}`),
-      },
-    });
-
-    expect(b).toBeTruthy();
+    expect(
+      await forgetPass.sendForgotPasswordCode('heymary@gmail.com'),
+    ).toBeTruthy();
   });
 });

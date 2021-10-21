@@ -60,8 +60,9 @@ describe(__filename.replace(__dirname, ''), () => {
     const fastify = container.resolve('Fastify').getFastify();
 
     container.resolve('AuthREST');
+    container.resolve('LogoutREST');
     const loginURL = fastify.openAPIBaseURL('/user/auth/login');
-    const refreshURL = fastify.openAPIBaseURL('/user/auth/refresh');
+    const logoutURL = fastify.openAPIBaseURL('/user/logout');
 
     const result1 = await fastify.inject({
       url: loginURL,
@@ -82,26 +83,16 @@ describe(__filename.replace(__dirname, ''), () => {
 
     expect(result1.statusCode).toEqual(200);
 
-    console.log(container.resolve('Config').ASM_AUTH_REFRESH_COOKIE);
-    // console.log(result1.headers);
-
-    const [, { value: AuthRefreshToken }] = result1.cookies;
-
-    // const allCookie = result1.cookies;
-    // const b = allCookie.find((x) => x.name === 'AuthToken');
-    // console.log(b);
-
     const result2 = await fastify.inject({
-      url: refreshURL,
+      url: logoutURL,
       method: 'GET',
-      headers: {
-        cookie: `${
-          container.resolve('Config').ASM_AUTH_REFRESH_COOKIE
-        }=${AuthRefreshToken};`,
-      },
       payload: {},
+      cookies: result1.cookies[0],
     });
 
-    console.log(result2.headers);
+    const allCookie = result2.cookies;
+    const b = allCookie.find((x) => x.name === 'AuthToken');
+
+    expect(b.value).toBe('0');
   });
 });

@@ -225,6 +225,12 @@ const ConfigSchema = {
       default: 'smtp://username:password@analytic-mail:1025/?pool=true',
     },
 
+    ASM_SMTP_SENDER: {
+      type: 'string',
+      description: 'noreply email to send',
+      default: 'noreply@gmail.com',
+    },
+
     ASM_SMTP_SEND_INTERVAL_SECONDS: {
       type: 'number',
       description:
