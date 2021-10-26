@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" md="7" class="d-flex mx-auto pt-0">
+    <v-col cols="12" md="6" class="d-flex mx-auto pt-0">
       <v-img
         class="text-center bgcolor"
         :src="`data:image/svg+xml;base64,${captchaImage}`"
@@ -11,25 +11,19 @@
         large
         text
         icon
-        color="pink"
+        color="red"
         class="mt-2 mr-2 ml-2"
         @click="recaptcha"
       >
         <v-icon>mdi-lock-reset</v-icon>
       </v-btn>
     </v-col>
-    <v-col cols="12" md="12" class="pb-0">
-      <!-- <ValidationProvider
-        v-slot="{ errors, valid }"
-        rules="required|length:6"
-        :name="`${$t('captcha')}`"
-      > -->
+    <v-col cols="12" class="pb-0">
       <v-text-field
         v-model="captcha.value"
         :label="$t('captcha')"
         type="text"
         outlined
-        dark
         :counter="max"
         :rules="captchaRule"
         required
@@ -87,6 +81,6 @@ export default {
 
 <style lang="scss" scoped>
 .bgcolor {
-  background-color: rgb(255, 241, 255);
+  background-color: rgb(203, 190, 226);
 }
 </style>

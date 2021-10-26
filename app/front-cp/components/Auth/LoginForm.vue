@@ -1,84 +1,42 @@
 <template>
-  <ValidationObserver ref="obs">
-    <v-row justify="center">
-      <v-col cols="12">
-        <v-card-title class="my-12 display-1 text-center justify-center">
-          LOGIN
-        </v-card-title>
-        <v-form
-          novalidate="true"
-          :disabled="isDisabled"
-          @submit.prevent="onSubmit"
-        >
-          <v-row align="center" justify="center">
-            <v-col cols="12" md="9">
-              <ValidationProvider
-                v-slot:default="{ errors, valid }"
-                :name="$t('emailorusername')"
-                rules="required|emailorusername"
-              >
-                <v-text-field
-                  v-model.trim="authModel"
-                  :label="$t('emailorusername')"
-                  type="text"
-                  outlined
-                  required
-                  :error-messages="errors"
-                  :success="valid"
-                  prepend-inner-icon="mdi-email-outline"
-                  @input="checkAuthModel"
-                />
-              </ValidationProvider>
-            </v-col>
-            <v-col cols="12" md="9">
-              <ValidationProvider
-                v-slot:default="{ errors, valid }"
-                :name="$t('emailorusername')"
-                rules="required|emailorusername"
-              >
-                <v-text-field
-                  v-model.trim="authModel"
-                  :label="$t('emailorusername')"
-                  type="text"
-                  outlined
-                  required
-                  :error-messages="errors"
-                  :success="valid"
-                  prepend-inner-icon="mdi-email-outline"
-                  @input="checkAuthModel"
-                />
-              </ValidationProvider>
-            </v-col>
-            <v-col cols="12" md="9">
-              <ValidationProvider
-                v-slot:default="{ errors, valid }"
-                :name="$t('emailorusername')"
-                rules="required|emailorusername"
-              >
-                <v-text-field
-                  v-model.trim="authModel"
-                  :label="$t('emailorusername')"
-                  type="text"
-                  outlined
-                  required
-                  :error-messages="errors"
-                  :success="valid"
-                  prepend-inner-icon="mdi-email-outline"
-                  @input="checkAuthModel"
-                />
-              </ValidationProvider>
-            </v-col>
-          </v-row>
-          <v-card-actions class="mt-4 pb-10 mx-auto text-center justify-center">
-            <v-btn type="submit" x-large color="primary" class="pl-12 pr-12">
-              {{ $t('login') }}
-              <v-icon right dark> mdi-arrow-right </v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-col>
-    </v-row>
-  </ValidationObserver>
+  <div>
+    <v-tabs
+      v-model="tab"
+      fixed-tabs
+      slider-color="yellow darken-1"
+      background-color="cyan darken-1"
+      dark
+      slider-size="4"
+    >
+      <v-tab href="#tab-1" class="white--text">
+        <v-icon left>mdi-shield-key-outline</v-icon>
+        {{ $t('password') }}
+      </v-tab>
+
+      <v-tab href="#tab-2" class="white--text">
+        <v-icon left>mdi-lock-outline</v-icon>
+        {{ $t('otp') }}
+      </v-tab>
+    </v-tabs>
+    <v-card elevation="7">
+      <v-tabs-items v-model="tab">
+        <v-tab-item value="tab-1">
+          <v-card flat>
+            <v-card-text>
+              <LoginPassword />
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item value="tab-2">
+          <v-card flat>
+            <v-card-text>
+              <LoginOtp />
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -86,14 +44,7 @@ export default {
   name: 'LoginForm',
   data() {
     return {
-      isDisabled: false,
-      authModel: '',
-      user: {
-        email: 'superadmin',
-        username: '',
-        password: '!c9pc$GHPPGpx8EC',
-        otp: '',
-      },
+      tab: null,
     };
   },
 };
