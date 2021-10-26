@@ -5,7 +5,6 @@
 
     <v-main>
       <v-container fluid>
-        dsbsb
         <nuxt />
       </v-container>
     </v-main>

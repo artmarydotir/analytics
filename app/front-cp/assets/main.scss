@@ -8,3 +8,12 @@
   box-shadow: 0 3px 11px 0 #d1d4f1, 0 3px 3px -2px rgba(161, 161, 161, 0.1),
     0 1px 8px 0 rgba(138, 137, 137, 0.1) !important;
 }
+
+:root .v-application .elevation-7 {
+  box-shadow: 0 3px 11px 0 #d1e4f1, 0 3px 3px -2px rgba(161, 161, 161, 0.1),
+    0 1px 8px 0 rgba(137, 138, 138, 0.1) !important;
+}
+
+.tab-hover-color {
+  background-color: rgba(0, 0, 0, 0.034) !important;
+}

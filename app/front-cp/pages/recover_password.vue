@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <IntroTemplate title="Login">
+    <IntroTemplate title="Reset Password">
       <template v-slot:frame>
-        <LoginForm />
+        <ResetPassword />
       </template>
     </IntroTemplate>
   </v-container>
@@ -11,16 +11,11 @@
 <script>
 export default {
   layout: 'login',
-  data() {
+
+  head() {
     return {
-      tab: null,
-      text: 'aaa',
+      title: this.$t('reset_password'),
     };
   },
-  // head() {
-  //   return {
-  //     title: this.$t('login'),
-  //   };
-  // },
 };
 </script>

@@ -1,17 +1,7 @@
 <template>
   <v-app class="bodybg">
     <nuxt />
-    <v-footer
-      padless
-      color="deep-purple"
-      :fixed="$vuetify.breakpoint.lgAndUp ? true : false"
-    >
-      <v-col class="text-center" cols="12">
-        <span class="white--text">
-          {{ $t('projectDescription') }}
-        </span>
-      </v-col>
-    </v-footer>
+    <IntroFooter />
   </v-app>
 </template>
 
@@ -36,10 +26,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bodybg {
-  background: linear-gradient(
-    90deg,
-    rgb(142, 90, 238) 0%,
-    rgb(81, 20, 194) 100%
-  );
+  background: rgb(244, 246, 248);
 }
 </style>

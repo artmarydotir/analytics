@@ -16,7 +16,7 @@ export default function ({ app, store }) {
       },
       themes: {
         light: {
-          primary: '#9155fd',
+          primary: colors.cyan,
           secondary: '#424242',
           accent: '#82B1FF',
           error: '#FF5252',
