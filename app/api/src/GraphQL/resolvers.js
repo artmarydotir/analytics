@@ -48,6 +48,7 @@ const {
 } = require('graphql-scalars');
 
 const Query = require('./Query');
+const Mutation = require('./Mutation');
 
 module.exports = {
   // graphql-scalars
@@ -99,4 +100,5 @@ module.exports = {
 
   // custom
   Query,
+  Mutation,
 };

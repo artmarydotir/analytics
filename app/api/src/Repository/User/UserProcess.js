@@ -250,6 +250,35 @@ class UserProcess {
 
     return { found: user[0] > 0, generatedPassword };
   }
+
+  /**
+   *
+   * @param {Number} userId
+   * @param {String} newPassword
+   * @returns {Promise<{}>}
+   */
+  async resetUserPassword(userId, newPassword) {
+    const user = await this.returnActiveUserDataByID(userId);
+
+    if (user) {
+      const { User } = this.sequelize.models;
+      await User.update(
+        {
+          password: await this.setPassword(newPassword),
+        },
+        {
+          where: {
+            id: userId,
+          },
+        },
+      );
+      return { id: userId };
+    }
+
+    throw new ErrorWithProps('User not found.', {
+      statusCode: 400,
+    });
+  }
 }
 
 module.exports = UserProcess;

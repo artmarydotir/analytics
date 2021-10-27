@@ -1,5 +1,5 @@
-const add = require('./add');
+const UserForgotPassword = require('./User/UserForgotPassword');
 
 module.exports = {
-  add,
+  UserForgotPassword,
 };

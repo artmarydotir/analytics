@@ -5,7 +5,7 @@
 
     <v-main>
       <v-container fluid>
-        <Snackbar />
+        <!-- <Snackbar /> -->
         <nuxt />
       </v-container>
     </v-main>

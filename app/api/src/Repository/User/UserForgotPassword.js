@@ -37,7 +37,7 @@ class UserForgotPassword {
       const { id } = user.dataValues;
       const token = Math.floor(1000 + Math.random() * 9000);
       const redis = await this.Redis.getRedis();
-      await redis.set(`forget_password:${id}`, token, 'EX', 300);
+      await redis.set(`forget_password:${token}`, id, 'EX', 300);
       const messageOption = {
         from: `${sender}`,
         to: `${email}`,

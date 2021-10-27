@@ -47,7 +47,23 @@ scalar Void
 
 # custom
 
-# queries
+# ********** FORGOT_PASSWORD *************
+input InputForgotPassword {
+  email: EmailAddress!
+}
+
+input InputResetPasswordUser {
+  id: String!
+  password: String!
+}
+
+# Mutation list
+type Mutation {
+  UserResetPassword(data: InputResetPasswordUser): String
+}
+
+# Query list
 type Query {
-  add(x: Int, y: Int): Int
+  UserForgotPassword(data: InputForgotPassword): Boolean
+  # VerifyCodeUser(data: InputVerifyCodeUser): Boolean
 }
