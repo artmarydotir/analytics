@@ -63,7 +63,12 @@ export default {
 
   plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
   components: {
-    dirs: ['~/components', '~/components/Global', '~/components/Auth'],
+    dirs: [
+      '~/components',
+      '~/components/Structure',
+      '~/components/Global',
+      '~/components/Auth',
+    ],
   },
 
   buildModules: [

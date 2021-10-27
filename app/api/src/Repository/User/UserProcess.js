@@ -239,7 +239,7 @@ class UserProcess {
     const { User } = this.sequelize.models;
     const user = await User.update(
       {
-        password: await this.generatePassword(),
+        password: await this.setPassword(generatedPassword),
       },
       {
         where: {

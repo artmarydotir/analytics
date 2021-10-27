@@ -23,9 +23,9 @@ const schema = {
           type: 'string',
           example: 'samplePassW00rd',
         },
-        otp: {
-          type: 'string',
-        },
+        // otp: {
+        //   type: 'string',
+        // },
         captcha: {
           type: 'object',
           properties: {

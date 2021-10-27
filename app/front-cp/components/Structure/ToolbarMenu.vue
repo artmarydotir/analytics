@@ -36,7 +36,9 @@
     </v-list>
   </v-menu>
 </template>
+
 <script>
+import { to } from 'await-to-js';
 export default {
   name: 'ToolbarMenu',
   data() {
@@ -46,11 +48,24 @@ export default {
   },
   methods: {
     async logOut() {
-      const res = await this.$store.dispatch('user/logout/logOut');
-      if (res) {
+      const [err, data] = await to(this.RestLogout());
+      if (data.status === 204) {
         this.$store.commit('user/auth/CLEAR_USER_DATA');
         this.$router.push(this.localePath({ name: 'index' }));
       }
+      if (err) {
+        this.$store.commit('SET_NOTIFICATION', {
+          show: true,
+          color: 'red',
+          message: `${err.message}`,
+        });
+      }
+    },
+
+    async RestLogout() {
+      return await this.$axios.get(
+        `${window.applicationBaseURL}api/open-api/user/logout`,
+      );
     },
   },
 };

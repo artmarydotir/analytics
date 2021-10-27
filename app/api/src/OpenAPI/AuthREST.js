@@ -103,12 +103,12 @@ class AuthREST {
     this.fastify.route({
       url: this.fastify.openAPIBaseURL('/user/auth/login'),
       method: 'POST',
-      config: {
-        rateLimit: {
-          max: 3,
-          timeWindow: '1 minute',
-        },
-      },
+      // config: {
+      //   rateLimit: {
+      //     max: 3,
+      //     timeWindow: '1 minute',
+      //   },
+      // },
       schema: {
         body: {
           operationId: 'UserSignIn',
@@ -130,10 +130,11 @@ class AuthREST {
       handler: async (req, reply) => {
         /** @type {Object} */
         const { body } = req;
-
+        console.log(body);
         try {
           const user = await UserAuthRepository.signIn(body.type, body.data);
 
+          console.log(user, '000000');
           const tokenTime = new Date();
           tokenTime.setTime(
             tokenTime.getTime() + Config.ASM_PUBLIC_AUTH_TOKEN_TTL * 1000,
@@ -180,17 +181,18 @@ class AuthREST {
 
           return {
             id: user.id,
-            expire: tokenTime,
+            expires: tokenTime,
             role: user.role,
           };
         } catch (e) {
-          return reply
-            .status(
-              e.extensions && e.extensions.statusCode
-                ? e.extensions.statusCode
-                : 500,
-            )
-            .send(e.message);
+          const status =
+            e.extensions && e.extensions.statusCode
+              ? e.extensions.statusCode
+              : 500;
+          return reply.status(status).send({
+            message: e.message,
+            status,
+          });
         }
       },
     });

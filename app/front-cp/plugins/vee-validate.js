@@ -5,6 +5,7 @@ import {
   required,
   email,
   min,
+  max,
   length,
   numeric,
   alpha,
@@ -26,6 +27,7 @@ setInteractionMode('eager');
 extend('required', required);
 extend('email', email);
 extend('min', min);
+extend('max', max);
 extend('length', length);
 extend('numeric', numeric);
 extend('alpha', alpha);
