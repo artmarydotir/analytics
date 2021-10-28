@@ -44,6 +44,11 @@ const ConfigSchema = {
       description: 'Default administrator username',
       default: 'superadmin',
     },
+    ASM_DEFAULT_ADMIN_EMAIL: {
+      type: 'string',
+      description: 'Default administrator email',
+      default: 'adminer@gmail.com',
+    },
 
     ASM_PUBLIC_DOMAIN: {
       type: 'string',
