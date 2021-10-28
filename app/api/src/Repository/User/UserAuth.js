@@ -76,6 +76,7 @@ class Authentication {
       return userData;
     }
 
+    // fix
     throw new ErrorWithProps('Invalid user data', {
       statusCode: 400,
     });

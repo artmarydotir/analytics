@@ -21,13 +21,6 @@ class ProjectListREST {
           },
           404: e404.getSchema(),
         },
-        security: [
-          {
-            apiKey: [],
-            bearerAuth: [],
-            cookieToken: [],
-          },
-        ],
       },
       preHandler: async (req, reply) => {
         if (

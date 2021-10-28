@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto text-center justify-center">
-    <!-- <Snackbar /> -->
+    <Snackbar />
     <ValidationObserver ref="obs">
       <v-card flat class="mx-auto" min-height="500px" elevation="7">
         <v-card-title class="pt-12 my-9 text-center justify-center text-h6">
@@ -8,7 +8,6 @@
         </v-card-title>
         <v-card-text>
           <v-form
-            novalidate="true"
             :disabled="isDisabled"
             class="pt-8"
             @submit.prevent="onSubmit"
@@ -62,7 +61,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
 const { to } = require('await-to-js');
 
 export default {
@@ -76,37 +74,31 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line require-await
     async onSubmit() {
-      // const validity = await this.$refs.obs.validate();
+      const validity = await this.$refs.obs.validate();
 
-      // if (!validity) {
-      //   return;
-      // }
-      // const [err, data] = await to(
-      //   this.$store.dispatch('user/forgetPassword/verifyUser', this.user),
-      // );
-
-      // if (err) {
-      //   this.isDisabled = false;
-
-      //   setTimeout(() => {
-      //     this.$store.commit('CLOSE_NOTIFICATION', false);
-      //   }, 2000);
-      //   this.$nextTick(() => {
-      //     this.$refs.obs.reset();
-      //   });
-      // }
-
-      this.isDisabled = true;
-      this.$router.push(
-        this.localeRoute({
-          name: 'recover_password',
-          params: {
-            id: this.$store.state.user.forgetPassword.userForgotPassId,
-          },
-        }),
+      if (!validity) {
+        return;
+      }
+      const [err, data] = await to(
+        this.$store.dispatch('user/forgetPassword/sendCode', this.user),
       );
+
+      if (err) {
+        this.isDisabled = false;
+
+        setTimeout(() => {
+          this.$store.commit('CLOSE_NOTIFICATION', false);
+        }, 2000);
+      }
+      if (data) {
+        this.isDisabled = true;
+        this.$router.push(
+          this.localeRoute({
+            name: 'reset_password',
+          }),
+        );
+      }
     },
   },
 };

@@ -28,6 +28,7 @@ module.exports = {
           config.ASM_DEFAULT_ADMIN_USERNAME,
         )}`,
       );
+      // log(`😇 email is: ${chalk.white.bgRed.bold('adminer@gmail.com')}`);
       log(
         `👉 Generated Password is: ${chalk.white.bgBlue.bold(
           generatedPassword,
@@ -54,6 +55,7 @@ module.exports = {
             config.ASM_DEFAULT_ADMIN_USERNAME,
           )}`,
         );
+        log(`😇 email is: ${chalk.white.bgRed.bold('adminer@gmail.com')}`);
         log(`👉 Password is: ${chalk.white.bgBlue.bold(newPassword)} 👈`);
       }
     }

@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const { ErrorWithProps } = require('mercurius').default;
 const { constants: UserOption } = require('../../Schema/UserOption');
 const {
@@ -35,15 +36,21 @@ class UserForgotPassword {
 
     if (user) {
       const { id } = user.dataValues;
-      const token = Math.floor(1000 + Math.random() * 9000);
+
+      const hashToken = crypto
+        .randomBytes(32)
+        .toString('base64')
+        .replace(/[^a-z0-9]/gi, '')
+        .substr(0, 16);
+
       const redis = await this.Redis.getRedis();
-      await redis.set(`forget_password:${id}`, token, 'EX', 300);
+      await redis.set(`forget_password:${hashToken}`, id, 'EX', 300);
       const messageOption = {
         from: `${sender}`,
         to: `${email}`,
         subject: 'Forget password code',
-        text: `Your code is: ${token}`,
-        html: `<p>Your code is: <code>${token}</code></p>`,
+        text: `Your code is: ${hashToken}`,
+        html: `<p>Your code is: <code>${hashToken}</code></p>`,
       };
 
       return new Promise((resolve, reject) => {

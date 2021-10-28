@@ -15,7 +15,6 @@ class AuthREST {
 
     /** @type {import('../Core/Fastify/GenericResponse').GenericResponse} */
     const e403 = Fastify.getGenericError(403);
-    const e404 = Fastify.getGenericError(404);
 
     this.fastify.route({
       url: refreshURL,
@@ -105,7 +104,7 @@ class AuthREST {
       method: 'POST',
       config: {
         rateLimit: {
-          max: 3,
+          max: 4,
           timeWindow: '1 minute',
         },
       },
@@ -180,17 +179,18 @@ class AuthREST {
 
           return {
             id: user.id,
-            expire: tokenTime,
+            expires: tokenTime,
             role: user.role,
           };
         } catch (e) {
-          return reply
-            .status(
-              e.extensions && e.extensions.statusCode
-                ? e.extensions.statusCode
-                : 500,
-            )
-            .send(e.message);
+          const status =
+            e.extensions && e.extensions.statusCode
+              ? e.extensions.statusCode
+              : 500;
+          return reply.status(status).send({
+            message: e.message,
+            status,
+          });
         }
       },
     });

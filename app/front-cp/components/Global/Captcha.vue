@@ -1,12 +1,7 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="12" md="6" class="d-flex mx-auto pt-0">
-      <v-img
-        class="text-center bgcolor"
-        :src="`data:image/svg+xml;base64,${captchaImage}`"
-        aspect-ratio="3.5"
-      >
-      </v-img>
+      <v-img class="text-center bgcolor" :src="captchaImage"> </v-img>
       <v-btn
         large
         text
@@ -15,21 +10,26 @@
         class="mt-2 mr-2 ml-2"
         @click="recaptcha"
       >
-        <v-icon>mdi-lock-reset</v-icon>
+        <v-icon>mdi-repeat</v-icon>
       </v-btn>
     </v-col>
     <v-col cols="12" class="pb-0">
-      <v-text-field
-        v-model="captcha.value"
-        :label="$t('captcha')"
-        type="text"
-        outlined
-        :counter="max"
-        :rules="captchaRule"
-        required
-        prepend-inner-icon="mdi-lock-question"
+      <ValidationProvider
+        v-slot:default="{ errors }"
+        :name="$t('captcha')"
+        :rules="{ required: true, min: 3, max: 6 }"
       >
-      </v-text-field>
+        <v-text-field
+          v-model="captcha.value"
+          :label="$t('captcha')"
+          type="text"
+          outlined
+          :counter="max"
+          :error-messages="errors"
+          required
+          prepend-inner-icon="mdi-code-tags"
+        />
+      </ValidationProvider>
     </v-col>
   </v-row>
 </template>
@@ -40,20 +40,17 @@ export default {
   data() {
     return {
       max: 6,
+      min: 3,
       captchaImage: null,
       captcha: {
-        token: '',
+        id: '',
         value: '',
       },
-      captchaRule: [
-        (v) => !!v || this.$t('required'),
-        (v) => (v && v.length <= this.max) || 'code is 6 character',
-      ],
     };
   },
   watch: {
-    'captcha.value'(newVal, oldVal) {
-      if (newVal.length === 6) {
+    'captcha.value'(v) {
+      if (v.length >= this.min && v.length <= this.max) {
         this.$emit('solvedCapatcha', this.captcha);
       }
     },
@@ -64,9 +61,12 @@ export default {
   methods: {
     async getCaptcha() {
       try {
-        const res = await this.$axios.$get('captcha');
-        this.captcha.token = res.token;
-        this.captchaImage = btoa(res.svg);
+        const res = await this.$axios.$get(
+          `${window.applicationBaseURL}api/open-api/captcha`,
+        );
+
+        this.captcha.id = res.id;
+        this.captchaImage = res.image;
       } catch (e) {
         console.log(e);
       }

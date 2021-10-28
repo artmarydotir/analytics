@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Snackbar />
     <v-tabs
       v-model="tab"
       fixed-tabs
@@ -47,5 +48,14 @@ export default {
       tab: null,
     };
   },
+  // mounted() {
+  //   if (this.$store.state.user.auth.isLogin) {
+  //     this.$router.push(
+  //       this.localeRoute({
+  //         name: 'dashboard',
+  //       }),
+  //     );
+  //   }
+  // },
 };
 </script>
