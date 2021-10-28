@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import Vue from 'vue';
-// import '@/custom-validation/validators';
+import '@/custom-validation/validators';
 import {
   required,
   email,

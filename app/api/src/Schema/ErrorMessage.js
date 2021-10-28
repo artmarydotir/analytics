@@ -15,6 +15,7 @@ const constants = {
   INVALID_WILDCARD_DOMAIN: '',
   INVALID_CAPTCHA: '',
   NOT_EXIST: '',
+  OTHER_ERROR: '',
 };
 
 const list = Object.values(constants);

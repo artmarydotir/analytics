@@ -15,7 +15,6 @@ class AuthREST {
 
     /** @type {import('../Core/Fastify/GenericResponse').GenericResponse} */
     const e403 = Fastify.getGenericError(403);
-    const e404 = Fastify.getGenericError(404);
 
     this.fastify.route({
       url: refreshURL,
@@ -103,12 +102,12 @@ class AuthREST {
     this.fastify.route({
       url: this.fastify.openAPIBaseURL('/user/auth/login'),
       method: 'POST',
-      // config: {
-      //   rateLimit: {
-      //     max: 3,
-      //     timeWindow: '1 minute',
-      //   },
-      // },
+      config: {
+        rateLimit: {
+          max: 4,
+          timeWindow: '1 minute',
+        },
+      },
       schema: {
         body: {
           operationId: 'UserSignIn',
@@ -130,11 +129,10 @@ class AuthREST {
       handler: async (req, reply) => {
         /** @type {Object} */
         const { body } = req;
-        console.log(body);
+
         try {
           const user = await UserAuthRepository.signIn(body.type, body.data);
 
-          console.log(user, '000000');
           const tokenTime = new Date();
           tokenTime.setTime(
             tokenTime.getTime() + Config.ASM_PUBLIC_AUTH_TOKEN_TTL * 1000,

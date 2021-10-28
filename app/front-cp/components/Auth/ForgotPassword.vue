@@ -8,7 +8,6 @@
         </v-card-title>
         <v-card-text>
           <v-form
-            novalidate="true"
             :disabled="isDisabled"
             class="pt-8"
             @submit.prevent="onSubmit"
@@ -76,14 +75,13 @@ export default {
   },
   methods: {
     async onSubmit() {
-      console.log('---heyy');
       const validity = await this.$refs.obs.validate();
 
       if (!validity) {
         return;
       }
       const [err, data] = await to(
-        this.$store.dispatch('user/forgetPassword/verifyUser', this.user),
+        this.$store.dispatch('user/forgetPassword/sendCode', this.user),
       );
 
       if (err) {
@@ -97,10 +95,7 @@ export default {
         this.isDisabled = true;
         this.$router.push(
           this.localeRoute({
-            name: 'recover_password',
-            // params: {
-            //   id: this.$store.state.user.forgetPassword.userForgotPassId,
-            // },
+            name: 'reset_password',
           }),
         );
       }

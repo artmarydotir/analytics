@@ -11,6 +11,7 @@ const { schema: ProjectDomainList } = require('./ProjectDomainList');
 const { schema: UserAuthType } = require('./UserAuthType');
 const { schema: UserSignIn } = require('./UserSignIn');
 const { schema: Captcha } = require('./Captcha');
+const { schema: UserResetPassword } = require('./UserResetPassword');
 
 module.exports = [
   CountryCodes,
@@ -26,4 +27,5 @@ module.exports = [
   UserAuthType,
   UserSignIn,
   Captcha,
+  UserResetPassword,
 ];
