@@ -28,7 +28,11 @@ module.exports = {
           config.ASM_DEFAULT_ADMIN_USERNAME,
         )}`,
       );
-      // log(`😇 email is: ${chalk.white.bgRed.bold('adminer@gmail.com')}`);
+      log(
+        `😇 email is: ${chalk.white.bgRed.bold(
+          config.ASM_DEFAULT_ADMIN_EMAIL,
+        )}`,
+      );
       log(
         `👉 Generated Password is: ${chalk.white.bgBlue.bold(
           generatedPassword,
@@ -41,7 +45,7 @@ module.exports = {
 
       const user = await userRepository.addUser({
         username: config.ASM_DEFAULT_ADMIN_USERNAME,
-        email: 'adminer@gmail.com',
+        email: config.ASM_DEFAULT_ADMIN_EMAIL,
         password: newPassword,
         role: 'SA',
         lang: 'en',
@@ -55,7 +59,11 @@ module.exports = {
             config.ASM_DEFAULT_ADMIN_USERNAME,
           )}`,
         );
-        log(`😇 email is: ${chalk.white.bgRed.bold('adminer@gmail.com')}`);
+        log(
+          `😇 email is: ${chalk.white.bgRed.bold(
+            config.ASM_DEFAULT_ADMIN_EMAIL,
+          )}`,
+        );
         log(`👉 Password is: ${chalk.white.bgBlue.bold(newPassword)} 👈`);
       }
     }

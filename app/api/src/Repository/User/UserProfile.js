@@ -29,6 +29,7 @@ class UserProfile {
         'username',
         'role',
         'lang',
+        'email',
         'country',
         'mobile',
         'options',

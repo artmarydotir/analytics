@@ -16,6 +16,7 @@ const constants = {
   INVALID_CAPTCHA: '',
   NOT_EXIST: '',
   OTHER_ERROR: '',
+  FORBIDDEN: '',
 };
 
 const list = Object.values(constants);

@@ -45,7 +45,10 @@ scalar UtcOffset
 scalar UUID
 scalar Void
 
-# custom
+# ********** GLOBAL *************
+input InputGlobalID {
+  id: Int!
+}
 
 # ********** FORGOT_PASSWORD *************
 input InputForgotPassword {
@@ -53,8 +56,21 @@ input InputForgotPassword {
 }
 
 input InputResetPasswordUser {
-  id: String!
+  id: Int!
   password: String!
+}
+
+# ********** USER *************
+
+type OutputUserProfile {
+  id: Int
+  username: String
+  email: EmailAddress
+  role: String
+  lang: String
+  country: String
+  mobile: String
+  options: [Int]
 }
 
 # Mutation list
@@ -65,5 +81,5 @@ type Mutation {
 # Query list
 type Query {
   UserForgotPassword(data: InputForgotPassword): Boolean
-  # VerifyCodeUser(data: InputVerifyCodeUser): Boolean
+  UserProfile(data: InputGlobalID): OutputUserProfile
 }

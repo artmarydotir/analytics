@@ -2,6 +2,9 @@ const { ErrorWithProps } = require('mercurius').default;
 const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
+const {
+  ResetPasswordSchema: resetPasswordJoi,
+} = require('../../JoySchema/ResetPassword');
 
 class UserResetPassword {
   constructor({ sequelize, Redis, UserProcessRepository }) {
@@ -18,10 +21,26 @@ class UserResetPassword {
    * @returns {Promise<{}>}
    */
   async checkTokenAndResetUserPassword(token, newPassword) {
-    // FIXME: JOI VALIDATION FOR PASSWORD
-    if (!token || !newPassword) {
-      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_FIELD, {
-        statusCode: 400,
+    const data = {
+      token,
+      newPassword,
+    };
+    const schema = resetPasswordJoi();
+
+    try {
+      await schema.validateAsync(data, { abortEarly: false });
+    } catch (e) {
+      const validationErrors = [];
+      e.details.forEach((element) => {
+        validationErrors.push({
+          message: element.message,
+          field: element.context.label,
+        });
+      });
+
+      throw new ErrorWithProps('UnProcessable Entity', {
+        validation: validationErrors,
+        statusCode: 422,
       });
     }
 

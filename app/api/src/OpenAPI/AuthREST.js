@@ -45,7 +45,7 @@ class AuthREST {
         const token = await JWT.sign(
           {
             uid: user.id,
-            role: user.role,
+            roles: user.role,
           },
           Config.ASM_PUBLIC_AUTH_TOKEN_TTL,
         );
@@ -93,7 +93,7 @@ class AuthREST {
 
         return {
           id: user.id,
-          role: user.role,
+          roles: user.role,
           expire: tokenTime,
         };
       },
@@ -118,9 +118,9 @@ class AuthREST {
           200: {
             type: 'object',
             properties: {
-              id: { type: 'string' },
+              id: { type: 'number' },
               expires: { type: 'string' },
-              role: { type: 'string' },
+              roles: { type: 'string' },
             },
           },
           403: e403.getSchema(),
@@ -149,7 +149,7 @@ class AuthREST {
           const token = await JWT.sign(
             {
               uid: user.id,
-              role: user.role,
+              roles: user.role,
             },
             Config.ASM_PUBLIC_AUTH_TOKEN_TTL,
           );
@@ -180,7 +180,7 @@ class AuthREST {
           return {
             id: user.id,
             expires: tokenTime,
-            role: user.role,
+            roles: user.role,
           };
         } catch (e) {
           const status =
