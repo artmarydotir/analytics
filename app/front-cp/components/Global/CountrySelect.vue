@@ -8,7 +8,6 @@
       :success="valid"
       item-text="nativeName"
       item-value="alpha2Code"
-      multiple
       autocomplete
       prepend-inner-icon="mdi-earth-plus"
       :label="`${$t('selectCountry')}`"
@@ -27,9 +26,9 @@ export default {
   name: 'CountrySelect',
 
   props: {
-    aclCountry: {
-      type: Array,
-      default: () => [],
+    model: {
+      type: String,
+      default: null,
       required: false,
     },
   },
@@ -42,10 +41,10 @@ export default {
   computed: {
     innercountry: {
       get() {
-        return this.aclCountry;
+        return this.model;
       },
       set(newValue) {
-        this.$emit('update:aclCountry', newValue);
+        this.$emit('update:model', newValue);
       },
     },
   },

@@ -4,7 +4,8 @@
     :clipped-left="$vuetify.breakpoint.lgAndUp"
     app
     dark
-    :color="$vuetify.theme.dark ? '' : 'primary'"
+    flat
+    :color="$vuetify.theme.dark ? '' : 'primary darken-1'"
   >
     <v-app-bar-nav-icon @click="drawerState = !drawerState" />
     <v-toolbar-title class="ml-0 pl-4">

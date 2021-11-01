@@ -73,9 +73,21 @@ type OutputUserProfile {
   options: [Int]
 }
 
+input InputUserCreate {
+  username: String!
+  email: EmailAddress!
+  password: String!
+  role: String!
+  lang: String
+  country: String
+  mobile: String
+  options: [Int]!
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
+  UserCreate(data: InputUserCreate): JSONObject
 }
 
 # Query list
