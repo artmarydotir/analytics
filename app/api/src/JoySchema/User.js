@@ -106,7 +106,7 @@ const UpdateUserSchemaSA = () =>
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
         'any.only': errorConstMerge.INVALID_COUNTRY,
       }),
-    mobile: Joi.string().messages({
+    mobile: Joi.string().allow(null, '').messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),
     options: Joi.object().allow(null).optional(),
@@ -156,8 +156,31 @@ const UpdateUserSchemaME = () =>
     additional: Joi.object().allow(null).optional(),
   });
 
+/**
+ * Update Member Password
+ */
+const UpdateMemberPassword = () =>
+  Joi.object({
+    id: Joi.number().required().messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+    }),
+    password: Joi.string().required().min(7).max(32).messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'string.min': errorConstMerge.MIN_LENGTH,
+      'string.max': errorConstMerge.MAX_LENGTH,
+      'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
+    }),
+    newPassword: Joi.string().required().min(7).max(32).messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'string.min': errorConstMerge.MIN_LENGTH,
+      'string.max': errorConstMerge.MAX_LENGTH,
+      'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
+    }),
+  });
+
 module.exports = {
   CreateUserSchema,
   UpdateUserSchemaSA,
   UpdateUserSchemaME,
+  UpdateMemberPassword,
 };

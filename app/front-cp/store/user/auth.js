@@ -18,6 +18,16 @@ export const mutations = {
   },
 };
 
+export const getters = {
+  GET_ROLE(state) {
+    if (state.userData) {
+      return state.userData.roles;
+    } else {
+      return '';
+    }
+  },
+};
+
 export const actions = {
   async signIn({ commit }, user) {
     try {

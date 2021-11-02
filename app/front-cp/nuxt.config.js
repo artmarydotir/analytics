@@ -68,6 +68,8 @@ export default {
       '~/components/Structure',
       '~/components/Global',
       '~/components/Auth',
+      '~/components/User',
+      '~/components/User/Update',
     ],
   },
 

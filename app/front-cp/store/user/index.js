@@ -125,4 +125,54 @@ export const actions = {
       throw new Error('error');
     }
   },
+  // ***************************************
+  async updateUser({ commit }, inputData) {
+    console.log('---', inputData);
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation (
+              $id: Int!
+              $data: InputUserUpdate
+            ) {
+              UserUpdate(
+                id: $id
+                data: $data
+              )
+          }`,
+          variables: inputData,
+        },
+      );
+
+      const result = data.data.UserUpdate;
+
+      if (data.errors) {
+        throw new Error(data.errors['0'].message);
+      }
+      if (result) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'Successfully Edited user.',
+          },
+          { root: true },
+        );
+        return true;
+      }
+    } catch (error) {
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: `${error}`,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };
