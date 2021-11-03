@@ -1,7 +1,6 @@
 <template>
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
-    {{ userId }}
     <UserUpdateWrapper
       :id="userId"
       :title="$t('editUser')"

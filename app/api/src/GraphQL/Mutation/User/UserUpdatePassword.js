@@ -6,8 +6,8 @@ const {
 } = require('../../../Schema/ErrorMessage');
 
 module.exports = async (_, { data }, { container, token }) => {
-  const { UserProcessRepository, UserUpdateMemberPassword } = container;
-
+  const { UserProcessRepository, UserUpdateMemberPasswordRepository } =
+    container;
   const { id, currentPassword, newPassword } = data;
 
   if (!token) {
@@ -27,7 +27,7 @@ module.exports = async (_, { data }, { container, token }) => {
     }
   } else {
     try {
-      return await UserUpdateMemberPassword.updateUserByMembers(
+      return await UserUpdateMemberPasswordRepository.updateUserByMembers(
         id,
         currentPassword,
         newPassword,

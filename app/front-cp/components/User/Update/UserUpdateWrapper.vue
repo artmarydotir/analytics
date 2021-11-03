@@ -38,7 +38,7 @@
           </v-tab-item>
 
           <v-tab-item value="tab-4">
-            <!-- <OtpActivate :user-id="dataPAss.id" /> -->
+            <LazyUpdateOtpActivate :user-id="userInfo.id" />
           </v-tab-item>
         </v-tabs-items>
       </v-card>

@@ -141,13 +141,12 @@ export default {
       this.user.id = this.userId;
 
       const [err, data] = await to(
-        this.$store.dispatch('user/edit/updatePasswordUser', this.user),
+        this.$store.dispatch('user/updatePasswordUser', this.user),
       );
       if (err) {
         this.isDisabled = false;
 
         setTimeout(() => {
-          this.user = {};
           this.$store.commit('CLOSE_NOTIFICATION', false);
         }, 500);
       }
@@ -156,20 +155,11 @@ export default {
         this.clear();
         setTimeout(() => {
           this.$store.commit('CLOSE_NOTIFICATION', false);
-          this.user = {};
-          if (this.loginRole.includes('SA')) {
-            this.$router.push(
-              this.localeRoute({
-                name: 'user-list',
-              }),
-            );
-          } else {
-            this.$router.push(
-              this.localeRoute({
-                name: 'user-profile',
-              }),
-            );
-          }
+          this.$router.push(
+            this.localeRoute({
+              name: 'user-profile',
+            }),
+          );
         }, 600);
       }
     },

@@ -42,7 +42,7 @@ class UserUpdateMemberPassword {
     }
 
     const user = await this.process.returnActiveUserDataByID(id);
-    let success = false;
+
     const validPassword = await this.process.verifyPassword(
       user.password,
       currentPassword,
@@ -50,10 +50,9 @@ class UserUpdateMemberPassword {
     if (validPassword) {
       const newPasswordHash = await this.process.hashPassword(newPassword);
       await this.process.resetUserPassword(id, newPasswordHash);
-      success = true;
     }
 
-    return success;
+    return id;
   }
 }
 

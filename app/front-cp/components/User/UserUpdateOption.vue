@@ -1,6 +1,5 @@
 <template>
   <v-row>
-    {{ options }}
     <v-col cols="12" md="6">
       <v-checkbox
         v-model="options.ACTIVE"
@@ -37,20 +36,6 @@ export default {
       },
     };
   },
-  // computed: {
-  //   innerValue: {
-  //     get() {
-  //       const a =
-  //       if (this.value.includes('ACTIVE')) {
-  //         this.options.ACTIVE = true;
-  //       }
-  //       return this.value;
-  //     },
-  //     set(v) {
-  //       this.$emit('update:value', v);
-  //     },
-  //   },
-  // },
   watch: {
     value(v) {
       if (v.includes(1)) {
