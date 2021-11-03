@@ -84,10 +84,34 @@ input InputUserCreate {
   options: [Int]!
 }
 
+input InputUserUpdate {
+  username: String
+  email: EmailAddress
+  password: String
+  role: String
+  lang: String
+  country: String
+  mobile: String
+  options: JSON
+}
+input InputUpdatePassword {
+  id: Int!
+  currentPassword: String
+  newPassword: String!
+}
+
+input InputOtpGenerate {
+  id: Int!
+  currentPassword: String
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
   UserCreate(data: InputUserCreate): JSONObject
+  UserUpdate(id: Int!, data: InputUserUpdate): Int
+  UserUpdatePassword(data: InputUpdatePassword): JSON
+  OtpGenerate(data: InputOtpGenerate): String
 }
 
 # Query list

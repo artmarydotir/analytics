@@ -114,7 +114,7 @@ class UserUpdate {
     const readyProjectList = await this.getProjectListBelongsUser(id);
 
     try {
-      const affectedRow = await User.update(initialValues, {
+      await User.update(initialValues, {
         where: {
           id,
         },
@@ -147,7 +147,7 @@ class UserUpdate {
 
       await t.commit();
 
-      return { affectedRow, id };
+      return id;
     } catch (error) {
       await t.rollback();
       throw error;
@@ -220,13 +220,13 @@ class UserUpdate {
 
     const { User } = this.sequelize.models;
 
-    const affectedRow = await User.update(initialValues, {
+    await User.update(initialValues, {
       where: {
         id,
       },
     });
 
-    return { affectedRow, id };
+    return id;
   }
 
   // eslint-disable-next-line class-methods-use-this
