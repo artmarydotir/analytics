@@ -15,7 +15,7 @@ module.exports = async (_, { data }, { container, token }) => {
   }
 
   if (token.roles !== userRoles.SUPERADMIN) {
-    throw new ErrorWithProps('Must enter current password.', {
+    throw new ErrorWithProps(errorConstMerge.ISREQUIRE_PASSWORD, {
       statusCode: 400,
     });
   }

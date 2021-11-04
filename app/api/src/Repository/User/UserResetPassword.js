@@ -6,6 +6,7 @@ const {
   ResetPasswordSchema: resetPasswordJoi,
 } = require('../../JoySchema/ResetPassword');
 
+// For Rest Interface
 class UserResetPassword {
   constructor({ sequelize, Redis, UserProcessRepository }) {
     /**  */

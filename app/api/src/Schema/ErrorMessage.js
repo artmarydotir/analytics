@@ -1,6 +1,7 @@
 const constants = {
   ISREQUIRE_FIELD: '',
   ISREQUIRE_ID: '',
+  ISREQUIRE_PASSWORD: '',
   MIN_LENGTH: '',
   MAX_LENGTH: '',
   INVALID_REGEX: '',

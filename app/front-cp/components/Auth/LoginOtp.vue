@@ -23,7 +23,6 @@
                   :error-messages="errors"
                   :success="valid"
                   prepend-inner-icon="mdi-email-outline"
-                  @input="checkAuthModel"
                 />
               </ValidationProvider>
             </v-col>
@@ -33,17 +32,16 @@
                 v-slot:default="{ errors, valid }"
                 :rules="{
                   required: true,
-                  min: 8,
+                  min: 6,
                 }"
-                :name="$t('password')"
+                :name="$t('otpCode')"
               >
                 <v-text-field
-                  v-model="user.password"
+                  v-model="user.otp"
                   :error-messages="errors"
                   :success="valid"
                   :label="$t('otpCode')"
-                  :append-icon="show ? 'mdi-eye-off-outline' : 'mdi-eye'"
-                  :type="show ? 'text' : 'password'"
+                  type="text"
                   outlined
                   prepend-inner-icon="mdi-lock-reset"
                   @click:append="show = !show"
@@ -64,21 +62,63 @@
 </template>
 
 <script>
+const { to } = require('await-to-js');
+
 export default {
   name: 'LoginOtp',
   data() {
     return {
-      tab: null,
       text: 'aaa',
       isDisabled: false,
-      authModel: '',
       show: false,
+      type: 'AO',
       user: {
-        type: 'AO',
         email: '',
-        password: '',
+        otp: '',
       },
     };
+  },
+  methods: {
+    async onSubmit() {
+      const validity = await this.$refs.obs.validate();
+      if (!validity) {
+        return;
+      }
+      const [err, data] = await to(
+        this.$store.dispatch('user/auth/signIn', {
+          type: this.type,
+          data: this.user,
+        }),
+      );
+
+      if (err) {
+        this.isDisabled = false;
+        setTimeout(() => {
+          this.$store.commit('CLOSE_NOTIFICATION', false);
+        }, 2000);
+      }
+
+      if (data) {
+        this.isDisabled = true;
+
+        setTimeout(() => {
+          this.$router.push(
+            this.localeRoute({
+              name: 'dashboard',
+            }),
+          );
+        }, 1500);
+
+        this.$nextTick(() => {
+          this.clearForm();
+          this.$refs.obs.reset();
+        });
+      }
+    },
+    clearForm() {
+      this.user.otp = '';
+      this.user.email = '';
+    },
   },
 };
 </script>

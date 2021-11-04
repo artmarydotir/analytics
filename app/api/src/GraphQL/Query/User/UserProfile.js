@@ -17,8 +17,7 @@ module.exports = async (_, { data }, { container, token }) => {
 
   if (
     !token.roles ||
-    id !== token.uid ||
-    token.roles !== userRoles.SUPERADMIN
+    (token.roles !== userRoles.SUPERADMIN && id !== token.uid)
   ) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
