@@ -150,7 +150,7 @@ const UpdateUserSchemaME = () =>
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
         'any.only': errorConstMerge.INVALID_COUNTRY,
       }),
-    mobile: Joi.string().messages({
+    mobile: Joi.string().allow(null, '').messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),
     additional: Joi.object().allow(null).optional(),
@@ -164,8 +164,7 @@ const UpdateMemberPassword = () =>
     id: Joi.number().required().messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),
-    password: Joi.string().required().min(7).max(32).messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+    currentPassword: Joi.string().optional().min(7).max(32).messages({
       'string.min': errorConstMerge.MIN_LENGTH,
       'string.max': errorConstMerge.MAX_LENGTH,
       'string.pattern.base': errorConstMerge.INVALID_PASSWORD,

@@ -7,6 +7,7 @@ const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 
+// For GraphQL Interface
 class UserForgotPassword {
   constructor({ sequelize, Config, Redis }) {
     this.Redis = Redis;
@@ -32,16 +33,15 @@ class UserForgotPassword {
       },
     });
 
-    let success = false;
+    let success = '0';
+    const hashToken = crypto
+      .randomBytes(32)
+      .toString('base64')
+      .replace(/[^a-z0-9]/gi, '')
+      .substr(0, 16);
 
     if (user) {
       const { id } = user.dataValues;
-
-      const hashToken = crypto
-        .randomBytes(32)
-        .toString('base64')
-        .replace(/[^a-z0-9]/gi, '')
-        .substr(0, 16);
 
       const redis = await this.Redis.getRedis();
       await redis.set(`forget_password:${hashToken}`, id, 'EX', 300);
@@ -57,7 +57,7 @@ class UserForgotPassword {
         const transport = nodemailer.createTransport(`${smtpUri}`);
         transport.sendMail(messageOption, (err) => {
           if (err) {
-            success = false;
+            success = '0';
             transport.close();
             reject(
               new ErrorWithProps(errorConstMerge.SMTP_ERROR, {
@@ -65,8 +65,8 @@ class UserForgotPassword {
               }),
             );
           } else {
-            success = true;
-            resolve(true);
+            success = '1';
+            resolve(this.Config.ASM_PUBLIC_APP_TEST ? hashToken : success);
             transport.close();
           }
         });

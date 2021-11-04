@@ -26,8 +26,8 @@ class UserProcess {
   }
 
   /**
-   * @param {String} otpSecret
    * @param {String} input
+   * @param {String} otpSecret
    * @returns {Boolean}
    */
   verifyOtp(input, otpSecret) {

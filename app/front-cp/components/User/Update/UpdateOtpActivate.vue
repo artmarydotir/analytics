@@ -150,13 +150,13 @@ export default {
     setNewOtpSecret(secret) {
       this.isDisabled = true;
       const uri = {
-        title: 'Analytics',
+        title: 'aasaam analytics',
         otpSecret: secret,
         host: window.location.hostname,
       };
 
       QRCode.toDataURL(
-        `otpauth://totp/${uri.title}:${uri.host}?secret=${uri.secret}&issuer=${uri.title}`,
+        `otpauth://totp/${uri.title}:${uri.host}?secret=${uri.otpSecret}&issuer=${uri.title}`,
       )
         .then((url) => {
           this.imagePath = url;
@@ -193,6 +193,7 @@ export default {
         this.isDisabled = false;
       }
       if (secret) {
+        console.log(secret, 'in uiii');
         this.setNewOtpSecret(secret);
       }
     },

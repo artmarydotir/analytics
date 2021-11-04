@@ -5,7 +5,7 @@ class Helper {
 
   async CreateUserHeaderAndToken(username, email, role, options) {
     const user = await this.CreateHelperUser(username, email, role, options);
-    console.log(user.dataValues, '00998877');
+
     const token = await this.container.resolve('JWT').sign(
       {
         uid: user.dataValues.id,

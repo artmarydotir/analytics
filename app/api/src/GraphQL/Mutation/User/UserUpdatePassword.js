@@ -27,7 +27,7 @@ module.exports = async (_, { data }, { container, token }) => {
     }
   } else {
     try {
-      return await UserUpdateMemberPasswordRepository.updateUserByMembers(
+      return await UserUpdateMemberPasswordRepository.setMemberPassword(
         id,
         currentPassword,
         newPassword,

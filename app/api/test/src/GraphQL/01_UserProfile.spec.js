@@ -35,9 +35,8 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  // it should add a user
-  it('graphql add user endpoint', async () => {
-    const { token } = await helper.CreateUserHeaderAndToken(
+  it('graphql show profile of user', async () => {
+    const { token, user } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
@@ -57,46 +56,57 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-          mutation(
+        query: `query(
             $id: Int!
-            $username: String
-            $email: EmailAddress
-            $password: String
-            $role: String
-            $lang: String
-            $country: String
-            $mobile: String
-            $options: JSON
           ) {
-            UserUpdate(
+            UserProfile(
               data: {
-                $id: $id
-                info: {
-                  username: $username
-                  email: $email
-                  password: $password
-                  role: $role
-                  lang: $lang
-                  country: $country
-                  mobile: $mobile
-                  options: $options
-                }
+                id: $id,
               }
-            )
-          }
-        `,
+            ) {
+              id
+              username
+              email
+              role
+              lang
+              country
+              mobile
+              options
+            }
+          }`,
         variables: {
-          id: 1,
-          info: {
-            lang: 'en',
-            role: 'VI',
-          },
+          id: user.id,
         },
       },
     });
 
     const { data } = JSON.parse(data1.body);
-    expect(data.UserCreate.username).toEqual('testusername');
+    expect(data.UserProfile.username).toEqual(user.username);
+
+    const data2 = await fastify.inject({
+      url: graphQLEndpoint,
+      method: 'POST',
+      payload: {
+        operationName: null,
+        query: `query(
+            $id: Int!
+          ) {
+            UserProfile(
+              data: {
+                id: $id,
+              }
+            ) {
+              id
+              username
+              email
+            }
+          }`,
+        variables: {
+          id: user.id,
+        },
+      },
+    });
+    const { errors } = JSON.parse(data2.body);
+    expect(errors['0'].extensions.statusCode).toEqual(403);
   });
 });

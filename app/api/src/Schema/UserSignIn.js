@@ -23,9 +23,9 @@ const schema = {
           type: 'string',
           example: 'samplePassW00rd',
         },
-        // otp: {
-        //   type: 'string',
-        // },
+        otp: {
+          type: 'string',
+        },
         captcha: {
           type: 'object',
           properties: {
@@ -40,10 +40,13 @@ const schema = {
       },
     },
   },
-  // anyOf: [
-  //   { required: ['type', 'email', 'password', 'captcha'] },
-  //   { required: ['type', 'email', 'otp'] },
-  // ],
+  if: {
+    properties: {
+      type: { const: 'AP' },
+    },
+    required: ['type', 'email', 'password', 'captcha'],
+  },
+  then: { required: ['type', 'email', 'otp'] },
 };
 
 module.exports = {

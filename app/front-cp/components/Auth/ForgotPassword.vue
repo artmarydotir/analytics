@@ -92,6 +92,7 @@ export default {
         }, 2000);
       }
       if (data) {
+        console.log(data);
         this.isDisabled = true;
         this.$router.push(
           this.localeRoute({

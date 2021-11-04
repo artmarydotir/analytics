@@ -150,6 +150,10 @@ export default {
       delete cloneUser.options;
       cloneUser.options = this.temporaryOptions;
       delete cloneUser.id;
+      if (this.userStateRole === 'VI' || this.userStateRole === 'AD') {
+        delete cloneUser.role;
+        delete cloneUser.options;
+      }
       const updatedData = { id: this.user.id, data: cloneUser };
 
       const [err, data] = await to(

@@ -87,7 +87,6 @@ input InputUserCreate {
 input InputUserUpdate {
   username: String
   email: EmailAddress
-  password: String
   role: String
   lang: String
   country: String
@@ -116,6 +115,6 @@ type Mutation {
 
 # Query list
 type Query {
-  UserForgotPassword(data: InputForgotPassword): Boolean
+  UserForgotPassword(data: InputForgotPassword): String
   UserProfile(data: InputGlobalID): OutputUserProfile
 }

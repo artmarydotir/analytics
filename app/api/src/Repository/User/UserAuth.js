@@ -68,18 +68,15 @@ class Authentication {
 
       success = validPassword && isValidCaptcha;
     } else if (type === constants.AUTH_OTP) {
-      const validOtp = this.user.verifyOtp(otp);
+      const validOtp = await this.user.verifyOtp(otp, userData.otpSecret);
       success = validOtp;
     }
-
-    if (success) {
-      return userData;
+    if (!success) {
+      throw new ErrorWithProps('Unauthorized', {
+        statusCode: 401,
+      });
     }
-
-    // fix
-    throw new ErrorWithProps('Invalid user data', {
-      statusCode: 400,
-    });
+    return userData;
   }
 }
 
