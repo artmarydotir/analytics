@@ -62,18 +62,20 @@ class UserList {
 
     if (lastSeen) {
       where.id = {
-        [Op.gt]: lastSeen,
+        [Op.lt]: lastSeen,
       };
     }
 
     const { User } = this.sequelize.models;
 
-    return User.findAll({
+    const result = await User.findAll({
       attributes,
       where,
-      limiting,
+      limit: limiting,
       order: [['id', 'DESC']],
     });
+
+    return { docs: result };
   }
 }
 

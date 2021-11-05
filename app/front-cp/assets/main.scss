@@ -22,3 +22,11 @@
 .v-list-item .v-list-item__subtitle {
   line-height: 1.5em !important;
 }
+
+.fix-height-table {
+  height: 100px !important;
+}
+
+tr.v-data-table__selected {
+  background: #9b9b9b44 !important;
+}

@@ -104,6 +104,30 @@ input InputOtpGenerate {
   currentPassword: String
 }
 
+input InputUserList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
+type OutputUserListDocs {
+  id: Int
+  username: String
+  email: String
+  role: String
+  lang: String
+  country: String
+  mobile: String
+  options: [Int]
+  additional: [JSONObject]
+  createdAt: Date
+  updatedAt: Date
+}
+
+type OutputUserList {
+  docs: [OutputUserListDocs]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -117,4 +141,5 @@ type Mutation {
 type Query {
   UserForgotPassword(data: InputForgotPassword): String
   UserProfile(data: InputGlobalID): OutputUserProfile
+  UserList(args: InputUserList): OutputUserList
 }

@@ -101,7 +101,7 @@
     "otplib": "^12",
     "pg": "^8",
     "pg-hstore": "^2",
-    "randomcolor": "^0",
+    "graphql-fields-list": "^2",
     "sequelize": "^6",
     "validator": "^13",
     "yaml": "^2.0.0-4"

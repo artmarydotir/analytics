@@ -87,7 +87,7 @@ describe(__filename.replace(__dirname, ''), () => {
         dte_createdAt: '2090-04-27 12:00:00',
       },
     });
-
+    console.log('----------------------', result1);
     expect(result1).toBeTruthy();
     expect(result1[0].dataValues.username).toBe('maryyq');
   });
