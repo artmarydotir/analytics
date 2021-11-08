@@ -52,7 +52,7 @@ class UserUpdate {
       });
     }
 
-    const isUserExist = await this.process.isUserExistByID(id);
+    const isUserExist = await this.process.userExistNotOptionCheck(id);
 
     if (isUserExist) {
       await this.validateShema(schema, data);

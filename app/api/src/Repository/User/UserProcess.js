@@ -206,6 +206,32 @@ class UserProcess {
   }
 
   /**
+   * @param {Number} userId
+   * @returns  {Promise<Boolean>}
+   */
+  async userExistNotOptionCheck(userId) {
+    const { User } = this.sequelize.models;
+    let isExist = false;
+
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      isExist = false;
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    } else {
+      isExist = true;
+    }
+
+    return isExist;
+  }
+
+  /**
    *
    * @returns  {Promise<string>}
    */
