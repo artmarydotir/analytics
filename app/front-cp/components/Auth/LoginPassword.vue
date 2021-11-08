@@ -86,7 +86,7 @@ export default {
       type: 'AP',
       user: {
         email: 'adminer@gmail.com',
-        password: 'O!s$@j^caLk#8=_0',
+        password: 'Ai2@Y%(n8k_=Gya*',
         captcha: null,
       },
     };

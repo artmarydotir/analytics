@@ -70,6 +70,7 @@ export default {
       '~/components/Auth',
       '~/components/User',
       '~/components/User/Update',
+      '~/components/Project',
     ],
   },
 

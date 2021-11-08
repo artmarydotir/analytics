@@ -74,127 +74,17 @@ export default {
       groupItems: [
         {
           action: 'mdi-cube-outline',
-          title: this.$t('nodeManagement'),
-          active: this.$route.path.includes('node'),
+          title: this.$t('projectManagement'),
+          active: this.$route.path.includes('project'),
           items: [
             {
-              title: this.$t('nodeAdd'),
-              link: '/node/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('nodeList'),
-              link: '/node/list/',
+              title: this.$t('projectAdd'),
+              link: '/project/add/',
               canSee: true,
             },
-          ],
-        },
-        {
-          action: 'mdi-toolbox-outline',
-          title: this.$t('certificateManagement'),
-          active: this.$route.path.includes('certificate'),
-          items: [
             {
-              title: this.$t('certificateAdd'),
-              link: '/certificate/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('certificateList'),
-              link: '/certificate/list/',
-              canSee: true,
-            },
-          ],
-        },
-
-        {
-          action: 'mdi-lock',
-          title: this.$t('protectionManagement'),
-          active: this.$route.path.includes('protection'),
-          items: [
-            {
-              title: this.$t('protectionAdd'),
-              link: '/protection/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('protectionList'),
-              link: '/protection/list/',
-              canSee: true,
-            },
-          ],
-        },
-        {
-          action: 'mdi-shield-key-outline',
-          title: this.$t('wafManagement'),
-          active: this.$route.path.includes('waf'),
-          items: [
-            {
-              title: this.$t('wafAdd'),
-              link: '/waf/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('wafList'),
-              link: '/waf/list/',
-              canSee: true,
-            },
-          ],
-        },
-        {
-          action: 'mdi-timelapse',
-          title: this.$t('aclManagement'),
-          active: this.$route.path.includes('acl'),
-          items: [
-            {
-              title: this.$t('aclAdd'),
-              link: '/acl/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('aclList'),
-              link: '/acl/list/',
-              canSee: true,
-            },
-          ],
-        },
-        {
-          action: 'mdi-server-security',
-          title: this.$t('upstreamManagement'),
-          active: this.$route.path.includes('upstream'),
-          items: [
-            {
-              title: this.$t('upstreamAdd'),
-              link: '/upstream/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('upstreamList'),
-              link: '/upstream/list/',
-              canSee: true,
-            },
-          ],
-        },
-        {
-          action: 'mdi-server-network',
-          title: this.$t('vhManagement'),
-          active: this.$route.path.includes('virtualhost'),
-          items: [
-            {
-              title: this.$t('vhAdd'),
-              link: '/virtualhost/add/',
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
-            },
-            {
-              title: this.$t('vhList'),
-              link: '/virtualhost/list/',
+              title: this.$t('projectList'),
+              link: '/project/list/',
               canSee: true,
             },
           ],
@@ -207,6 +97,7 @@ export default {
             {
               title: this.$t('userAdd'),
               link: '/user/add/',
+              canSee: true,
               // canSee:
               //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
             },
