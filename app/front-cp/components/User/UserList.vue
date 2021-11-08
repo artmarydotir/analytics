@@ -107,6 +107,7 @@
 <script>
 import debounce from 'lodash/debounce';
 import tableFunctions from '@/mixin/tableFunctions';
+const { to } = require('await-to-js');
 
 export default {
   name: 'Userable',
@@ -201,6 +202,29 @@ export default {
     deleteActionBtn(data) {
       this.dialog = true;
       this.modalData = Object.assign({}, data);
+    },
+
+    async deleteUser() {
+      const { id } = this.modalData;
+
+      const [err, data] = await to(
+        this.$store.dispatch(this.moduleInfo.rmUrl, id),
+      );
+      if (data) {
+        this.dialog = false;
+        const result = await this.callTableListApi(
+          {
+            lastSeen: undefined,
+            limit: this.limit,
+            filter: this.filter,
+          },
+          this.moduleInfo.url,
+        );
+        this.userDocs = result;
+      }
+      if (err) {
+        this.dialog = false;
+      }
     },
   },
 };

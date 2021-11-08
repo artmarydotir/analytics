@@ -230,4 +230,54 @@ export const actions = {
       throw new Error('error');
     }
   },
+
+  // ***************************************
+  async deleteUser({ commit }, id) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation ($id: Int!) {
+              UserDelete(
+                data: {
+                  id: $id,
+                }
+              )
+          }`,
+          variables: {
+            id,
+          },
+        },
+      );
+
+      const result = data.data.UserDelete;
+      if (data.errors) {
+        throw new Error(data.errors['0'].message);
+      }
+      if (result.id) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'Successfully Deleted user.',
+          },
+          { root: true },
+        );
+        return true;
+      }
+    } catch (error) {
+      // later todo
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: `${error}`,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };

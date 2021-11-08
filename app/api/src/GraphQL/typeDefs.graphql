@@ -135,6 +135,7 @@ type Mutation {
   UserUpdate(id: Int!, data: InputUserUpdate): Int
   UserUpdatePassword(data: InputUpdatePassword): JSON
   OtpGenerate(data: InputOtpGenerate): String
+  UserDelete(data: InputGlobalID): JSON
 }
 
 # Query list
