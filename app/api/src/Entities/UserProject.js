@@ -10,7 +10,8 @@ module.exports = (sequelize) => {
 
   const UserProject = sequelize.define('UserProject', {
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
     },
   });
 

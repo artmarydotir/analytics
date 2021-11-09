@@ -53,7 +53,7 @@ class ProjectList {
 
     if (lastSeen) {
       query.id = {
-        [Op.gt]: lastSeen,
+        [Op.lt]: lastSeen,
       };
     }
 

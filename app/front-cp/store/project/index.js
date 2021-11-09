@@ -17,24 +17,16 @@ export const actions = {
         `${window.applicationBaseURL}api/graphql/graphql`,
         {
           query: `mutation (
-            $username: String!
-            $email: EmailAddress!
-            $password: String!
-            $role: String!
-            $lang: String
-            $country: String
-            $mobile: String
-            $options: [Int]!
+            $title: String!
+            $description: String
+            $userAndCategory: [JSONObject]!
+            $options: [Int]
               ) {
-              UserCreate(
+              ProjectCreate(
                 data: {
-                  username: $username
-                  email: $email
-                  password: $password
-                  lang: $lang
-                  country: $country
-                  role: $role
-                  mobile: $mobile
+                  title: $title
+                  description: $description
+                  userAndCategory: $userAndCategory
                   options: $options
                 }
               )
@@ -43,17 +35,17 @@ export const actions = {
         },
       );
 
-      const result = data.data.UserCreate;
+      const result = data.data.ProjectCreate;
       if (data.errors) {
         throw new Error(data.errors['0'].message);
       }
-      if (result.id) {
+      if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Created user.',
+            message: 'Successfully Created project.',
           },
           { root: true },
         );

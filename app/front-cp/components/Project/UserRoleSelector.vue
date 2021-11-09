@@ -127,7 +127,7 @@ export default {
       for (const key in this.cat) {
         if (this.cat[key]) {
           this.userAndCategory.push({
-            userId: Number(key),
+            UserId: Number(key),
             category: this.cat[key],
           });
         }

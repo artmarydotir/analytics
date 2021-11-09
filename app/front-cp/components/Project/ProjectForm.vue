@@ -142,7 +142,7 @@ export default {
       if (
         Object.prototype.hasOwnProperty.call(
           this.innerProject,
-          'userCategories',
+          'userAndCategory',
         ) === undefined
       ) {
         this.$store.commit('SET_NOTIFICATION', {
@@ -179,17 +179,11 @@ export default {
             }),
           );
         }, 1500);
-        // this.clearForm();
       }
     },
 
-    clearForm() {
-      this.$nextTick(() => {
-        this.$refs.obs.reset();
-      });
-    },
     userCategories(value) {
-      this.$set(this.innerProject, 'userCategories', value);
+      this.$set(this.innerProject, 'userAndCategory', value);
     },
   },
 };

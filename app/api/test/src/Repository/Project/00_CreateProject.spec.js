@@ -46,6 +46,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('add project', async () => {
     const createProject = container.resolve('ProjectCreateRepository');
+    const profile = container.resolve('ProjectProfileRepository');
     const createUser = container.resolve('UserCreateRepository');
     const user = await createUser.addUser({
       username: 'addproject',
@@ -75,6 +76,22 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
+    const pData = await createProject.addProject({
+      title: 'for profile test',
+      description: 'hey hello',
+      userAndCategory: [
+        {
+          UserId: user.dataValues.id,
+          category: ['ALL'],
+        },
+        {
+          UserId: user2.dataValues.id,
+          category: ['VIEW_A'],
+        },
+      ],
+      additional: {},
+    });
+
     expect(
       await createProject.addProject({
         title: 'donyaye Eghtesad',
@@ -89,6 +106,8 @@ describe(__filename.replace(__dirname, ''), () => {
         additional: {},
       }),
     ).toBeTruthy();
+
+    await profile.returnProjectData(pData.id);
 
     expect(
       await createProject.addProject({

@@ -7,6 +7,7 @@ const {
 
 module.exports = async (_, { data }, { container, token }) => {
   const { ProjectCreateRepository } = container;
+  console.log(data);
 
   if (!token || token.roles === userRoles.VIEWER) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
