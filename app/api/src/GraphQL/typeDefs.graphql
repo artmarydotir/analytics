@@ -128,6 +128,15 @@ type OutputUserList {
   docs: [OutputUserListDocs]
 }
 
+# ********** PROJECT *************
+
+input InputProjectCreate {
+  title: String!
+  description: String
+  userAndCategory: [JSONObject]!
+  options: [Int]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -136,6 +145,7 @@ type Mutation {
   UserUpdatePassword(data: InputUpdatePassword): JSON
   OtpGenerate(data: InputOtpGenerate): String
   UserDelete(data: InputGlobalID): JSON
+  ProjectCreate(data: InputProjectCreate): Int
 }
 
 # Query list

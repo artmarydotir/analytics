@@ -13,13 +13,6 @@ export default {
   // permissions: ['SA', 'AD', 'VI'],
   data() {
     return {
-      dynamicSlots: {
-        vDataTable: [
-          {
-            name: 'item.email',
-          },
-        ],
-      },
       moduleData: {
         url: 'user/list/listUser',
         rmUrl: 'user/deleteUser',

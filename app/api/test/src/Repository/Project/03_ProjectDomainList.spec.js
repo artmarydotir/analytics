@@ -90,10 +90,10 @@ describe(__filename.replace(__dirname, ''), () => {
       publicToken: 'project00080',
       options: [1],
       description: 'hello test for list',
-      userAndRoles: [
+      userAndCategory: [
         {
           UserId: enableUser.dataValues.id,
-          role: ['ALL', 'VIEW_B'],
+          category: ['ALL', 'VIEW_B'],
         },
       ],
       additional: {},
@@ -104,10 +104,10 @@ describe(__filename.replace(__dirname, ''), () => {
       publicToken: 'project00090',
       description: 'hello test for list',
       options: [1, 2],
-      userAndRoles: [
+      userAndCategory: [
         {
           UserId: disableUser.dataValues.id,
-          role: ['ALL', 'VIEW_B'],
+          category: ['ALL', 'VIEW_B'],
         },
       ],
       additional: {},

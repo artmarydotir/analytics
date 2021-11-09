@@ -20,7 +20,7 @@ class ProjectUpdate {
       title,
       publicToken,
       description,
-      userAndRoles,
+      userAndCategory,
       options,
       additional,
     } = data;
@@ -57,7 +57,7 @@ class ProjectUpdate {
     };
 
     const middleTable = {
-      userAndRoles: null,
+      userAndCategory: null,
     };
 
     initialValues.title = title;
@@ -92,8 +92,8 @@ class ProjectUpdate {
       initialValues.additional = additional;
     }
 
-    if (userAndRoles) {
-      middleTable.userAndRoles = userAndRoles;
+    if (userAndCategory) {
+      middleTable.userAndCategory = userAndCategory;
     }
 
     /**
@@ -122,7 +122,7 @@ class ProjectUpdate {
         },
       );
 
-      const readyData = middleTable.userAndRoles.map((obj) => ({
+      const readyData = middleTable.userAndCategory.map((obj) => ({
         ...obj,
         ProjectId: id,
       }));
