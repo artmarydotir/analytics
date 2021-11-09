@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
   const Project = sequelize.modelManager.getModel('Project');
 
   const UserProject = sequelize.define('UserProject', {
-    role: {
+    category: {
       type: DataTypes.STRING,
     },
   });

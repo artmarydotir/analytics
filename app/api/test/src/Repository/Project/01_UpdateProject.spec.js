@@ -82,10 +82,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'donyaye Eghtesad',
       publicToken: '123654',
       description: 'hey hello',
-      userAndRoles: [
+      userAndCategory: [
         {
           UserId: user.dataValues.id,
-          role: ['ALL', 'VIEW_A'],
+          category: ['ALL', 'VIEW_A'],
         },
       ],
       additional: {},
@@ -95,10 +95,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'analytic',
       publicToken: '12365468',
       description: 'hey htm',
-      userAndRoles: [
+      userAndCategory: [
         {
           UserId: user.dataValues.id,
-          role: ['ALL'],
+          category: ['ALL'],
         },
       ],
     });
@@ -161,14 +161,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: true,
           DELETED: true,
         },
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_C'],
+            category: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            role: ['NEWS_A'],
+            category: ['NEWS_A'],
           },
         ],
       }),
@@ -183,14 +183,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: false,
           DELETED: true,
         },
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_C'],
+            category: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            role: ['NEWS_A'],
+            category: ['NEWS_A'],
           },
         ],
       }),
@@ -204,14 +204,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: true,
           DELETED: false,
         },
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_C'],
+            category: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            role: ['NEWS_A'],
+            category: ['NEWS_A'],
           },
         ],
       }),

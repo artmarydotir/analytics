@@ -1,14 +1,12 @@
 <template>
   <v-container class="pt-6" fluid>
-    <ProjectForm :title="$t('projectAdd')" :project="project" />
+    <ProjectForm :title="$t('projectAdd')" />
   </v-container>
 </template>
 <script>
 export default {
   data() {
-    return {
-      project: {},
-    };
+    return {};
   },
   head() {
     return {

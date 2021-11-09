@@ -3,6 +3,7 @@ const OtpGenerate = require('./User/OtpGenerate');
 const UserCreate = require('./User/UserCreate');
 const UserUpdate = require('./User/UserUpdate');
 const UserDelete = require('./User/UserDelete');
+const ProjectCreate = require('./Project/ProjectCreate');
 
 module.exports = {
   UserCreate,
@@ -10,4 +11,5 @@ module.exports = {
   UserDelete,
   OtpGenerate,
   UserUpdatePassword,
+  ProjectCreate,
 };

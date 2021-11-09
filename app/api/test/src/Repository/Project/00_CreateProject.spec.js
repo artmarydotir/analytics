@@ -80,10 +80,10 @@ describe(__filename.replace(__dirname, ''), () => {
         title: 'donyaye Eghtesad',
         publicToken: '123654',
         description: 'hey hello',
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            category: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -95,14 +95,14 @@ describe(__filename.replace(__dirname, ''), () => {
         title: 'test2',
         publicToken: '123654a1s2',
         description: 'hey hello',
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            category: ['ALL', 'VIEW_A'],
           },
           {
             UserId: user2.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            category: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -113,10 +113,10 @@ describe(__filename.replace(__dirname, ''), () => {
       await createProject.addProject({
         title: 'donyayeEf',
         description: 'hey this is a description',
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            category: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -134,10 +134,10 @@ describe(__filename.replace(__dirname, ''), () => {
     await expect(
       createProject.addProject({
         description: 'hey hello there',
-        userAndRoles: [
+        userAndCategory: [
           {
             UserId: user.dataValues.id,
-            role: ['ALL', 'VIEW_A'],
+            category: ['ALL', 'VIEW_A'],
           },
         ],
       }),

@@ -75,10 +75,10 @@ describe(__filename.replace(__dirname, ''), () => {
       publicToken: 'project00080',
       options: [1],
       description: 'hello test for list',
-      userAndRoles: [
+      userAndCategory: [
         {
           UserId: enableUser.dataValues.id,
-          role: ['ALL', 'VIEW_B'],
+          category: ['ALL', 'VIEW_B'],
         },
       ],
       additional: {},

@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto">
     <Snackbar />
+    {{ innerProject }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -32,24 +33,20 @@
                   ></v-text-field>
                 </ValidationProvider>
               </v-col>
-              <v-col cols="12" md="6" lg="4">
-                <ValidationProvider
-                  v-slot:default="{ errors, valid }"
-                  rules="required"
-                  :name="$t('publicToken')"
-                >
-                  <v-text-field
-                    v-model.trim="innerProject.publicToken"
-                    :error-messages="errors"
-                    :success="valid"
-                    dir="ltr"
-                    type="text"
-                    outlined
-                    required
-                    :label="$t('publicToken')"
-                  ></v-text-field>
-                </ValidationProvider>
+              <v-col v-if="editMood" cols="12" md="6" lg="4">
+                <v-text-field
+                  v-model="innerProject.publicToken"
+                  dir="ltr"
+                  type="text"
+                  outlined
+                  required
+                  :label="$t('publicToken')"
+                ></v-text-field>
               </v-col>
+              <v-col cols="12" md="6" lg="4">
+                <ProjectCreationOption @sendOptions="updateOptions" />
+              </v-col>
+
               <v-col cols="12">
                 <v-textarea
                   v-model="innerProject.description"
@@ -61,11 +58,7 @@
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
-                <UserRoleSelector />
-              </v-col>
-
-              <v-col cols="12" md="6" lg="4">
-                <ProjectCreationOption @sendOptions="updateOptions" />
+                <UserRoleSelector @sendData="userCategories" />
               </v-col>
 
               <!-- actions -->
@@ -114,8 +107,9 @@ export default {
       type: String,
     },
     project: {
-      required: true,
       type: Object,
+      required: false,
+      default: () => ({}),
     },
     editMood: {
       required: false,
@@ -140,15 +134,33 @@ export default {
   },
   methods: {
     updateOptions(value) {
-      this.user.options = value;
+      this.$set(this.innerProject, 'options', value);
     },
     async onSubmit() {
-      const validity = await this.$refs.obs.validate();
+      let validity = await this.$refs.obs.validate();
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.innerProject,
+          'userCategories',
+        ) === undefined
+      ) {
+        this.$store.commit('SET_NOTIFICATION', {
+          show: true,
+          color: 'warning',
+          message: 'Must add at least one user',
+        });
+        validity = false;
+      }
+
       if (!validity) {
+        console.log(validity);
+
         return;
       }
+
       const [err, data] = await to(
-        this.$store.dispatch('user/addUser', this.user),
+        this.$store.dispatch('project/addProject', this.innerProject),
       );
       if (err) {
         this.isDisabled = false;
@@ -167,7 +179,7 @@ export default {
             }),
           );
         }, 1500);
-        this.clearForm();
+        // this.clearForm();
       }
     },
 
@@ -175,6 +187,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.obs.reset();
       });
+    },
+    userCategories(value) {
+      this.$set(this.innerProject, 'userCategories', value);
     },
   },
 };
