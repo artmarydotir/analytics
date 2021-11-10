@@ -16,7 +16,7 @@ class ProjectProfile {
    */
 
   async returnProjectData(projectId) {
-    const { Project, UserProject } = this.sequelize.models;
+    const { Project, UserProject, User } = this.sequelize.models;
 
     if (!projectId) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -31,12 +31,32 @@ class ProjectProfile {
       },
     });
 
-    const usersDoc = await UserProject.findAll({
-      attributes: ['category', 'UserId', 'ProjectId'],
-      where: {
-        ProjectId: projectId,
+    const usersDoc = await this.sequelize.query(
+      `
+        SELECT
+          "UserProjects"."rules" AS "rules",
+          "UserProjects"."UserId" AS "UserId",
+          "UserProjects"."ProjectId" AS "ProjectId",
+          "Users"."username" AS "Username"
+        FROM "UserProjects"
+        LEFT JOIN "Users" ON ("Users"."id" = "UserProjects"."UserId")
+        WHERE "ProjectId" = :projectId
+      `,
+      {
+        replacements: { projectId },
+        model: UserProject,
+        mapToModel: true,
       },
-    });
+    );
+
+    // console.log(usersDoc);
+
+    // const usersDoc = await UserProject.findAll({
+    //   // attributes: ['rules', 'UserId', 'ProjectId'],
+    //   where: {
+    //     ProjectId: projectId,
+    //   },
+    // });
 
     if (!project) {
       throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
@@ -44,13 +64,16 @@ class ProjectProfile {
       });
     }
 
+    console.log(usersDoc);
     const userList = [];
     if (usersDoc.length > 0) {
       usersDoc.map((user) => {
-        const { UserId, category } = user;
+        console.log('9999', usersDoc);
+        const { UserId, rules, Username } = user;
         return userList.push({
           UserId,
-          category,
+          rules,
+          Username,
         });
       });
     }

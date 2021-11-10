@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <!-- {{ editInfo }} -->
     <v-toolbar dark color="teal">
       <v-toolbar-title v-show="$vuetify.breakpoint.mdAndUp" class="mr-3 ml-2">
         Select User:
@@ -26,6 +27,7 @@
     </v-toolbar>
 
     <v-col cols="12">
+      ## {{ loopingList }}
       <v-row v-for="(item, i) in loopingList" :key="i" align="center">
         <v-col cols="12" md="2">
           <div>
@@ -38,15 +40,16 @@
           </div>
         </v-col>
         <v-col cols="10" md="8" class="pa-0 pt-5">
+          {{ cat }}
           <ValidationProvider
             v-slot:default="{ errors, valid }"
-            name="category"
+            name="rules"
             rules="required"
           >
             <v-select
               v-model="cat[item.id]"
-              :items="category"
-              :label="$t('selectCategory')"
+              :items="rules"
+              :label="$t('selectRules')"
               outlined
               small-chips
               :error-messages="errors"
@@ -81,20 +84,59 @@
 import debounce from 'lodash/debounce';
 
 export default {
+  props: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+
+    loopingListO: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+  },
+
   data() {
     return {
       cat: {},
       userDocs: [],
       search: '',
       user: '',
-      category: ['ALL', 'VIEW_A', 'VIEW_C'],
-      userAndCategory: [],
+      rules: ['ALL', 'VIEW_A', 'VIEW_C'],
+      userAndRules: [],
       loopingList: [],
       delivers: [],
     };
   },
+  // computed: {
+  //   cat: {
+  //     get() {
+  //       return this.catO;
+  //     },
+  //     set(v) {
+  //       this.$emit('update:catO', v);
+  //     },
+  //   },
+  // },
 
   watch: {
+    loopingListO(value) {
+      if (this.edit) {
+        console.log(value);
+        const mutateList = this.loopingListO.map((v) => {
+          return {
+            id: v.UserId,
+          };
+        });
+        this.loopingList = mutateList;
+        this.cat = this.loopingListO.reduce((acc, cur) => {
+          acc[cur.UserId] = cur.rules;
+          return acc;
+        }, {});
+      }
+    },
+
     search(value) {
       if (!value) {
         return;
@@ -122,17 +164,18 @@ export default {
         this.loopingList.push(input);
       }
     },
+
     sendData() {
-      this.userAndCategory = [];
+      this.userAndRules = [];
       for (const key in this.cat) {
         if (this.cat[key]) {
-          this.userAndCategory.push({
+          this.userAndRules.push({
             UserId: Number(key),
-            category: this.cat[key],
+            rules: this.cat[key],
           });
         }
       }
-      this.delivers = [...this.userAndCategory];
+      this.delivers = [...this.userAndRules];
       this.$emit('sendData', this.delivers);
     },
     getUsers() {

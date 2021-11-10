@@ -20,7 +20,7 @@ const CreateProjectSchema = () =>
     publicToken: Joi.string().optional().messages({
       'string.max': errorConstMerge.MAX_LENGTH,
     }),
-    userAndCategory: Joi.array().allow(null).optional(),
+    userAndRules: Joi.array().allow(null).optional(),
     options: Joi.any().allow(null).optional(),
     additional: Joi.object().allow(null).optional(),
   });

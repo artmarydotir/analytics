@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
   const Project = sequelize.modelManager.getModel('Project');
 
   const UserProject = sequelize.define('UserProject', {
-    category: {
+    rules: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
@@ -23,6 +23,6 @@ module.exports = (sequelize) => {
   Project.belongsToMany(User, {
     through: UserProject,
   });
-  //
+
   return UserProject;
 };

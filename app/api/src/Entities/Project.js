@@ -49,6 +49,6 @@ module.exports = (sequelize) =>
       // },
     },
     {
-      // Other model options go here
+      // tableName: 'projects',
     },
   );

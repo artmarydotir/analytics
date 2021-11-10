@@ -13,6 +13,7 @@ import {
   alpha_dash,
   regex,
   digits,
+  alpha_num,
 } from 'vee-validate/dist/rules';
 
 import {
@@ -34,6 +35,7 @@ extend('alpha', alpha);
 extend('digits', digits);
 extend('alpha_spaces', alpha_spaces);
 extend('alpha_dash', alpha_dash);
+extend('alpha_num', alpha_num);
 extend('regex', regex);
 
 Vue.component('ValidationProvider', ValidationProvider);

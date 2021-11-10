@@ -19,7 +19,7 @@
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
-                  rules="required|alpha_spaces"
+                  :rules="{ required: true, regex: /[a-zA-Z0-9\s]+/ }"
                   :name="$t('title')"
                 >
                   <v-text-field
@@ -40,11 +40,19 @@
                   type="text"
                   outlined
                   required
+                  readonly
                   :label="$t('publicToken')"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="6" lg="4">
+
+              <v-col v-if="!editMood" cols="12" md="6" lg="4">
                 <ProjectCreationOption @sendOptions="updateOptions" />
+              </v-col>
+              <v-col v-if="editMood" cols="12" md="6" lg="4">
+                <ProjectUpdateOption
+                  :value.sync="project.options"
+                  @sendOptions="reciveOptions"
+                />
               </v-col>
 
               <v-col cols="12">
@@ -58,7 +66,11 @@
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
-                <UserRoleSelector @sendData="userCategories" />
+                <UserRuleSelector
+                  :edit="editMood"
+                  :looping-list-o="innerProject.userAndRules"
+                  @sendData="receiveRules"
+                />
               </v-col>
 
               <!-- actions -->
@@ -83,7 +95,6 @@
                   x-large
                   color="middle white--text"
                   class="mb-3 mr-1 ml-1 pl-12 pr-12"
-                  @click="clearForm"
                 >
                   {{ $t('reset') }}
                 </v-btn>
@@ -119,6 +130,7 @@ export default {
   },
   data() {
     return {
+      temporaryOptions: {},
       isDisabled: false,
     };
   },
@@ -142,7 +154,7 @@ export default {
       if (
         Object.prototype.hasOwnProperty.call(
           this.innerProject,
-          'userAndCategory',
+          'userAndRules',
         ) === undefined
       ) {
         this.$store.commit('SET_NOTIFICATION', {
@@ -182,8 +194,11 @@ export default {
       }
     },
 
-    userCategories(value) {
-      this.$set(this.innerProject, 'userAndCategory', value);
+    receiveRules(value) {
+      this.$set(this.innerProject, 'userAndRules', value);
+    },
+    reciveOptions(options) {
+      this.temporaryOptions = options;
     },
   },
 };

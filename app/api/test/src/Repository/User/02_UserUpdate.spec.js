@@ -86,10 +86,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'its test for enable mood',
       publicToken: '1236s5721',
       options: [1],
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user1.dataValues.id,
-          category: ['ALL', 'VIEW_A'],
+          rules: ['ALL', 'VIEW_A'],
         },
       ],
       additional: {},
@@ -99,14 +99,14 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'its test',
       publicToken: '1236s5730',
       options: [2],
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user2.dataValues.id,
-          category: ['ALL'],
+          rules: ['ALL'],
         },
         {
           UserId: user1.dataValues.id,
-          category: ['ALL'],
+          rules: ['ALL'],
         },
       ],
       additional: {},
@@ -116,10 +116,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'its test hey',
       publicToken: '1236s5asd',
       options: [1],
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user2.dataValues.id,
-          category: ['ALL'],
+          rules: ['ALL'],
         },
       ],
       additional: {},

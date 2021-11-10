@@ -60,7 +60,6 @@ export const actions = {
   },
   // ***************************************
   async addUser({ commit }, inputData) {
-    console.log(inputData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -127,7 +126,6 @@ export const actions = {
   },
   // ***************************************
   async updateUser({ commit }, inputData) {
-    console.log('---', inputData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
