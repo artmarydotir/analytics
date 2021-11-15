@@ -127,13 +127,11 @@ class ProjectUpdate {
         ProjectId: id,
       }));
 
+      await UserProject.destroy({ where: { ProjectId: id }, transaction: t });
+
       await UserProject.bulkCreate(readyData, {
-        // not sure if its needed
-        where: {
-          ProjectId: id,
-        },
         transaction: t,
-        updateOnDuplicate: ['UserId', 'role'],
+        updateOnDuplicate: ['UserId', 'rules'],
       });
 
       await t.commit();

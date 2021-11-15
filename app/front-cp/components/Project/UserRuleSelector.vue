@@ -40,7 +40,7 @@
           </div>
         </v-col>
         <v-col cols="10" md="8" class="pa-0 pt-5">
-          {{ cat }}
+          cat : {{ cat }}
           <ValidationProvider
             v-slot:default="{ errors, valid }"
             name="rules"
@@ -123,14 +123,15 @@ export default {
   watch: {
     loopingListO(value) {
       if (this.edit) {
-        console.log(value);
         const mutateList = this.loopingListO.map((v) => {
           return {
             id: v.UserId,
+            username: v.username,
           };
         });
         this.loopingList = mutateList;
         this.cat = this.loopingListO.reduce((acc, cur) => {
+          console.log(acc, cur, '$$$$');
           acc[cur.UserId] = cur.rules;
           return acc;
         }, {});
@@ -150,7 +151,6 @@ export default {
   },
   methods: {
     makeAlist(input) {
-      console.log(input);
       if (this.loopingList.includes(input)) {
         this.$store.commit('SET_NOTIFICATION', {
           show: true,
@@ -175,6 +175,15 @@ export default {
           });
         }
       }
+
+      this.userAndRules.forEach((v) => {
+        this.loopingList.forEach((v2) => {
+          if (v.UserId === v2.id) {
+            v.username = v2.username;
+          }
+        });
+      });
+
       this.delivers = [...this.userAndRules];
       this.$emit('sendData', this.delivers);
     },

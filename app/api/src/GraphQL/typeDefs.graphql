@@ -147,7 +147,6 @@ type OutputProjectProfile {
 }
 
 input InputProjectUpdate {
-  id: Int!
   title: String
   description: String
   userAndRules: [JSONObject]

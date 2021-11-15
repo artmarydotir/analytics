@@ -8,8 +8,6 @@ const {
 module.exports = async (_, { id, data }, { container, token }) => {
   const { ProjectUpdateRepository } = container;
 
-  console.log(id, data);
-  console.log('--------------');
   if (!token && token.roles === userRoles.VIEWER) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
@@ -17,7 +15,8 @@ module.exports = async (_, { id, data }, { container, token }) => {
   }
 
   try {
-    return await ProjectUpdateRepository.updateProject(id, data);
+    const projectData = await ProjectUpdateRepository.updateProject(id, data);
+    return projectData.projectId;
   } catch (e) {
     throw new ErrorWithProps(e.message, {
       statusCode: e.extensions ? e.extensions.statusCode : 500,

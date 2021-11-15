@@ -22,7 +22,7 @@ module.exports = async (_, { data }, { container, token }) => {
   }
 
   if (token.roles.includes(userRoles.VIEWER)) {
-    // @FIXME: check if user has access to project
+    // @FIXME: check if owner of project is the same as the token owner
   }
 
   const project = ProjectProfileRepository.returnProjectData(id);

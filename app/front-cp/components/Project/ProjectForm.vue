@@ -149,30 +149,14 @@ export default {
       this.$set(this.innerProject, 'options', value);
     },
     async onSubmit() {
-      let validity = await this.$refs.obs.validate();
-
-      if (
-        Object.prototype.hasOwnProperty.call(
-          this.innerProject,
-          'userAndRules',
-        ) === undefined
-      ) {
-        this.$store.commit('SET_NOTIFICATION', {
-          show: true,
-          color: 'warning',
-          message: 'Must add at least one user',
-        });
-        validity = false;
-      }
+      const validity = await this.$refs.obs.validate();
 
       if (!validity) {
-        console.log(validity);
-
         return;
       }
-
+      const re = this.updatingFunction();
       const [err, data] = await to(
-        this.$store.dispatch('project/addProject', this.innerProject),
+        this.$store.dispatch('project/updateProject', re),
       );
       if (err) {
         this.isDisabled = false;
@@ -182,6 +166,7 @@ export default {
       }
 
       if (data) {
+        console.log('im here');
         this.isDisabled = true;
 
         setTimeout(() => {
@@ -194,6 +179,16 @@ export default {
       }
     },
 
+    updatingFunction() {
+      const cloneData = { ...this.innerProject };
+      cloneData.options = this.temporaryOptions;
+      delete cloneData.publicToken;
+      delete cloneData.id;
+      return {
+        id: this.innerProject.id,
+        data: cloneData,
+      };
+    },
     receiveRules(value) {
       this.$set(this.innerProject, 'userAndRules', value);
     },
