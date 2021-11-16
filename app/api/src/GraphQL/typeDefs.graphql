@@ -133,8 +133,62 @@ type OutputUserList {
 input InputProjectCreate {
   title: String!
   description: String
-  userAndCategory: [JSONObject]!
+  userAndRules: [JSONObject]!
   options: [Int]
+}
+
+type OutputProjectProfile {
+  id: Int
+  title: String
+  description: String
+  publicToken: String
+  userAndRules: [JSONObject]
+  options: [Int]
+}
+
+input InputProjectUpdate {
+  title: String
+  description: String
+  userAndRules: [JSONObject]
+  options: JSON
+}
+
+input InputProjectList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
+type OutputProjectListDocs {
+  id: Int
+  title: String
+  publicToken: String
+  owner: [JSONObject]
+  options: [Int]
+  additional: [JSONObject]
+  createdAt: Date
+}
+
+type OutputProjectList {
+  docs: [OutputProjectListDocs]
+}
+
+## project owner
+type OutputProjectOwnerList {
+  docs: [OutputProjectListOwnerDocs]
+}
+
+type OutputProjectListOwnerDocs {
+  id: Int
+  title: String
+  description: String
+  publicToken: String
+}
+
+input InputProjectListOwner {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
 }
 
 # Mutation list
@@ -146,6 +200,7 @@ type Mutation {
   OtpGenerate(data: InputOtpGenerate): String
   UserDelete(data: InputGlobalID): JSON
   ProjectCreate(data: InputProjectCreate): Int
+  ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
 }
 
 # Query list
@@ -153,4 +208,7 @@ type Query {
   UserForgotPassword(data: InputForgotPassword): String
   UserProfile(data: InputGlobalID): OutputUserProfile
   UserList(args: InputUserList): OutputUserList
+  ProjectProfile(data: InputGlobalID): OutputProjectProfile
+  ProjectList(args: InputProjectList): OutputProjectList
+  ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
 }

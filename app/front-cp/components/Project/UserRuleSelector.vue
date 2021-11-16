@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <!-- {{ editInfo }} -->
     <v-toolbar dark color="teal">
       <v-toolbar-title v-show="$vuetify.breakpoint.mdAndUp" class="mr-3 ml-2">
         Select User:
@@ -40,13 +41,13 @@
         <v-col cols="10" md="8" class="pa-0 pt-5">
           <ValidationProvider
             v-slot:default="{ errors, valid }"
-            name="category"
+            name="rules"
             rules="required"
           >
             <v-select
               v-model="cat[item.id]"
-              :items="category"
-              :label="$t('selectCategory')"
+              :items="rules"
+              :label="$t('selectRules')"
               outlined
               small-chips
               :error-messages="errors"
@@ -81,20 +82,50 @@
 import debounce from 'lodash/debounce';
 
 export default {
+  props: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+
+    loopingListO: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
+  },
+
   data() {
     return {
       cat: {},
       userDocs: [],
       search: '',
       user: '',
-      category: ['ALL', 'VIEW_A', 'VIEW_C'],
-      userAndCategory: [],
+      rules: ['ALL', 'VIEW_A', 'VIEW_C'],
+      userAndRules: [],
       loopingList: [],
       delivers: [],
     };
   },
 
   watch: {
+    loopingListO(value) {
+      if (this.edit) {
+        const mutateList = this.loopingListO.map((v) => {
+          return {
+            id: v.UserId,
+            username: v.username,
+          };
+        });
+        this.loopingList = mutateList;
+        this.cat = this.loopingListO.reduce((acc, cur) => {
+          console.log(acc, cur, '$$$$');
+          acc[cur.UserId] = cur.rules;
+          return acc;
+        }, {});
+      }
+    },
+
     search(value) {
       if (!value) {
         return;
@@ -108,7 +139,6 @@ export default {
   },
   methods: {
     makeAlist(input) {
-      console.log(input);
       if (this.loopingList.includes(input)) {
         this.$store.commit('SET_NOTIFICATION', {
           show: true,
@@ -122,17 +152,27 @@ export default {
         this.loopingList.push(input);
       }
     },
+
     sendData() {
-      this.userAndCategory = [];
+      this.userAndRules = [];
       for (const key in this.cat) {
         if (this.cat[key]) {
-          this.userAndCategory.push({
+          this.userAndRules.push({
             UserId: Number(key),
-            category: this.cat[key],
+            rules: this.cat[key],
           });
         }
       }
-      this.delivers = [...this.userAndCategory];
+
+      this.userAndRules.forEach((v) => {
+        this.loopingList.forEach((v2) => {
+          if (v.UserId === v2.id) {
+            v.username = v2.username;
+          }
+        });
+      });
+
+      this.delivers = [...this.userAndRules];
       this.$emit('sendData', this.delivers);
     },
     getUsers() {

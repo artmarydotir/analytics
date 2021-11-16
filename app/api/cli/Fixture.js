@@ -104,14 +104,14 @@ module.exports = {
             publicToken: `project${index.toString().padStart(5, '0')}`,
             description: 'project dear project',
             options: [Math.floor(Math.random() * 2) + 1],
-            userAndCategory: [
+            userAndRules: [
               {
                 UserId: Math.floor(Math.random() * 10) + 1,
-                category: ['ALL', 'VIEW_A'],
+                rules: ['ALL', 'VIEW_A'],
               },
               {
                 UserId: Math.floor(Math.random() * 50) + 11,
-                category: ['ALL', 'VIEW_C'],
+                rules: ['ALL', 'VIEW_C'],
               },
             ],
             additional: {},

@@ -60,10 +60,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'donyaye egh',
       publicToken: '123654',
       description: 'hey hello',
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user.dataValues.id,
-          category: ['ALL', 'VIEW_A'],
+          rules: ['ALL', 'VIEW_A'],
         },
       ],
       additional: {},

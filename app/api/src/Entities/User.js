@@ -56,13 +56,5 @@ module.exports = (sequelize) =>
         allowNull: true,
       },
     },
-    {
-      // freezeTableName: true,
-      // setterMethods: {
-      //   revokeOTPSecret() {
-      //     this.setDataValue('otpSecret', authenticator.generateSecret(12));
-      //   },
-      // },
-      // Other model options go here
-    },
+    {},
   );

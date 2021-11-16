@@ -20,7 +20,7 @@ class ProjectUpdate {
       title,
       publicToken,
       description,
-      userAndCategory,
+      userAndRules,
       options,
       additional,
     } = data;
@@ -57,7 +57,7 @@ class ProjectUpdate {
     };
 
     const middleTable = {
-      userAndCategory: null,
+      userAndRules: null,
     };
 
     initialValues.title = title;
@@ -92,8 +92,8 @@ class ProjectUpdate {
       initialValues.additional = additional;
     }
 
-    if (userAndCategory) {
-      middleTable.userAndCategory = userAndCategory;
+    if (userAndRules) {
+      middleTable.userAndRules = userAndRules;
     }
 
     /**
@@ -122,18 +122,16 @@ class ProjectUpdate {
         },
       );
 
-      const readyData = middleTable.userAndCategory.map((obj) => ({
+      const readyData = middleTable.userAndRules.map((obj) => ({
         ...obj,
         ProjectId: id,
       }));
 
+      await UserProject.destroy({ where: { ProjectId: id }, transaction: t });
+
       await UserProject.bulkCreate(readyData, {
-        // not sure if its needed
-        where: {
-          ProjectId: id,
-        },
         transaction: t,
-        updateOnDuplicate: ['UserId', 'role'],
+        updateOnDuplicate: ['UserId', 'rules'],
       });
 
       await t.commit();

@@ -82,10 +82,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'donyaye Eghtesad',
       publicToken: '123654',
       description: 'hey hello',
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user.dataValues.id,
-          category: ['ALL', 'VIEW_A'],
+          rules: ['ALL', 'VIEW_A'],
         },
       ],
       additional: {},
@@ -95,10 +95,10 @@ describe(__filename.replace(__dirname, ''), () => {
       title: 'analytic',
       publicToken: '12365468',
       description: 'hey htm',
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user.dataValues.id,
-          category: ['ALL'],
+          rules: ['ALL'],
         },
       ],
     });
@@ -161,14 +161,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: true,
           DELETED: true,
         },
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_C'],
+            rules: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            category: ['NEWS_A'],
+            rules: ['NEWS_A'],
           },
         ],
       }),
@@ -183,14 +183,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: false,
           DELETED: true,
         },
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_C'],
+            rules: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            category: ['NEWS_A'],
+            rules: ['NEWS_A'],
           },
         ],
       }),
@@ -204,14 +204,14 @@ describe(__filename.replace(__dirname, ''), () => {
           ACTIVE: true,
           DELETED: false,
         },
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_C'],
+            rules: ['ALL', 'VIEW_C'],
           },
           {
             UserId: user2.dataValues.id,
-            category: ['NEWS_A'],
+            rules: ['NEWS_A'],
           },
         ],
       }),

@@ -17,7 +17,7 @@ class ProjectCreate {
    * @param {String} data.title
    * @param {String} data.publicToken
    * @param {String} data.description
-   * @param {object[]} data.userAndCategory
+   * @param {object[]} data.userAndRules
    * @param {Number[]} data.options
    * @param {Object} data.additional
    */
@@ -26,7 +26,7 @@ class ProjectCreate {
       title,
       publicToken,
       description,
-      userAndCategory,
+      userAndRules,
       options = [projectOption.ACTIVE],
       additional = {},
     } = data;
@@ -60,7 +60,7 @@ class ProjectCreate {
       enabled: true,
     };
     const middleTable = {
-      userAndCategory: null,
+      userAndRules: null,
     };
 
     initialValues.title = title;
@@ -80,8 +80,8 @@ class ProjectCreate {
     }
     initialValues.privateToken = this.generatePrivateToken();
 
-    if (userAndCategory) {
-      middleTable.userAndCategory = userAndCategory;
+    if (userAndRules) {
+      middleTable.userAndRules = userAndRules;
     }
 
     /**
@@ -94,7 +94,7 @@ class ProjectCreate {
     try {
       const project = await Project.create(initialValues, { transaction: t });
 
-      const readyData = middleTable.userAndCategory.map((obj) => ({
+      const readyData = middleTable.userAndRules.map((obj) => ({
         ...obj,
         ProjectId: project.dataValues.id,
       }));

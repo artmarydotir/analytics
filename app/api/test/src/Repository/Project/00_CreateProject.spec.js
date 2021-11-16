@@ -79,14 +79,14 @@ describe(__filename.replace(__dirname, ''), () => {
     const pData = await createProject.addProject({
       title: 'for profile test',
       description: 'hey hello',
-      userAndCategory: [
+      userAndRules: [
         {
           UserId: user.dataValues.id,
-          category: ['ALL'],
+          rules: ['ALL'],
         },
         {
           UserId: user2.dataValues.id,
-          category: ['VIEW_A'],
+          rules: ['VIEW_A'],
         },
       ],
       additional: {},
@@ -97,10 +97,10 @@ describe(__filename.replace(__dirname, ''), () => {
         title: 'donyaye Eghtesad',
         publicToken: '123654',
         description: 'hey hello',
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_A'],
+            rules: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -114,14 +114,14 @@ describe(__filename.replace(__dirname, ''), () => {
         title: 'test2',
         publicToken: '123654a1s2',
         description: 'hey hello',
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_A'],
+            rules: ['ALL', 'VIEW_A'],
           },
           {
             UserId: user2.dataValues.id,
-            category: ['ALL', 'VIEW_A'],
+            rules: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -132,10 +132,10 @@ describe(__filename.replace(__dirname, ''), () => {
       await createProject.addProject({
         title: 'donyayeEf',
         description: 'hey this is a description',
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_A'],
+            rules: ['ALL', 'VIEW_A'],
           },
         ],
         additional: {},
@@ -153,10 +153,10 @@ describe(__filename.replace(__dirname, ''), () => {
     await expect(
       createProject.addProject({
         description: 'hey hello there',
-        userAndCategory: [
+        userAndRules: [
           {
             UserId: user.dataValues.id,
-            category: ['ALL', 'VIEW_A'],
+            rules: ['ALL', 'VIEW_A'],
           },
         ],
       }),

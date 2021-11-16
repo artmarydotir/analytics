@@ -31,12 +31,23 @@ class ProjectProfile {
       },
     });
 
-    const usersDoc = await UserProject.findAll({
-      attributes: ['category', 'UserId', 'ProjectId'],
-      where: {
-        ProjectId: projectId,
+    const usersDoc = await this.sequelize.query(
+      `
+        SELECT
+          "UserProjects"."rules" AS "rules",
+          "UserProjects"."UserId" AS "UserId",
+          "UserProjects"."ProjectId" AS "ProjectId",
+          "Users"."username" AS "username"
+        FROM "UserProjects"
+        LEFT JOIN "Users" ON ("Users"."id" = "UserProjects"."UserId")
+        WHERE "ProjectId" = :projectId
+      `,
+      {
+        replacements: { projectId },
+        model: UserProject,
+        mapToModel: true,
       },
-    });
+    );
 
     if (!project) {
       throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
@@ -45,15 +56,14 @@ class ProjectProfile {
     }
 
     const userList = [];
-    if (usersDoc.length > 0) {
-      usersDoc.map((user) => {
-        const { UserId, category } = user;
-        return userList.push({
-          UserId,
-          category,
-        });
+    usersDoc.forEach((item) => {
+      const { rules, username, UserId } = item.dataValues;
+      userList.push({
+        rules,
+        UserId,
+        username,
       });
-    }
+    });
 
     return {
       ...project.dataValues,
