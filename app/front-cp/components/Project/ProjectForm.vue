@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <Snackbar />
-    {{ innerProject }}
+
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}

@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable sonarjs/cognitive-complexity */
+const { QueryTypes } = require('sequelize');
 const { Op } = require('sequelize');
 
 class ProjectList {
@@ -59,23 +61,34 @@ class ProjectList {
 
     const { User, Project } = this.sequelize.models;
 
-    return Project.findAll({
+    const result = await Project.findAll({
       attributes: {
-        exclude: ['updatedAt', 'privateToken'],
+        exclude: ['updatedAt', 'privateToken', 'description'],
       },
       where: query,
       include: [
         {
           model: User,
           attributes: ['username'],
-          through: {
-            attributes: [],
-          },
         },
       ],
-      limiting,
+      limit: limiting,
       order: [['id', 'DESC']],
     });
+
+    const docs = result.map((project) => ({
+      id: project.id,
+      title: project.title,
+      options: project.options,
+      additional: project.additional,
+      publicToken: project.publicToken,
+      createdAt: project.createdAt,
+      owner: project.Users.map((user) => ({
+        username: user.username,
+      })),
+    }));
+
+    return { docs };
   }
 
   /**
@@ -88,9 +101,8 @@ class ProjectList {
     userId,
     { lastSeen = undefined, filter = {}, limit },
   ) {
-    const query = {};
+    const query = [];
     let limiting = 10;
-
 
     if (filter) {
       Object.keys(filter).forEach((field) => {
@@ -102,118 +114,85 @@ class ProjectList {
           const name = m[2];
 
           if (['dts', 'dte', 'like'].includes(type) && !query[`${name}`]) {
-            query[`${name}`] = {};
+            query.push({
+              colName: `${name}`,
+            });
           }
 
           if (type === 'like') {
-            query[`${name}`] = {
-              [Op.like]: `%${value.replace(/["']+/g, ' ')}%`,
-            };
-          } else if (type === 'dts') {
-            query[`${name}`] = {
-              [Op.gte]: new Date(value),
-            };
-          } else if (type === 'dte') {
-            query[`${name}`] = {
-              [Op.lte]: new Date(value),
-            };
+            query.forEach((q) => {
+              const validValue = value.replace(/["']+/g, ' ').trim();
+              if (validValue && q.colName === `${name}`) {
+                q.colOp = 'LIKE';
+                q.colValue = `%${validValue}%`;
+              }
+            });
           }
         }
       });
     }
 
+    if (lastSeen) {
+      query.push({
+        colName: 'id',
+        colOp: '<',
+        colValue: lastSeen,
+      });
+    }
+
+    // Creating the query condition
+    const queryBuilding = [];
+    query.forEach((q) => {
+      if (q.colValue) {
+        queryBuilding.push(
+          `"Projects"."${q.colName}" ${q.colOp} :${q.colName}Val`,
+        );
+      }
+    });
+
+    // Creating variables for query
+    const queryValues = {};
+    query.forEach((q) => {
+      queryValues[`${q.colName}Val`] = q.colValue;
+    });
+
     if (limit && Number.isInteger(limit) && limit >= 1 && limit <= 80) {
       limiting = limit;
     }
 
-    if (lastSeen) {
-      query.id = {
-        [Op.lt]: lastSeen,
-      };
-    }
-
-    // [
-    //   '"n1" = ":asddsad"',
-    //   '"n2" = "v2"',
-    // ];
-    // {
-    //   "colmen" : "",
-    // }
-
-    // var a = [
-    //   {
-    //     col: 'c1',
-    //     op: 'eq',
-    //     val: 'v1',
-    //   },
-    // ];
-
-
     const { UserProject } = this.sequelize.models;
 
-    const userProjectList = await this.sequelize.query(
-      `SELECT
-        *
-      FROM "UserProjects"
-      LEFT JOIN "Projects" ON (
-        "Projects"."id" = "UserProjects"."ProjectId"
-      )
-      WHERE
-        "UserProjects"."UserId" = :userId
-        `${}`
-      AND
-        "Projects"."enabled" = true
+    const appendingCondition =
+      queryBuilding.length > 0 ? `AND ${queryBuilding.join(' AND ')}` : '';
 
-      ORDER BY "Projects"."id" DESC
-      LIMIT :limiting;
+    const projectDataList = await this.sequelize.query(
+      `SELECT "title", "id", "description", "publicToken"
+        FROM "UserProjects"
+          LEFT JOIN "Projects" ON (
+            "Projects"."id" = "UserProjects"."ProjectId"
+          )
+        WHERE
+          "UserProjects"."UserId" = :userId
+        AND
+          "Projects"."enabled" = true
+        ${appendingCondition}
+
+        ORDER BY "Projects"."id" DESC
+        LIMIT :limiting;
       `,
       {
-        replacements: { userId, limiting },
+        replacements: { userId, limiting, ...queryValues },
         model: UserProject,
         mapToModel: true,
+        type: QueryTypes.SELECT,
       },
     );
-    // [ 3, 10, 11, 26, 37, 53 ]
-    console.log(userProjectList);
-    // const b = await UserProject.findAll({
-    //   // where: query,
-    //   where: {
-    //     UserId: userId,
-    //   },
-    //   include: [
-    //     {
-    //       model: Project,
-    //       attributes: ['username'],
-    //       through: {
-    //         attributes: [],
-    //       },
-    //       required: true,
-    //     },
-    //   ],
-    //   limiting,
-    //   order: [['id', 'DESC']],
-    // });
 
-    // const all = [];
-    // b.forEach((element) => {
-    //   all.push(element.ProjectId);
-    //   // console.log(element.dataValues.ProjectId);
-    // });
+    const result = projectDataList.map((project) => ({
+      ...project.dataValues,
+    }));
 
-    // console.log(all);
-    // [ 3, 10, 11, 26, 37, 53 ]
-    // const c = await Project.findAll({
-    //   attributes: {
-    //     exclude: ['updatedAt', 'privateToken'],
-    //   },
-    //   where: {
-    //     id: all,
-    //   },
-    //   limiting,
-    //   order: [['id', 'DESC']],
-    // });
-
-    // console.log(c);
+    return { docs: result };
   }
 }
 

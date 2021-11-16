@@ -10,7 +10,7 @@ module.exports = async (_, { args }, { container, token }) => {
 
   const { ProjectListRepository } = container;
 
-  if (!token || token.roles === userRoles.VIEWER) {
+  if (!token) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });
@@ -18,19 +18,17 @@ module.exports = async (_, { args }, { container, token }) => {
 
   let list = [];
 
-  if (token.roles === userRoles.ADMIN || token.roles === userRoles.SUPERADMIN) {
-    list = await ProjectListRepository.fetchProjectList({
-      lastSeen,
-      filter,
-      limit,
+  if (token.roles !== userRoles.VIEWER) {
+    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
+      statusCode: 403,
     });
   }
 
-  if (!list) {
-    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
-      statusCode: 404,
-    });
-  }
+  list = await ProjectListRepository.fetchProjectListByOwner(token.uid, {
+    lastSeen,
+    filter,
+    limit,
+  });
 
   return list;
 };

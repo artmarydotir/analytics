@@ -46,8 +46,12 @@ describe(__filename.replace(__dirname, ''), () => {
     const projectList = container.resolve('ProjectListRepository');
 
     const result1 = await projectList.fetchProjectListByOwner(5, {
+      lastSeen: 2,
       limit: 10,
-      filter: {},
+      filter: {
+        like_title: 'project1',
+        // like_description: 'dear',
+      },
     });
 
     console.log('****####');

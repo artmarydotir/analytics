@@ -76,7 +76,7 @@ class DomainList {
           required: false,
         },
       ],
-      limiting,
+      limit: limiting,
       order: [['id', 'DESC']],
     });
 

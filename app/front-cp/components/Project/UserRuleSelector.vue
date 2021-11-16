@@ -27,7 +27,6 @@
     </v-toolbar>
 
     <v-col cols="12">
-      ## {{ loopingList }}
       <v-row v-for="(item, i) in loopingList" :key="i" align="center">
         <v-col cols="12" md="2">
           <div>
@@ -40,7 +39,6 @@
           </div>
         </v-col>
         <v-col cols="10" md="8" class="pa-0 pt-5">
-          cat : {{ cat }}
           <ValidationProvider
             v-slot:default="{ errors, valid }"
             name="rules"
@@ -109,16 +107,6 @@ export default {
       delivers: [],
     };
   },
-  // computed: {
-  //   cat: {
-  //     get() {
-  //       return this.catO;
-  //     },
-  //     set(v) {
-  //       this.$emit('update:catO', v);
-  //     },
-  //   },
-  // },
 
   watch: {
     loopingListO(value) {

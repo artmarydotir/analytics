@@ -153,6 +153,44 @@ input InputProjectUpdate {
   options: JSON
 }
 
+input InputProjectList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
+type OutputProjectListDocs {
+  id: Int
+  title: String
+  publicToken: String
+  owner: [JSONObject]
+  options: [Int]
+  additional: [JSONObject]
+  createdAt: Date
+}
+
+type OutputProjectList {
+  docs: [OutputProjectListDocs]
+}
+
+## project owner
+type OutputProjectOwnerList {
+  docs: [OutputProjectListOwnerDocs]
+}
+
+type OutputProjectListOwnerDocs {
+  id: Int
+  title: String
+  description: String
+  publicToken: String
+}
+
+input InputProjectListOwner {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -171,4 +209,6 @@ type Query {
   UserProfile(data: InputGlobalID): OutputUserProfile
   UserList(args: InputUserList): OutputUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
+  ProjectList(args: InputProjectList): OutputProjectList
+  ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
 }
