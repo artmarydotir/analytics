@@ -201,6 +201,7 @@ type Mutation {
   UserDelete(data: InputGlobalID): JSON
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
+  ProjectDelete(data: InputGlobalID): Int
 }
 
 # Query list

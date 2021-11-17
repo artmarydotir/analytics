@@ -29,7 +29,7 @@
             :title="$t('deleteProject')"
             :okbtn="$t('deleteProject')"
             :closebtn="$t('nope')"
-            :done-event="deleteUser"
+            :done-event="deleteProject"
           >
             <template slot="dialogbody">
               <h3 class="headline mx-auto text-center pt-3">
@@ -51,7 +51,7 @@
         <template v-slot:[`item.owner`]="{ item }">
           <v-chip
             v-for="o in item.owner"
-            :key="o"
+            :key="o.username"
             dark
             small
             label
@@ -231,9 +231,9 @@ export default {
       this.modalData = Object.assign({}, data);
     },
 
-    async deleteUser() {
+    async deleteProject() {
       const { id } = this.modalData;
-
+      console.log(id, '---');
       const [err, data] = await to(
         this.$store.dispatch(this.moduleInfo.rmUrl, id),
       );
