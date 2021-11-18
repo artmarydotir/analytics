@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <Snackbar />
-
+    {{ domain }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -19,45 +19,51 @@
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
-                  :rules="{ required: true, regex: /[a-zA-Z0-9\s]+/ }"
-                  :name="$t('title')"
+                  :rules="{ required: true }"
+                  :name="$t('domain')"
                 >
                   <v-text-field
-                    v-model.trim="innerProject.title"
+                    v-model.trim="innerDomain.domain"
                     color="light-blue darken-1"
                     :error-messages="errors"
                     :success="valid"
                     type="text"
                     outlined
-                    :label="$t('title')"
-                  ></v-text-field>
+                    :label="$t('domain')"
+                  >
+                  </v-text-field>
                 </ValidationProvider>
               </v-col>
-              <v-col v-if="editMood" cols="12" md="6" lg="4">
-                <v-text-field
-                  v-model="innerProject.publicToken"
-                  dir="ltr"
-                  type="text"
-                  outlined
-                  required
-                  readonly
-                  :label="$t('publicToken')"
-                ></v-text-field>
+              <v-col cols="12" md="6" lg="4">
+                <ValidationProvider
+                  v-slot:default="{ errors, valid }"
+                  :rules="{ required: true }"
+                  :name="$t('wildCardDomain')"
+                >
+                  <v-text-field
+                    v-model.trim="innerDomain.wildcardDomain"
+                    color="light-blue darken-1"
+                    :error-messages="errors"
+                    :success="valid"
+                    type="text"
+                    outlined
+                    :label="$t('wildcardDomain')"
+                  >
+                  </v-text-field>
+                </ValidationProvider>
               </v-col>
-
               <v-col v-if="!editMood" cols="12" md="6" lg="4">
-                <ProjectCreationOption @sendOptions="updateOptions" />
+                <DomainCreationOption @sendOptions="updateOptions" />
               </v-col>
               <v-col v-if="editMood" cols="12" md="6" lg="4">
-                <ProjectUpdateOption
-                  :value.sync="project.options"
+                <DomainUpdateOption
+                  :value.sync="domain.options"
                   @sendOptions="reciveOptions"
                 />
               </v-col>
-
               <v-col cols="12">
                 <v-textarea
-                  v-model="innerProject.description"
+                  v-model="innerDomain.description"
                   outlined
                   name="description"
                   filled
@@ -65,14 +71,9 @@
                   :label="$t('description')"
                 ></v-textarea>
               </v-col>
-              <v-col cols="12">
-                <UserRuleSelector
-                  :edit="editMood"
-                  :looping-list-o="innerProject.userAndRules"
-                  @sendData="receiveRules"
-                />
+              <v-col cols="12" md="8" lg="4">
+                <SelectProject :model.sync="domain.ProjectId" />
               </v-col>
-
               <!-- actions -->
               <v-col
                 cols="12"
@@ -108,16 +109,14 @@
 </template>
 
 <script>
-const { to } = require('await-to-js');
-
 export default {
-  name: 'ProjectForm',
+  name: 'DomainForm',
   props: {
     title: {
-      required: true,
       type: String,
+      default: '',
     },
-    project: {
+    domain: {
       type: Object,
       required: false,
       default: () => ({}),
@@ -130,96 +129,26 @@ export default {
   },
   data() {
     return {
-      temporaryOptions: {},
       isDisabled: false,
+      temporaryOptions: {},
     };
   },
   computed: {
-    innerProject: {
+    innerDomain: {
       get() {
-        return this.project;
+        return this.domain;
       },
       set(newValue) {
-        this.$emit('update:project', newValue);
+        this.$emit('update:domain', newValue);
       },
     },
   },
   methods: {
     updateOptions(value) {
-      this.$set(this.innerProject, 'options', value);
+      this.$set(this.innerDomain, 'options', value);
     },
-    async onSubmit() {
-      const validity = await this.$refs.obs.validate();
-
-      if (!validity) {
-        return;
-      }
-
-      if (this.editMood) {
-        await this.editingMethode();
-      } else {
-        await this.creatingMethode();
-      }
-    },
-    async editingMethode() {
-      const re = this.updatingFunction();
-      const [, data] = await to(
-        this.$store.dispatch('project/updateProject', re),
-      );
-
-      if (data) {
-        this.redirecting();
-      } else {
-        this.errorCallback();
-      }
-    },
-
-    async creatingMethode() {
-      const [, data] = await to(
-        this.$store.dispatch('project/addProject', this.innerProject),
-      );
-      if (data) {
-        this.redirecting();
-      } else {
-        this.errorCallback();
-      }
-    },
-
-    updatingFunction() {
-      const cloneData = { ...this.innerProject };
-      cloneData.options = this.temporaryOptions;
-      delete cloneData.publicToken;
-      delete cloneData.id;
-      return {
-        id: this.innerProject.id,
-        data: cloneData,
-      };
-    },
-
-    receiveRules(value) {
-      this.$set(this.innerProject, 'userAndRules', value);
-    },
-
     reciveOptions(options) {
       this.temporaryOptions = options;
-    },
-
-    redirecting() {
-      this.isDisabled = true;
-      setTimeout(() => {
-        this.$router.push(
-          this.localeRoute({
-            name: 'project-list',
-          }),
-        );
-      }, 1100);
-    },
-
-    errorCallback() {
-      this.isDisabled = false;
-      setTimeout(() => {
-        this.$store.commit('CLOSE_NOTIFICATION', false);
-      }, 1000);
     },
   },
 };

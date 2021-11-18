@@ -32,12 +32,18 @@
             :done-event="deleteProject"
           >
             <template slot="dialogbody">
+              <v-alert dense type="error" class="mt-5">
+                <span>
+                  {{ $t('deleteProjectWarning') }}
+                </span>
+              </v-alert>
               <h3 class="headline mx-auto text-center pt-3">
                 {{ $t('areYouSureDelete') }}
               </h3>
+
               <div class="text-center mx-auto pt-5 pb-5">
                 <span class="text-h5 primary--text">
-                  {{ modalData.email }}
+                  user: {{ modalData.title }} with id: {{ modalData.id }}
                 </span>
               </div>
             </template>
@@ -233,7 +239,7 @@ export default {
 
     async deleteProject() {
       const { id } = this.modalData;
-      console.log(id, '---');
+
       const [err, data] = await to(
         this.$store.dispatch(this.moduleInfo.rmUrl, id),
       );

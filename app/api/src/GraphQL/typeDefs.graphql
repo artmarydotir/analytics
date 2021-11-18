@@ -191,6 +191,17 @@ input InputProjectListOwner {
   limit: Int = 9
 }
 
+# ********** DOMAIN *************
+
+input InputDomainCreate {
+  domain: String
+  wildcardDomain: String
+  projectId: Int!
+  description: String
+  options: [Int]
+  additional: [JSONObject]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -202,6 +213,7 @@ type Mutation {
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
+  DomainCreate(data: InputDomainCreate): Int
 }
 
 # Query list

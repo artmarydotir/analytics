@@ -73,7 +73,24 @@ export default {
       ],
       groupItems: [
         {
-          action: 'mdi-cube-outline',
+          action: 'mdi-domain',
+          title: this.$t('domainManagement'),
+          active: this.$route.path.includes('project'),
+          items: [
+            {
+              title: this.$t('domainAdd'),
+              link: '/domain/add/',
+              canSee: true,
+            },
+            {
+              title: this.$t('domainList'),
+              link: '/domain/list/',
+              canSee: true,
+            },
+          ],
+        },
+        {
+          action: 'mdi-file-table-box-outline',
           title: this.$t('projectManagement'),
           active: this.$route.path.includes('project'),
           items: [
