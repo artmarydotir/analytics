@@ -75,7 +75,7 @@ export default {
         {
           action: 'mdi-domain',
           title: this.$t('domainManagement'),
-          active: this.$route.path.includes('project'),
+          active: this.$route.path.includes('domain'),
           items: [
             {
               title: this.$t('domainAdd'),

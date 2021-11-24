@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <Snackbar />
-    {{ domain }}
+
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -16,10 +16,15 @@
             @submit.prevent="onSubmit"
           >
             <v-row>
+              {{ innerDomain }}
+
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
-                  :rules="{ required: true }"
+                  :rules="{
+                    required: disableWDomain,
+                    isDomain: true,
+                  }"
                   :name="$t('domain')"
                 >
                   <v-text-field
@@ -29,6 +34,7 @@
                     :success="valid"
                     type="text"
                     outlined
+                    :disabled="disableDomain"
                     :label="$t('domain')"
                   >
                   </v-text-field>
@@ -37,7 +43,9 @@
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
-                  :rules="{ required: true }"
+                  :rules="{
+                    required: disableDomain,
+                  }"
                   :name="$t('wildCardDomain')"
                 >
                   <v-text-field
@@ -47,6 +55,7 @@
                     :success="valid"
                     type="text"
                     outlined
+                    :disabled="disableWDomain"
                     :label="$t('wildcardDomain')"
                   >
                   </v-text-field>
@@ -109,6 +118,7 @@
 </template>
 
 <script>
+const _ = require('lodash');
 export default {
   name: 'DomainForm',
   props: {
@@ -119,7 +129,10 @@ export default {
     domain: {
       type: Object,
       required: false,
-      default: () => ({}),
+      default: () => ({
+        domain: '',
+        wildcardDomain: '',
+      }),
     },
     editMood: {
       required: false,
@@ -131,6 +144,8 @@ export default {
     return {
       isDisabled: false,
       temporaryOptions: {},
+      disableDomain: false,
+      disableWDomain: false,
     };
   },
   computed: {
@@ -141,6 +156,24 @@ export default {
       set(newValue) {
         this.$emit('update:domain', newValue);
       },
+    },
+  },
+  watch: {
+    'innerDomain.domain'(newValue) {
+      console.log(newValue);
+      if (!_.isEmpty(newValue)) {
+        this.disableWDomain = true;
+      } else {
+        this.disableWDomain = false;
+      }
+    },
+    'innerDomain.wildcardDomain'(newValue) {
+      console.log(newValue);
+      if (!_.isEmpty(newValue)) {
+        this.disableDomain = true;
+      } else {
+        this.disableDomain = false;
+      }
     },
   },
   methods: {
