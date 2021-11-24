@@ -5,6 +5,8 @@ const UserUpdate = require('./User/UserUpdate');
 const UserDelete = require('./User/UserDelete');
 const ProjectCreate = require('./Project/ProjectCreate');
 const ProjectUpdate = require('./Project/ProjectUpdate');
+const ProjectDelete = require('./Project/ProjectDelete');
+const DomainCreate = require('./Domain/DomainCreate');
 
 module.exports = {
   UserCreate,
@@ -14,4 +16,6 @@ module.exports = {
   UserUpdatePassword,
   ProjectCreate,
   ProjectUpdate,
+  ProjectDelete,
+  DomainCreate,
 };

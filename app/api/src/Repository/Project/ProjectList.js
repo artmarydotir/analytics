@@ -22,7 +22,7 @@ class ProjectList {
           const name = m[2];
 
           if (
-            ['arrIn', 'dts', 'dte', 'like'].includes(type) &&
+            ['arrIn', 'dts', 'dte', 'like', 'id'].includes(type) &&
             !query[`${name}`]
           ) {
             query[`${name}`] = {};
@@ -49,6 +49,7 @@ class ProjectList {
       });
     }
 
+    console.log(query);
     if (limit && Number.isInteger(limit) && limit >= 1 && limit <= 80) {
       limiting = limit;
     }

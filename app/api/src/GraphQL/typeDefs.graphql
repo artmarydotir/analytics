@@ -135,6 +135,7 @@ input InputProjectCreate {
   description: String
   userAndRules: [JSONObject]!
   options: [Int]
+  primaryOwner: Int!
 }
 
 type OutputProjectProfile {
@@ -144,6 +145,7 @@ type OutputProjectProfile {
   publicToken: String
   userAndRules: [JSONObject]
   options: [Int]
+  primaryOwner: Int
 }
 
 input InputProjectUpdate {
@@ -151,6 +153,7 @@ input InputProjectUpdate {
   description: String
   userAndRules: [JSONObject]
   options: JSON
+  primaryOwner: Int
 }
 
 input InputProjectList {
@@ -167,6 +170,7 @@ type OutputProjectListDocs {
   options: [Int]
   additional: [JSONObject]
   createdAt: Date
+  primaryOwner: Int
 }
 
 type OutputProjectList {
@@ -191,6 +195,17 @@ input InputProjectListOwner {
   limit: Int = 9
 }
 
+# ********** DOMAIN *************
+
+input InputDomainCreate {
+  domain: String
+  wildcardDomain: String
+  projectId: Int!
+  description: String
+  options: [Int]
+  additional: [JSONObject]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -201,6 +216,8 @@ type Mutation {
   UserDelete(data: InputGlobalID): JSON
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
+  ProjectDelete(data: InputGlobalID): Int
+  DomainCreate(data: InputDomainCreate): Int
 }
 
 # Query list

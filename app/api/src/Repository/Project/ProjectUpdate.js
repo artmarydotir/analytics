@@ -23,6 +23,7 @@ class ProjectUpdate {
       userAndRules,
       options,
       additional,
+      primaryOwner,
     } = data;
 
     const schema = projectJoiSchema();
@@ -86,6 +87,10 @@ class ProjectUpdate {
 
     if (description) {
       initialValues.description = description;
+    }
+    // TODO: if exist user
+    if (primaryOwner) {
+      initialValues.primaryOwner = primaryOwner;
     }
 
     if (additional) {

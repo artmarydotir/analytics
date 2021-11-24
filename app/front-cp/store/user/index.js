@@ -265,13 +265,13 @@ export const actions = {
         return true;
       }
     } catch (error) {
-      // later todo
+      const { data } = error.response;
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: `${error}`,
+          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
         },
         { root: true },
       );

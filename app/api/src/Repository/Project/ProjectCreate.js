@@ -19,6 +19,7 @@ class ProjectCreate {
    * @param {String} data.description
    * @param {object[]} data.userAndRules
    * @param {Number[]} data.options
+   * @param {Number} data.primaryOwner
    * @param {Object} data.additional
    */
   async addProject(data) {
@@ -29,6 +30,7 @@ class ProjectCreate {
       userAndRules,
       options = [projectOption.ACTIVE],
       additional = {},
+      primaryOwner,
     } = data;
 
     const schema = projectJoiSchema();
@@ -57,6 +59,7 @@ class ProjectCreate {
       privateToken: null,
       publicToken: null,
       additional: null,
+      primaryOwner: null,
       enabled: true,
     };
     const middleTable = {
@@ -79,6 +82,7 @@ class ProjectCreate {
       initialValues.publicToken = this.generatePublicToken();
     }
     initialValues.privateToken = this.generatePrivateToken();
+    initialValues.primaryOwner = primaryOwner;
 
     if (userAndRules) {
       middleTable.userAndRules = userAndRules;

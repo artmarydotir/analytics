@@ -1,0 +1,155 @@
+<template>
+  <div class="mx-auto">
+    <Snackbar />
+    {{ domain }}
+    <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
+      <v-card-title class="secondary white--text pa-4">
+        {{ title }}
+        <v-spacer></v-spacer>
+      </v-card-title>
+      <!-- Form -->
+      <div class="pa-6">
+        <ValidationObserver ref="obs">
+          <v-form
+            novalidate="true"
+            :disabled="isDisabled"
+            @submit.prevent="onSubmit"
+          >
+            <v-row>
+              <v-col cols="12" md="6" lg="4">
+                <ValidationProvider
+                  v-slot:default="{ errors, valid }"
+                  :rules="{ required: true }"
+                  :name="$t('domain')"
+                >
+                  <v-text-field
+                    v-model.trim="innerDomain.domain"
+                    color="light-blue darken-1"
+                    :error-messages="errors"
+                    :success="valid"
+                    type="text"
+                    outlined
+                    :label="$t('domain')"
+                  >
+                  </v-text-field>
+                </ValidationProvider>
+              </v-col>
+              <v-col cols="12" md="6" lg="4">
+                <ValidationProvider
+                  v-slot:default="{ errors, valid }"
+                  :rules="{ required: true }"
+                  :name="$t('wildCardDomain')"
+                >
+                  <v-text-field
+                    v-model.trim="innerDomain.wildcardDomain"
+                    color="light-blue darken-1"
+                    :error-messages="errors"
+                    :success="valid"
+                    type="text"
+                    outlined
+                    :label="$t('wildcardDomain')"
+                  >
+                  </v-text-field>
+                </ValidationProvider>
+              </v-col>
+              <v-col v-if="!editMood" cols="12" md="6" lg="4">
+                <DomainCreationOption @sendOptions="updateOptions" />
+              </v-col>
+              <v-col v-if="editMood" cols="12" md="6" lg="4">
+                <DomainUpdateOption
+                  :value.sync="domain.options"
+                  @sendOptions="reciveOptions"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="innerDomain.description"
+                  outlined
+                  name="description"
+                  filled
+                  rows="3"
+                  :label="$t('description')"
+                ></v-textarea>
+              </v-col>
+              <v-col cols="12" md="8" lg="4">
+                <SelectProject :model.sync="domain.ProjectId" />
+              </v-col>
+              <!-- actions -->
+              <v-col
+                cols="12"
+                :class="
+                  $vuetify.breakpoint.smAndUp
+                    ? 'd-flex justify-end align-end'
+                    : ''
+                "
+              >
+                <v-btn
+                  :disabled="isDisabled"
+                  type="submit"
+                  x-large
+                  color="primary white--text"
+                  class="mb-3 mr-1 ml-1 pl-12 pr-12"
+                >
+                  {{ title }}
+                </v-btn>
+                <v-btn
+                  x-large
+                  color="middle white--text"
+                  class="mb-3 mr-1 ml-1 pl-12 pr-12"
+                >
+                  {{ $t('reset') }}
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </ValidationObserver>
+      </div>
+    </v-card>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DomainForm',
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    domain: {
+      type: Object,
+      required: false,
+      default: () => ({}),
+    },
+    editMood: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      isDisabled: false,
+      temporaryOptions: {},
+    };
+  },
+  computed: {
+    innerDomain: {
+      get() {
+        return this.domain;
+      },
+      set(newValue) {
+        this.$emit('update:domain', newValue);
+      },
+    },
+  },
+  methods: {
+    updateOptions(value) {
+      this.$set(this.innerDomain, 'options', value);
+    },
+    reciveOptions(options) {
+      this.temporaryOptions = options;
+    },
+  },
+};
+</script>

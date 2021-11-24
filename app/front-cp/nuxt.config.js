@@ -71,6 +71,7 @@ export default {
       '~/components/User',
       '~/components/User/Update',
       '~/components/Project',
+      '~/components/Domain',
     ],
   },
 

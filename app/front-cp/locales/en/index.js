@@ -82,6 +82,8 @@ module.exports = {
   add: 'Add',
   edit: 'Edit',
   iAgree: 'I accept the consequences of changing configuration.',
+  deleteProjectWarning:
+    'By deleting this project, all domain that belongs to this will be deactive too.',
 
   // ## validations
   validations: {

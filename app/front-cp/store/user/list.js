@@ -23,7 +23,7 @@ export const actions = {
                 lastSeen: $lastSeen
               }
             ) {
-              docs { id username email role , options }
+              docs { id mobile username email role  options }
             }
           }`,
           variables: input,

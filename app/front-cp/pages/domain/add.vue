@@ -1,6 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
-    <ProjectForm :title="$t('projectAdd')" :adding-confirmation="true" />
+    <DomainForm :title="$t('domainAdd')" />
   </v-container>
 </template>
 <script>
@@ -10,7 +10,7 @@ export default {
   },
   head() {
     return {
-      title: this.$t('projectAdd'),
+      title: this.$t('domainAdd'),
     };
   },
 };

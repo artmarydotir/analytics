@@ -29,15 +29,21 @@
             :title="$t('deleteProject')"
             :okbtn="$t('deleteProject')"
             :closebtn="$t('nope')"
-            :done-event="deleteUser"
+            :done-event="deleteProject"
           >
             <template slot="dialogbody">
+              <v-alert dense type="error" class="mt-5">
+                <span>
+                  {{ $t('deleteProjectWarning') }}
+                </span>
+              </v-alert>
               <h3 class="headline mx-auto text-center pt-3">
                 {{ $t('areYouSureDelete') }}
               </h3>
+
               <div class="text-center mx-auto pt-5 pb-5">
                 <span class="text-h5 primary--text">
-                  {{ modalData.email }}
+                  user: {{ modalData.title }} with id: {{ modalData.id }}
                 </span>
               </div>
             </template>
@@ -51,7 +57,7 @@
         <template v-slot:[`item.owner`]="{ item }">
           <v-chip
             v-for="o in item.owner"
-            :key="o"
+            :key="o.username"
             dark
             small
             label
@@ -231,7 +237,7 @@ export default {
       this.modalData = Object.assign({}, data);
     },
 
-    async deleteUser() {
+    async deleteProject() {
       const { id } = this.modalData;
 
       const [err, data] = await to(

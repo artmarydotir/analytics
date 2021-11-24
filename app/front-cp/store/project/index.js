@@ -20,7 +20,7 @@ export const actions = {
                 id: $id
               }
             ) {
-              id title description options userAndRules publicToken
+              id title description options userAndRules publicToken primaryOwner
             }
           }`,
           variables: {
@@ -62,6 +62,7 @@ export const actions = {
             $description: String
             $userAndRules: [JSONObject]!
             $options: [Int]
+            $primaryOwner: Int!
               ) {
               ProjectCreate(
                 data: {
@@ -69,6 +70,7 @@ export const actions = {
                   description: $description
                   userAndRules: $userAndRules
                   options: $options
+                  primaryOwner: $primaryOwner
                 }
               )
           }`,
@@ -160,6 +162,54 @@ export const actions = {
     }
   },
   // ***************************************
+  async deleteProject({ commit }, id) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation ($id: Int!) {
+            ProjectDelete(
+                data: {
+                  id: $id,
+                }
+              )
+          }`,
+          variables: {
+            id,
+          },
+        },
+      );
 
+      console.log(data);
+      const result = data.data.ProjectDelete;
+      if (data.errors) {
+        throw new Error(data.errors['0'].message);
+      }
+      if (result) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'Successfully Deleted project.',
+          },
+          { root: true },
+        );
+        return true;
+      }
+    } catch (error) {
+      const { data } = error.response;
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
   // ***************************************
 };

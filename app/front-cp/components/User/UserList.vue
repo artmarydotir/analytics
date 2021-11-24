@@ -57,7 +57,30 @@
           </v-chip>
         </template> -->
 
-        <!-- dynamicslot  -->
+        <template v-slot:[`item.options`]="{ item }">
+          <v-chip
+            v-if="item.options.includes(1)"
+            dark
+            small
+            label
+            outlined
+            class="ma-1"
+            color="green"
+          >
+            {{ $t('active') }}
+          </v-chip>
+          <v-chip
+            v-if="item.options.includes(2)"
+            dark
+            label
+            small
+            outlined
+            class="ma-1"
+            color="orange"
+          >
+            {{ $t('deleted') }}
+          </v-chip>
+        </template>
 
         <!-- Action  -->
         <template v-slot:[`item.actions`]="{ item }">
@@ -189,8 +212,6 @@ export default {
       if (newDocs.length < this.limit) {
         this.isDisabledMore = true;
       }
-
-      // Ai2@Y%(n8k_=Gya*
 
       this.userDocs.push(...newDocs);
     },

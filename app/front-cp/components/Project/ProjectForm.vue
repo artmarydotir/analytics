@@ -33,7 +33,7 @@
                   ></v-text-field>
                 </ValidationProvider>
               </v-col>
-              <v-col v-if="editMood" cols="12" md="6" lg="4">
+              <v-col v-if="editMood" cols="12" md="6" lg="3">
                 <v-text-field
                   v-model="innerProject.publicToken"
                   dir="ltr"
@@ -44,7 +44,13 @@
                   :label="$t('publicToken')"
                 ></v-text-field>
               </v-col>
-
+              <v-col cols="12" md="6" lg="3">
+                <SelectPrimaryOwner
+                  :filling-id="innerProject.primaryOwner"
+                  :adding-confirmation="addingConfirmation"
+                  @sendPrimeryUserValue="onSendPrime"
+                />
+              </v-col>
               <v-col v-if="!editMood" cols="12" md="6" lg="4">
                 <ProjectCreationOption @sendOptions="updateOptions" />
               </v-col>
@@ -66,7 +72,7 @@
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
-                <UserRuleSelector
+                <LazyUserRuleSelector
                   :edit="editMood"
                   :looping-list-o="innerProject.userAndRules"
                   @sendData="receiveRules"
@@ -127,6 +133,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    addingConfirmation: {
+      required: false,
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -145,6 +156,9 @@ export default {
     },
   },
   methods: {
+    onSendPrime(data) {
+      this.innerProject.primaryOwner = data;
+    },
     updateOptions(value) {
       this.$set(this.innerProject, 'options', value);
     },
@@ -154,28 +168,34 @@ export default {
       if (!validity) {
         return;
       }
+
+      if (this.editMood) {
+        await this.editingMethode();
+      } else {
+        await this.creatingMethode();
+      }
+    },
+    async editingMethode() {
       const re = this.updatingFunction();
-      const [err, data] = await to(
+      const [, data] = await to(
         this.$store.dispatch('project/updateProject', re),
       );
-      if (err) {
-        this.isDisabled = false;
-        setTimeout(() => {
-          this.$store.commit('CLOSE_NOTIFICATION', false);
-        }, 1000);
-      }
 
       if (data) {
-        console.log('im here');
-        this.isDisabled = true;
+        this.redirecting();
+      } else {
+        this.errorCallback();
+      }
+    },
 
-        setTimeout(() => {
-          this.$router.push(
-            this.localeRoute({
-              name: 'project-list',
-            }),
-          );
-        }, 1500);
+    async creatingMethode() {
+      const [, data] = await to(
+        this.$store.dispatch('project/addProject', this.innerProject),
+      );
+      if (data) {
+        this.redirecting();
+      } else {
+        this.errorCallback();
       }
     },
 
@@ -189,11 +209,31 @@ export default {
         data: cloneData,
       };
     },
+
     receiveRules(value) {
       this.$set(this.innerProject, 'userAndRules', value);
     },
+
     reciveOptions(options) {
       this.temporaryOptions = options;
+    },
+
+    redirecting() {
+      this.isDisabled = true;
+      setTimeout(() => {
+        this.$router.push(
+          this.localeRoute({
+            name: 'project-list',
+          }),
+        );
+      }, 1100);
+    },
+
+    errorCallback() {
+      this.isDisabled = false;
+      setTimeout(() => {
+        this.$store.commit('CLOSE_NOTIFICATION', false);
+      }, 1000);
     },
   },
 };

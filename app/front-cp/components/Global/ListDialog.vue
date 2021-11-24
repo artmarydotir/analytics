@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="innerDialog" max-width="600px" @click:outside="close">
     <v-card :loading="loading">
-      <v-card-title dark class="teal white--text pa-4">
+      <v-card-title dark class="primary white--text pa-4">
         <span class="headline">{{ title }}</span>
       </v-card-title>
 
