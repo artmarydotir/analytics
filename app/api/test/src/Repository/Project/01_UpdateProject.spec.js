@@ -88,6 +88,7 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_A'],
         },
       ],
+      primaryOwner: user.dataValues.id,
       additional: {},
     });
 
@@ -101,6 +102,7 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL'],
         },
       ],
+      primaryOwner: user.dataValues.id,
     });
 
     expect(
@@ -171,6 +173,7 @@ describe(__filename.replace(__dirname, ''), () => {
             rules: ['NEWS_A'],
           },
         ],
+        primaryOwner: user.dataValues.id,
       }),
     ).toBeTruthy();
 

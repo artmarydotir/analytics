@@ -43,6 +43,10 @@ module.exports = (sequelize) =>
         type: DataTypes.JSON,
         allowNull: true,
       },
+      primaryOwner: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       // usersLst: {
       //   type: DataTypes.ARRAY(DataTypes.INTEGER),
       //   allowNull: true,

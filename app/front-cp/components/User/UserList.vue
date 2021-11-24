@@ -213,8 +213,6 @@ export default {
         this.isDisabledMore = true;
       }
 
-      // Ai2@Y%(n8k_=Gya*
-
       this.userDocs.push(...newDocs);
     },
 

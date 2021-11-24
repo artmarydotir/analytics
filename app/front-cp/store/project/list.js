@@ -53,7 +53,7 @@ export const actions = {
       throw new Error('error');
     }
   },
-  // ***************************************
+  // ****************role=viewer***********************
   async viewerListProject({ commit }, input) {
     console.log('-----');
     try {

@@ -99,6 +99,13 @@ class UserUpdate {
       }
     }
 
+    let owners = [];
+    if (inabilityStatus === false) {
+      owners = await this.findPrimaryOwnerOfProject(id);
+
+      console.log('-----------', owners);
+    }
+
     if (additional && typeof additional === 'object') {
       initialValues.additional = additional;
     }
@@ -110,8 +117,8 @@ class UserUpdate {
      */
 
     const t = await this.sequelize.transaction();
-    const { User, Project, Domain } = this.sequelize.models;
-    const readyProjectList = await this.getProjectListBelongsUser(id);
+    const { User, Project, Domain, UserProject } = this.sequelize.models;
+    // const readyProjectList = await this.getProjectListBelongsUser(id);
 
     try {
       await User.update(initialValues, {
@@ -121,29 +128,43 @@ class UserUpdate {
         transaction: t,
       });
 
-      await Project.update(
-        { enabled: inabilityStatus },
-        {
-          where: {
-            id: {
-              [Op.in]: readyProjectList,
+      if (owners.length > 0) {
+        await Project.update(
+          { enabled: inabilityStatus },
+          {
+            where: {
+              id: {
+                [Op.in]: owners,
+              },
             },
+            transaction: t,
           },
-          transaction: t,
-        },
-      );
+        );
+        await Domain.update(
+          { enabled: inabilityStatus },
+          {
+            where: {
+              ProjectId: {
+                [Op.in]: owners,
+              },
+            },
+            transaction: t,
+          },
+        );
+        // Also delete this user from user projects rules
 
-      await Domain.update(
-        { enabled: inabilityStatus },
-        {
-          where: {
-            ProjectId: {
-              [Op.in]: readyProjectList,
-            },
-          },
+        await UserProject.destroy({
+          where: { UserId: id },
           transaction: t,
-        },
-      );
+        });
+      }
+      if (inabilityStatus === false) {
+        const c = await UserProject.destroy({
+          where: { UserId: id },
+          transaction: t,
+        });
+        console.log('------affected-----', c);
+      }
 
       await t.commit();
 
@@ -254,6 +275,7 @@ class UserUpdate {
    * @param {Number} id
    * @param {Object.<string, boolean>} props
    */
+  // FIXME: This method is not used anymore for delete user. must change
   async patchUserOptions(id, props) {
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -380,6 +402,29 @@ class UserUpdate {
     });
 
     return readyProjectList;
+  }
+
+  /**
+   *
+   * @param {Number} userId
+   * @returns {Promise<Array>}
+   */
+  async findPrimaryOwnerOfProject(userId) {
+    const { Project } = this.sequelize.models;
+    const list = [];
+
+    const projectList = await Project.findAll({
+      attributes: ['id'],
+      where: {
+        primaryOwner: userId,
+      },
+    });
+
+    projectList.forEach((element) => {
+      list.push(element.dataValues.id);
+    });
+
+    return list;
   }
 }
 

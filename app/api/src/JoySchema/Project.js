@@ -22,6 +22,9 @@ const CreateProjectSchema = () =>
     }),
     userAndRules: Joi.array().allow(null).optional(),
     options: Joi.any().allow(null).optional(),
+    primaryOwner: Joi.number().required().messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+    }),
     additional: Joi.object().allow(null).optional(),
   });
 

@@ -181,6 +181,7 @@ export default {
           lastSeen: undefined,
           limit: 20,
           filter: {
+            arrIn_options: [1],
             like_username: this.search,
           },
         })

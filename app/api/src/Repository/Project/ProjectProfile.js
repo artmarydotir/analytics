@@ -25,12 +25,20 @@ class ProjectProfile {
     }
 
     const project = await Project.findOne({
-      attributes: ['id', 'title', 'publicToken', 'description', 'options'],
+      attributes: [
+        'id',
+        'title',
+        'publicToken',
+        'description',
+        'options',
+        'primaryOwner',
+      ],
       where: {
         id: projectId,
       },
     });
 
+    // todo AND "Users"."options" = ARRAY[1]
     const usersDoc = await this.sequelize.query(
       `
         SELECT

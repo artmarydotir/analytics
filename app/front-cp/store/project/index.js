@@ -20,7 +20,7 @@ export const actions = {
                 id: $id
               }
             ) {
-              id title description options userAndRules publicToken
+              id title description options userAndRules publicToken primaryOwner
             }
           }`,
           variables: {
@@ -62,6 +62,7 @@ export const actions = {
             $description: String
             $userAndRules: [JSONObject]!
             $options: [Int]
+            $primaryOwner: Int!
               ) {
               ProjectCreate(
                 data: {
@@ -69,6 +70,7 @@ export const actions = {
                   description: $description
                   userAndRules: $userAndRules
                   options: $options
+                  primaryOwner: $primaryOwner
                 }
               )
           }`,

@@ -62,6 +62,18 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
 
+    const user3 = await createUser.addUser({
+      username: 'addprimary',
+      email: 'addprimary@gmail.com',
+      password: 'a1asQW12!@AS',
+      role: 'SA',
+      lang: 'fa',
+      options: [1],
+      additional: {
+        gender: 'female',
+      },
+    });
+
     const user2 = await createUser.addUser({
       username: 'addproject2',
       email: 'addproject2@gmail.com',
@@ -89,6 +101,7 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['VIEW_A'],
         },
       ],
+      primaryOwner: user3.dataValues.id,
       additional: {},
     });
 
@@ -124,6 +137,7 @@ describe(__filename.replace(__dirname, ''), () => {
             rules: ['ALL', 'VIEW_A'],
           },
         ],
+        primaryOwner: user.dataValues.id,
         additional: {},
       }),
     ).toBeTruthy();
@@ -139,6 +153,7 @@ describe(__filename.replace(__dirname, ''), () => {
           },
         ],
         additional: {},
+        primaryOwner: user.dataValues.id,
       }),
     ).toBeTruthy();
 
@@ -159,6 +174,7 @@ describe(__filename.replace(__dirname, ''), () => {
             rules: ['ALL', 'VIEW_A'],
           },
         ],
+        primaryOwner: user.dataValues.id,
       }),
     ).rejects.toThrowError();
   });

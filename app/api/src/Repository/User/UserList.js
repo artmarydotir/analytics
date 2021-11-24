@@ -25,7 +25,7 @@ class UserList {
           const name = m[2];
 
           if (
-            ['arrIn', 'dts', 'dte', 'eq', 'like'].includes(type) &&
+            ['arrIn', 'dts', 'dte', 'eq', 'like', 'ids'].includes(type) &&
             !where[`${name}`]
           ) {
             where[`${name}`] = {};
@@ -51,6 +51,8 @@ class UserList {
             where[`${name}`] = {
               [Op.lte]: new Date(value),
             };
+          } else if (type === 'ids') {
+            where[`${name}`] = value;
           }
         }
       });

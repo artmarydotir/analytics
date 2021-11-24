@@ -114,6 +114,7 @@ module.exports = {
                 rules: ['ALL', 'VIEW_C'],
               },
             ],
+            primaryOwner: Math.floor(Math.random() * 10) + 1,
             additional: {},
           })
           .then(() => cb())

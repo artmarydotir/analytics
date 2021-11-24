@@ -135,6 +135,7 @@ input InputProjectCreate {
   description: String
   userAndRules: [JSONObject]!
   options: [Int]
+  primaryOwner: Int!
 }
 
 type OutputProjectProfile {
@@ -144,6 +145,7 @@ type OutputProjectProfile {
   publicToken: String
   userAndRules: [JSONObject]
   options: [Int]
+  primaryOwner: Int
 }
 
 input InputProjectUpdate {
@@ -151,6 +153,7 @@ input InputProjectUpdate {
   description: String
   userAndRules: [JSONObject]
   options: JSON
+  primaryOwner: Int
 }
 
 input InputProjectList {
@@ -167,6 +170,7 @@ type OutputProjectListDocs {
   options: [Int]
   additional: [JSONObject]
   createdAt: Date
+  primaryOwner: Int
 }
 
 type OutputProjectList {
