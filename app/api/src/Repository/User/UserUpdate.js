@@ -118,7 +118,6 @@ class UserUpdate {
 
     const t = await this.sequelize.transaction();
     const { User, Project, Domain, UserProject } = this.sequelize.models;
-    // const readyProjectList = await this.getProjectListBelongsUser(id);
 
     try {
       await User.update(initialValues, {
@@ -295,11 +294,18 @@ class UserUpdate {
       inabilityStatus = true;
     }
 
+    let owners = [];
+    if (inabilityStatus === false) {
+      owners = await this.findPrimaryOwnerOfProject(id);
+
+      console.log('-----------', owners);
+    }
+
     const t = await this.sequelize.transaction();
-    const { User, Project, Domain } = this.sequelize.models;
-    const readyProjectList = await this.getProjectListBelongsUser(id);
+    const { User, Project, Domain, UserProject } = this.sequelize.models;
+
     try {
-      const affectedRow = await User.update(
+      await User.update(
         {
           options: getOptions,
         },
@@ -310,34 +316,47 @@ class UserUpdate {
           transaction: t,
         },
       );
-
-      await Project.update(
-        { enabled: inabilityStatus },
-        {
-          where: {
-            id: {
-              [Op.in]: readyProjectList,
+      if (owners.length > 0) {
+        await Project.update(
+          { enabled: inabilityStatus },
+          {
+            where: {
+              id: {
+                [Op.in]: owners,
+              },
             },
+            transaction: t,
           },
-          transaction: t,
-        },
-      );
-
-      await Domain.update(
-        { enabled: inabilityStatus },
-        {
-          where: {
-            ProjectId: {
-              [Op.in]: readyProjectList,
+        );
+        await Domain.update(
+          { enabled: inabilityStatus },
+          {
+            where: {
+              ProjectId: {
+                [Op.in]: owners,
+              },
             },
+            transaction: t,
           },
+        );
+
+        await UserProject.destroy({
+          where: { UserId: id },
           transaction: t,
-        },
-      );
+        });
+      }
+      // Remove this user from user projects rules.
+      if (inabilityStatus === false) {
+        const c = await UserProject.destroy({
+          where: { UserId: id },
+          transaction: t,
+        });
+        console.log('------affected-----', c);
+      }
 
       await t.commit();
 
-      return { affectedRow, id };
+      return id;
     } catch (error) {
       await t.rollback();
       throw error;

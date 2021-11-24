@@ -40,7 +40,8 @@ export default {
     value(v) {
       if (v.includes(1)) {
         this.options.ACTIVE = true;
-      } else if (v.includes(2)) {
+      }
+      if (v.includes(2)) {
         this.options.DELETED = true;
       }
     },
