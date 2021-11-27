@@ -5,8 +5,10 @@
     :name="$t('primaryOwner')"
   >
     <v-autocomplete
-      v-model="innerValue"
+      v-model="model"
       :items="userDocs"
+      :loading="isLoading"
+      :search-input.sync="search"
       item-text="username"
       item-value="id"
       autocomplete
@@ -14,8 +16,8 @@
       cache-items
       :success="valid"
       outlined
+      return-object
       :label="$t('selectPrimaryOwner')"
-      :search-input.sync="search"
       @change="sendData"
     >
     </v-autocomplete>
@@ -32,8 +34,9 @@ export default {
       type: Number,
       required: false,
       default: undefined,
+      // default: 0,
     },
-    addingConfirmation: {
+    edit: {
       type: Boolean,
       required: false,
       default: false,
@@ -41,44 +44,54 @@ export default {
   },
   data() {
     return {
-      userDocs: [],
-      search: '',
-      innerValue: undefined,
-      dataLoaded: false,
+      entries: [],
+      isLoading: false,
+      model: {
+        id: 0,
+        username: null,
+      },
+      search: null,
     };
+  },
+  computed: {
+    userDocs() {
+      return this.entries.map((entry) => ({
+        id: entry.id,
+        username: entry.username,
+      }));
+    },
   },
 
   watch: {
-    search(value) {
-      if (this.dataLoaded || this.addingConfirmation) {
-        debounce(this.fetchNewList, 900)(value);
+    search(val) {
+      if (val !== this.model.username) {
+        this.isLoading = true;
+        debounce(this.fetchNewList, 1500)(val);
       }
-    },
-    fillingId(value) {
-      this.callUserList();
-      this.$watch('search', () => {
-        this.dataLoaded = true;
-      });
+
+      if (this.entries.length > 0 || this.isLoading) return;
+
+      this.isLoading = false;
     },
   },
-
   mounted() {
-    if (this.fillingId) {
-      const self = this;
+    const unwatch = this.$watch('fillingId', () => {
+      if (!this.fillingId) return;
+      this.findUserById();
+      unwatch();
+    });
 
-      self.$nextTick(() => {
-        self.dataLoaded = false;
-      });
+    if (this.edit === false) {
+      this.fetchNewList();
     }
   },
+
   methods: {
     sendData(v) {
       this.$emit('sendPrimeryUserValue', v);
     },
-    async callUserList() {
-      let data = {};
-
-      [, data] = await to(
+    async findUserById() {
+      const [, data] = await to(
         this.$store.dispatch('user/list/listUser', {
           lastSeen: undefined,
           limit: 20,
@@ -91,19 +104,9 @@ export default {
       );
 
       if (data) {
-        this.userDocs = data.docs.map((item) => {
-          return {
-            id: item.id,
-            username: item.username,
-          };
-        });
-        this.innerValue = this.userDocs[0].id;
-      } else {
-        this.$store.commit('SET_NOTIFICATION', {
-          show: true,
-          color: 'red',
-          message: 'error',
-        });
+        this.entries = data.docs;
+        this.model = this.entries[0];
+        // this.isLoading = false;
       }
     },
     async fetchNewList() {
@@ -119,13 +122,8 @@ export default {
       );
 
       if (data) {
-        this.userDocs = data.docs;
-      } else {
-        this.$store.commit('SET_NOTIFICATION', {
-          show: true,
-          color: 'red',
-          message: 'error',
-        });
+        this.entries = data.docs;
+        this.isLoading = false;
       }
     },
   },

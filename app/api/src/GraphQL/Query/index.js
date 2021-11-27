@@ -3,6 +3,7 @@ const UserProfile = require('./User/UserProfile');
 const ProjectProfile = require('./Project/ProjectProfile');
 const UserForgotPassword = require('./User/UserForgotPassword');
 const ProjectList = require('./Project/ProjectList');
+const ProjectSimpleList = require('./Project/ProjectSimpleList');
 const ProjectOwnerList = require('./Project/ProjectOwnerList');
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
   UserForgotPassword,
   ProjectProfile,
   ProjectList,
+  ProjectSimpleList,
   ProjectOwnerList,
 };

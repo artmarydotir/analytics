@@ -47,7 +47,7 @@
               <v-col cols="12" md="6" lg="3">
                 <SelectPrimaryOwner
                   :filling-id="innerProject.primaryOwner"
-                  :adding-confirmation="addingConfirmation"
+                  :edit="editMood"
                   @sendPrimeryUserValue="onSendPrime"
                 />
               </v-col>
@@ -133,11 +133,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    addingConfirmation: {
-      required: false,
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -155,9 +150,10 @@ export default {
       },
     },
   },
+
   methods: {
     onSendPrime(data) {
-      this.innerProject.primaryOwner = data;
+      this.$set(this.innerProject, 'primaryOwner', data.id);
     },
     updateOptions(value) {
       this.$set(this.innerProject, 'options', value);

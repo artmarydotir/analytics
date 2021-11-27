@@ -2,6 +2,7 @@
   <div class="mx-auto">
     <Snackbar />
 
+    {{ innerDomain }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -16,14 +17,12 @@
             @submit.prevent="onSubmit"
           >
             <v-row>
-              {{ innerDomain }}
-
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
                   :rules="{
                     required: disableWDomain,
-                    isDomain: true,
+                    isDomain: { wild: false },
                   }"
                   :name="$t('domain')"
                 >
@@ -45,6 +44,7 @@
                   v-slot:default="{ errors, valid }"
                   :rules="{
                     required: disableDomain,
+                    isDomain: { wild: true },
                   }"
                   :name="$t('wildCardDomain')"
                 >
@@ -66,7 +66,7 @@
               </v-col>
               <v-col v-if="editMood" cols="12" md="6" lg="4">
                 <DomainUpdateOption
-                  :value.sync="domain.options"
+                  :value.sync="innerDomain.options"
                   @sendOptions="reciveOptions"
                 />
               </v-col>
@@ -81,7 +81,10 @@
                 ></v-textarea>
               </v-col>
               <v-col cols="12" md="8" lg="4">
-                <SelectProject :model.sync="domain.ProjectId" />
+                <SelectProject
+                  :filling-id="innerDomain.projectId"
+                  @sendProjectId="onSendProject"
+                />
               </v-col>
               <!-- actions -->
               <v-col
@@ -118,7 +121,9 @@
 </template>
 
 <script>
+const { to } = require('await-to-js');
 const _ = require('lodash');
+
 export default {
   name: 'DomainForm',
   props: {
@@ -132,6 +137,7 @@ export default {
       default: () => ({
         domain: '',
         wildcardDomain: '',
+        projectId: 0,
       }),
     },
     editMood: {
@@ -182,6 +188,46 @@ export default {
     },
     reciveOptions(options) {
       this.temporaryOptions = options;
+    },
+    onSendProject(value) {
+      console.log(typeof value.id);
+      this.$set(this.innerDomain, 'projectId', value.id);
+    },
+    async onSubmit() {
+      if (this.editMood) {
+        await this.editingMethod();
+      } else {
+        await this.creatingMethod();
+      }
+    },
+
+    async creatingMethod() {
+      const [, data] = await to(
+        this.$store.dispatch('domain/addDomain', this.innerDomain),
+      );
+      if (data) {
+        this.redirecting();
+      } else {
+        this.errorCallback();
+      }
+    },
+
+    redirecting() {
+      this.isDisabled = true;
+      setTimeout(() => {
+        this.$router.push(
+          this.localeRoute({
+            name: 'domain-list',
+          }),
+        );
+      }, 1100);
+    },
+
+    errorCallback() {
+      this.isDisabled = false;
+      setTimeout(() => {
+        this.$store.commit('CLOSE_NOTIFICATION', false);
+      }, 1000);
     },
   },
 };

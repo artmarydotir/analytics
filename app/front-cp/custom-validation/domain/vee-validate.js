@@ -2,15 +2,18 @@ import { extend } from 'vee-validate';
 const isValidDomain = require('is-valid-domain');
 
 extend('isDomain', {
-  params: ['subdomain', 'wildcard', 'allowUnicode', 'topLevel'],
-  validate(value) {
-    console.log(value);
+  params: ['wild'],
+  validate(value, { wild }) {
+    let result = false;
+    if (wild && !value.startsWith('*.')) {
+      result = false;
+      return result;
+    }
 
-    const result = isValidDomain(value, {
+    result = isValidDomain(value, {
       subdomain: true,
-      wildcard: true,
+      wildcard: wild,
       allowUnicode: true,
-      topLevel: true,
     });
     return result;
   },
