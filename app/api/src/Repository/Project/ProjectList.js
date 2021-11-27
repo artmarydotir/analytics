@@ -114,7 +114,10 @@ class ProjectList {
           const type = m[1];
           const name = m[2];
 
-          if (['dts', 'dte', 'like'].includes(type) && !query[`${name}`]) {
+          if (
+            ['dts', 'dte', 'like', 'ids'].includes(type) &&
+            !query[`${name}`]
+          ) {
             query.push({
               colName: `${name}`,
             });
@@ -129,6 +132,14 @@ class ProjectList {
               }
             });
           }
+          // if (type === 'ids') {
+          //   query.forEach((q) => {
+          //     if (q.colName === `${name}`) {
+          //       q.colOp = '=';
+          //       q.colValue = value;
+          //     }
+          //   });
+          // }
         }
       });
     }

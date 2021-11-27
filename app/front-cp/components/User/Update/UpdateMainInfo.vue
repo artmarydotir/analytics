@@ -165,19 +165,19 @@ export default {
       }
       if (data) {
         this.isDisabled = true;
-        // if (this.loginRole.includes('SA')) {
-        //   this.$router.push(
-        //     this.localeRoute({
-        //       name: 'user-list',
-        //     }),
-        //   );
-        // } else {
-        //   this.$router.push(
-        //     this.localeRoute({
-        //       name: 'user-profile',
-        //     }),
-        //   );
-        // }
+        if (this.userStateRole === 'SA') {
+          this.$router.push(
+            this.localeRoute({
+              name: 'user-list',
+            }),
+          );
+        } else {
+          this.$router.push(
+            this.localeRoute({
+              name: 'user-profile',
+            }),
+          );
+        }
       }
     },
   },

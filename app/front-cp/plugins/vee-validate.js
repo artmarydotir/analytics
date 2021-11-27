@@ -3,6 +3,7 @@ import Vue from 'vue';
 import '@/custom-validation/validators';
 import {
   required,
+  required_if,
   email,
   min,
   max,
@@ -26,6 +27,7 @@ import {
 setInteractionMode('eager');
 
 extend('required', required);
+extend('required_if', required_if);
 extend('email', email);
 extend('min', min);
 extend('max', max);

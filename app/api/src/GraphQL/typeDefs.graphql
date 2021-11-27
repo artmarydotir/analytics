@@ -195,6 +195,15 @@ input InputProjectListOwner {
   limit: Int = 9
 }
 
+type OutputSimpleProjectListDocs {
+  id: Int
+  title: String
+}
+
+type OutputSimpleProjectList {
+  docs: [OutputSimpleProjectListDocs]
+}
+
 # ********** DOMAIN *************
 
 input InputDomainCreate {
@@ -202,7 +211,7 @@ input InputDomainCreate {
   wildcardDomain: String
   projectId: Int!
   description: String
-  options: [Int]
+  options: [Int]!
   additional: [JSONObject]
 }
 
@@ -227,5 +236,6 @@ type Query {
   UserList(args: InputUserList): OutputUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
   ProjectList(args: InputProjectList): OutputProjectList
+  ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
   ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
 }
