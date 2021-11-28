@@ -1,15 +1,16 @@
 <template>
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
+
     <template v-if="loading">
-      <ProjectForm
-        :title="$t('projectEdit')"
+      <DomainForm
+        :title="$t('domainEdit')"
         :edit-mood="true"
-        :project="project"
+        :domain="domain"
       />
     </template>
     <template v-else>
-      {{ $t('projectNotFound') }}
+      {{ $t('domainNotFound') }}
     </template>
   </v-container>
 </template>
@@ -18,27 +19,27 @@
 export default {
   data() {
     return {
-      project: {},
+      domain: {},
       loading: false,
-      projectId: Number(this.$route.params.id),
+      domainId: Number(this.$route.params.id),
     };
   },
   head() {
     return {
-      title: this.$t('editProject'),
+      title: this.$t('editDomain'),
     };
   },
   async mounted() {
     this.loading = false;
-    if (this.projectId) {
+    if (this.domainId) {
       const result = await this.$store.dispatch(
-        'project/showProjectProfile',
-        this.projectId,
+        'domain/showDomainProfile',
+        this.domainId,
       );
       if (result) {
         this.loading = true;
       }
-      this.project = { ...result };
+      this.domain = { ...result };
     }
   },
 };

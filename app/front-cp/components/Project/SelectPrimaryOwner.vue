@@ -1,9 +1,12 @@
 <template>
   <ValidationProvider
     v-slot:default="{ errors, valid }"
-    :rules="{ required: true }"
+    :rules="{
+      required: isRequired,
+    }"
     :name="$t('primaryOwner')"
   >
+    {{ isRequired }} {{ errors }} {{ valid }}
     <v-autocomplete
       v-model="model"
       :items="userDocs"
@@ -34,9 +37,8 @@ export default {
       type: Number,
       required: false,
       default: undefined,
-      // default: 0,
     },
-    edit: {
+    isRequired: {
       type: Boolean,
       required: false,
       default: false,
@@ -75,13 +77,10 @@ export default {
     },
   },
   mounted() {
-    const unwatch = this.$watch('fillingId', () => {
-      if (!this.fillingId) return;
+    if (this.fillingId) {
+      console.log('fillingId:', this.fillingId);
       this.findUserById();
-      unwatch();
-    });
-
-    if (this.edit === false) {
+    } else {
       this.fetchNewList();
     }
   },
@@ -106,7 +105,7 @@ export default {
       if (data) {
         this.entries = data.docs;
         this.model = this.entries[0];
-        // this.isLoading = false;
+        this.isLoading = false;
       }
     },
     async fetchNewList() {

@@ -215,6 +215,36 @@ input InputDomainCreate {
   additional: [JSONObject]
 }
 
+input InputDomainList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
+type OutputDomainListDocs {
+  id: Int
+  domain: String
+  wildcardDomain: String
+  projectId: Int
+  projectName: JSONObject
+  description: String
+  options: [Int]
+  additional: [JSONObject]
+}
+
+type OutputDomainList {
+  docs: [OutputDomainListDocs]
+}
+
+type OutputDomainProfile {
+  id: Int
+  domain: String
+  wildcardDomain: String
+  ProjectId: Int
+  description: String
+  options: [Int]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -238,4 +268,6 @@ type Query {
   ProjectList(args: InputProjectList): OutputProjectList
   ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
   ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
+  DomainList(args: InputDomainList): OutputDomainList
+  DomainProfile(data: InputGlobalID): OutputDomainProfile
 }

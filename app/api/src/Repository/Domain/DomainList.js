@@ -60,7 +60,7 @@ class DomainList {
 
     if (lastSeen) {
       query.id = {
-        [Op.gt]: lastSeen,
+        [Op.lt]: lastSeen,
       };
     }
 
@@ -90,7 +90,9 @@ class DomainList {
       delete x.Project;
     });
 
-    return c;
+    return {
+      docs: c,
+    };
   }
 }
 

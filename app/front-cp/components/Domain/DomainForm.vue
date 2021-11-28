@@ -82,7 +82,7 @@
               </v-col>
               <v-col cols="12" md="8" lg="4">
                 <SelectProject
-                  :filling-id="innerDomain.projectId"
+                  :filling-id="innerDomain.ProjectId"
                   @sendProjectId="onSendProject"
                 />
               </v-col>
@@ -137,7 +137,7 @@ export default {
       default: () => ({
         domain: '',
         wildcardDomain: '',
-        projectId: 0,
+        ProjectId: 0,
       }),
     },
     editMood: {
@@ -191,7 +191,7 @@ export default {
     },
     onSendProject(value) {
       console.log(typeof value.id);
-      this.$set(this.innerDomain, 'projectId', value.id);
+      this.$set(this.innerDomain, 'ProjectId', value.id);
     },
     async onSubmit() {
       if (this.editMood) {

@@ -7,7 +7,6 @@ const {
 
 module.exports = async (_, { data }, { container, token }) => {
   const { DomainCreateRepository } = container;
-  console.log(data);
 
   if (!token || token.roles !== userRoles.SUPERADMIN) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {

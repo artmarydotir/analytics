@@ -47,7 +47,7 @@
               <v-col cols="12" md="6" lg="3">
                 <SelectPrimaryOwner
                   :filling-id="innerProject.primaryOwner"
-                  :edit="editMood"
+                  :is-required="true"
                   @sendPrimeryUserValue="onSendPrime"
                 />
               </v-col>
