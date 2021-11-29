@@ -37,8 +37,8 @@ export default {
       );
       if (result) {
         this.loading = true;
+        this.project = { ...result };
       }
-      this.project = { ...result };
     }
   },
 };

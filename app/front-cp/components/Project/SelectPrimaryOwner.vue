@@ -1,12 +1,9 @@
 <template>
   <ValidationProvider
     v-slot:default="{ errors, valid }"
-    :rules="{
-      required: isRequired,
-    }"
+    :rules="{ objectRequired: true }"
     :name="$t('primaryOwner')"
   >
-    {{ isRequired }} {{ errors }} {{ valid }}
     <v-autocomplete
       v-model="model"
       :items="userDocs"
@@ -19,7 +16,9 @@
       cache-items
       :success="valid"
       outlined
+      data-vv-name="primaryOwner"
       return-object
+      required
       :label="$t('selectPrimaryOwner')"
       @change="sendData"
     >
@@ -61,6 +60,12 @@ export default {
         id: entry.id,
         username: entry.username,
       }));
+    },
+    isEmpty() {
+      if (this.model.id === 0) {
+        return false;
+      }
+      return true;
     },
   },
 

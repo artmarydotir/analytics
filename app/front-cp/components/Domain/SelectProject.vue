@@ -1,10 +1,9 @@
 <template>
   <ValidationProvider
     v-slot:default="{ errors, valid }"
-    :rules="{ required: true }"
+    :rules="{ requiredProject: true }"
     :name="$t('selectProject')"
   >
-    {{ model }}
     <v-autocomplete
       v-model="model"
       :items="entries"

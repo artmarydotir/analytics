@@ -1,6 +1,5 @@
 <template>
   <v-row>
-    <!-- {{ editInfo }} -->
     <v-toolbar dark color="teal">
       <v-toolbar-title v-show="$vuetify.breakpoint.mdAndUp" class="mr-3 ml-2">
         Select User:
@@ -111,18 +110,7 @@ export default {
   watch: {
     loopingListO(value) {
       if (this.edit) {
-        const mutateList = this.loopingListO.map((v) => {
-          return {
-            id: v.UserId,
-            username: v.username,
-          };
-        });
-        this.loopingList = mutateList;
-        this.cat = this.loopingListO.reduce((acc, cur) => {
-          console.log(acc, cur, '$$$$');
-          acc[cur.UserId] = cur.rules;
-          return acc;
-        }, {});
+        this.editMutating();
       }
     },
 
@@ -136,6 +124,9 @@ export default {
 
   mounted() {
     this.getUsers();
+    if (this.edit) {
+      this.editMutating();
+    }
   },
   methods: {
     makeAlist(input) {
@@ -199,6 +190,20 @@ export default {
       this.$delete(this.cat, id);
 
       this.sendData();
+    },
+    editMutating() {
+      console.log('what ?', this.edit);
+      const mutateList = this.loopingListO.map((v) => {
+        return {
+          id: v.UserId,
+          username: v.username,
+        };
+      });
+      this.loopingList = mutateList;
+      this.cat = this.loopingListO.reduce((acc, cur) => {
+        acc[cur.UserId] = cur.rules;
+        return acc;
+      }, {});
     },
   },
 };

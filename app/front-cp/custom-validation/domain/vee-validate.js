@@ -5,6 +5,9 @@ extend('isDomain', {
   params: ['wild'],
   validate(value, { wild }) {
     let result = false;
+    if (!value) {
+      result = false;
+    }
     if (wild && !value.startsWith('*.')) {
       result = false;
       return result;

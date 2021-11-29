@@ -2,7 +2,6 @@
   <div class="mx-auto">
     <Snackbar />
 
-    {{ innerDomain }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -21,7 +20,9 @@
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
                   :rules="{
-                    required: disableWDomain,
+                    required_if:
+                      innerDomain.wildcardDomain &&
+                      innerDomain.wildcardDomain.length < 0,
                     isDomain: { wild: false },
                   }"
                   :name="$t('domain')"
@@ -43,7 +44,8 @@
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
                   :rules="{
-                    required: disableDomain,
+                    required_if:
+                      innerDomain.domain && innerDomain.domain.length < 0,
                     isDomain: { wild: true },
                   }"
                   :name="$t('wildCardDomain')"
@@ -166,7 +168,6 @@ export default {
   },
   watch: {
     'innerDomain.domain'(newValue) {
-      console.log(newValue);
       if (!_.isEmpty(newValue)) {
         this.disableWDomain = true;
       } else {
@@ -174,7 +175,6 @@ export default {
       }
     },
     'innerDomain.wildcardDomain'(newValue) {
-      console.log(newValue);
       if (!_.isEmpty(newValue)) {
         this.disableDomain = true;
       } else {
@@ -194,6 +194,10 @@ export default {
       this.$set(this.innerDomain, 'ProjectId', value.id);
     },
     async onSubmit() {
+      const validity = await this.$refs.obs.validate();
+      if (!validity) {
+        return;
+      }
       if (this.editMood) {
         await this.editingMethod();
       } else {
