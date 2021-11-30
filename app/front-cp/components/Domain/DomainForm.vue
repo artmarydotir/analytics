@@ -2,7 +2,6 @@
   <div class="mx-auto">
     <Snackbar />
 
-    {{ innerDomain }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
       <v-card-title class="secondary white--text pa-4">
         {{ title }}
@@ -21,7 +20,9 @@
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
                   :rules="{
-                    required: disableWDomain,
+                    required_if:
+                      innerDomain.wildcardDomain &&
+                      innerDomain.wildcardDomain.length < 0,
                     isDomain: { wild: false },
                   }"
                   :name="$t('domain')"
@@ -43,7 +44,8 @@
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
                   :rules="{
-                    required: disableDomain,
+                    required_if:
+                      innerDomain.domain && innerDomain.domain.length < 0,
                     isDomain: { wild: true },
                   }"
                   :name="$t('wildCardDomain')"
@@ -82,7 +84,7 @@
               </v-col>
               <v-col cols="12" md="8" lg="4">
                 <SelectProject
-                  :filling-id="innerDomain.projectId"
+                  :filling-id="innerDomain.ProjectId"
                   @sendProjectId="onSendProject"
                 />
               </v-col>
@@ -137,7 +139,7 @@ export default {
       default: () => ({
         domain: '',
         wildcardDomain: '',
-        projectId: 0,
+        ProjectId: 0,
       }),
     },
     editMood: {
@@ -166,7 +168,6 @@ export default {
   },
   watch: {
     'innerDomain.domain'(newValue) {
-      console.log(newValue);
       if (!_.isEmpty(newValue)) {
         this.disableWDomain = true;
       } else {
@@ -174,7 +175,6 @@ export default {
       }
     },
     'innerDomain.wildcardDomain'(newValue) {
-      console.log(newValue);
       if (!_.isEmpty(newValue)) {
         this.disableDomain = true;
       } else {
@@ -191,9 +191,13 @@ export default {
     },
     onSendProject(value) {
       console.log(typeof value.id);
-      this.$set(this.innerDomain, 'projectId', value.id);
+      this.$set(this.innerDomain, 'ProjectId', value.id);
     },
     async onSubmit() {
+      const validity = await this.$refs.obs.validate();
+      if (!validity) {
+        return;
+      }
       if (this.editMood) {
         await this.editingMethod();
       } else {

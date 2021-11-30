@@ -6,7 +6,7 @@ const {
 } = require('../../../Schema/ErrorMessage');
 
 module.exports = async (_, { data }, { container, token }) => {
-  const { ProjectProfileRepository } = container;
+  const { DomainProfileRepository } = container;
   const { id } = data;
 
   if (!token) {
@@ -21,13 +21,13 @@ module.exports = async (_, { data }, { container, token }) => {
     });
   }
 
-  const project = ProjectProfileRepository.returnProjectData(id);
+  const domain = DomainProfileRepository.returnDomainData(id);
 
-  if (!project) {
+  if (!domain) {
     throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
       statusCode: 404,
     });
   }
 
-  return project;
+  return domain;
 };

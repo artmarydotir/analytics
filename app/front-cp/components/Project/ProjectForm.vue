@@ -47,7 +47,7 @@
               <v-col cols="12" md="6" lg="3">
                 <SelectPrimaryOwner
                   :filling-id="innerProject.primaryOwner"
-                  :edit="editMood"
+                  :is-required="true"
                   @sendPrimeryUserValue="onSendPrime"
                 />
               </v-col>
@@ -72,7 +72,7 @@
                 ></v-textarea>
               </v-col>
               <v-col cols="12">
-                <LazyUserRuleSelector
+                <UserRuleSelector
                   :edit="editMood"
                   :looping-list-o="innerProject.userAndRules"
                   @sendData="receiveRules"
@@ -126,7 +126,9 @@ export default {
     project: {
       type: Object,
       required: false,
-      default: () => ({}),
+      default: () => ({
+        userAndRules: [],
+      }),
     },
     editMood: {
       required: false,
@@ -185,6 +187,10 @@ export default {
     },
 
     async creatingMethode() {
+      const validity = await this.$refs.obs.validate();
+      if (!validity) {
+        return;
+      }
       const [, data] = await to(
         this.$store.dispatch('project/addProject', this.innerProject),
       );

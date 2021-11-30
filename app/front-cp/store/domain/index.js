@@ -8,28 +8,28 @@ export const getters = {};
 
 export const actions = {
   // ***************************************
-  async showDomainProfile({ commit }, projectId) {
-    console.log(projectId, 'vuex');
+  async showDomainProfile({ commit }, domainId) {
+    console.log(domainId, 'domainId');
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
         {
           query: `query ($id: Int!) {
-            ProjectProfile(
+            DomainProfile(
               data: {
                 id: $id
               }
             ) {
-              id title description options userAndRules publicToken primaryOwner
+              id wildcardDomain domain ProjectId description options
             }
           }`,
           variables: {
-            id: projectId,
+            id: domainId,
           },
         },
       );
 
-      const result = data.data.ProjectProfile;
+      const result = data.data.DomainProfile;
 
       if (data.errors) {
         throw data.errors;

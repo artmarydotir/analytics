@@ -1,10 +1,9 @@
 <template>
   <ValidationProvider
     v-slot:default="{ errors, valid }"
-    :rules="{ required: true }"
+    :rules="{ requiredProject: true }"
     :name="$t('selectProject')"
   >
-    {{ model }}
     <v-autocomplete
       v-model="model"
       :items="entries"
@@ -67,6 +66,7 @@ export default {
   },
   mounted() {
     if (this.fillingId) {
+      console.log('fillingId:', this.fillingId);
       this.findProjectById();
     } else {
       this.fetchNewList();

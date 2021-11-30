@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
+      {{ value }}
       <v-checkbox
         v-model="options.ACTIVE"
         :label="$t('active')"
@@ -37,16 +38,20 @@ export default {
     };
   },
   watch: {
-    value(v) {
-      if (v.includes(1)) {
-        this.options.ACTIVE = true;
-      }
-      if (v.includes(2)) {
-        this.options.DELETED = true;
-      }
+    value: {
+      handler(v) {
+        if (v.includes(1)) {
+          this.options.ACTIVE = true;
+        }
+        if (v.includes(2)) {
+          this.options.DELETED = true;
+        }
+      },
+      immediate: true,
     },
     options: {
       handler(options) {
+        console.log(options);
         this.$emit('sendOptions', options);
       },
       deep: true,

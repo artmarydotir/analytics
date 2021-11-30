@@ -37,13 +37,16 @@ export default {
     };
   },
   watch: {
-    value(v) {
-      if (v.includes(1)) {
-        this.options.ACTIVE = true;
-      }
-      if (v.includes(2)) {
-        this.options.DELETED = true;
-      }
+    value: {
+      handler(v) {
+        if (v.includes(1)) {
+          this.options.ACTIVE = true;
+        }
+        if (v.includes(2)) {
+          this.options.DELETED = true;
+        }
+      },
+      immediate: true,
     },
     options: {
       handler(options) {
