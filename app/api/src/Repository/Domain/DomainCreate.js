@@ -10,6 +10,7 @@ const {
   CreateDomainSchema: domainJoiSchema,
 } = require('../../JoySchema/Domain');
 
+const SequelizeErrorHandler = require('../../Utils/SequelizeErrorHandler');
 const { constants: domainOption } = require('../../Schema/DomainOption');
 
 class DomainCreate {
@@ -122,9 +123,14 @@ class DomainCreate {
      ***
      */
     const { Domain } = this.sequelize.models;
-    const result = await Domain.create(initialValues);
-
-    return result.dataValues;
+    try {
+      const result = await Domain.create(initialValues);
+      return result.dataValues;
+    } catch (e) {
+      if (e.errors) {
+        SequelizeErrorHandler(e);
+      }
+    }
   }
 
   /**

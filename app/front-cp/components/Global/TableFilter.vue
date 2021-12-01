@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     sendFilter: debounce(function () {
-      console.log(this.filter);
       this.$emit('sendReadyFilter', this.filter);
     }, 900),
   },

@@ -18,6 +18,8 @@ const constants = {
   NOT_EXIST: '',
   OTHER_ERROR: '',
   FORBIDDEN: '',
+  DUPLICATE_ENTRY: '',
+  NOT_ALLOWED: '',
 };
 
 const list = Object.values(constants);

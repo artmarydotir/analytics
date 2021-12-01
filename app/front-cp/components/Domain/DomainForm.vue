@@ -167,19 +167,27 @@ export default {
     },
   },
   watch: {
-    'innerDomain.domain'(newValue) {
-      if (!_.isEmpty(newValue)) {
-        this.disableWDomain = true;
-      } else {
-        this.disableWDomain = false;
-      }
+    'innerDomain.domain': {
+      handler(newValue) {
+        if (!_.isEmpty(newValue)) {
+          this.disableWDomain = true;
+        } else {
+          this.disableWDomain = false;
+        }
+      },
+      immediate: true,
+      deep: true,
     },
-    'innerDomain.wildcardDomain'(newValue) {
-      if (!_.isEmpty(newValue)) {
-        this.disableDomain = true;
-      } else {
-        this.disableDomain = false;
-      }
+    'innerDomain.wildcardDomain': {
+      handler(newValue) {
+        if (!_.isEmpty(newValue)) {
+          this.disableDomain = true;
+        } else {
+          this.disableDomain = false;
+        }
+      },
+      immediate: true,
+      deep: true,
     },
   },
   methods: {
@@ -190,8 +198,7 @@ export default {
       this.temporaryOptions = options;
     },
     onSendProject(value) {
-      console.log(typeof value.id);
-      this.$set(this.innerDomain, 'ProjectId', value.id);
+      this.$set(this.innerDomain, 'projectId', value.id);
     },
     async onSubmit() {
       const validity = await this.$refs.obs.validate();
@@ -216,6 +223,37 @@ export default {
       }
     },
 
+    // eslint-disable-next-line require-await
+    async editingMethod() {
+      const readyData = this.updatingFunction();
+
+      const [, data] = await to(
+        this.$store.dispatch('domain/updateDomain', readyData),
+      );
+
+      if (data) {
+        this.redirecting();
+      } else {
+        this.errorCallback();
+      }
+    },
+
+    updatingFunction() {
+      const cloneData = { ...this.innerDomain };
+
+      cloneData.options = this.temporaryOptions;
+      if (cloneData.projectId) {
+        delete cloneData.ProjectId;
+      } else if (cloneData.ProjectId) {
+        cloneData.projectId = this.innerDomain.ProjectId;
+        delete cloneData.ProjectId;
+      }
+      delete cloneData.id;
+      return {
+        id: this.innerDomain.id,
+        data: cloneData,
+      };
+    },
     redirecting() {
       this.isDisabled = true;
       setTimeout(() => {

@@ -184,15 +184,12 @@ export default {
         });
     },
     removeUser(id) {
-      console.log(id);
-
       this.loopingList = this.loopingList.filter((item) => item.id !== id);
       this.$delete(this.cat, id);
 
       this.sendData();
     },
     editMutating() {
-      console.log('what ?', this.edit);
       const mutateList = this.loopingListO.map((v) => {
         return {
           id: v.UserId,

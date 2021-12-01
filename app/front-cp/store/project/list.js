@@ -30,7 +30,6 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.ProjectList;
 
       if (data.errors) {
@@ -78,7 +77,6 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.ProjectSimpleList;
 
       if (data.errors) {
@@ -103,7 +101,6 @@ export const actions = {
   },
   // ****************role=viewer***********************
   async viewerListProject({ commit }, input) {
-    console.log('-----');
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -127,7 +124,6 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.ProjectOwnerList;
 
       if (data.errors) {

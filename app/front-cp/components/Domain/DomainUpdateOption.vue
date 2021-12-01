@@ -51,7 +51,6 @@ export default {
     },
     options: {
       handler(options) {
-        console.log(options);
         this.$emit('sendOptions', options);
       },
       deep: true,

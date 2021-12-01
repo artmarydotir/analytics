@@ -193,7 +193,6 @@ export default {
         this.isDisabled = false;
       }
       if (secret) {
-        console.log(secret, 'in uiii');
         this.setNewOtpSecret(secret);
       }
     },

@@ -7,6 +7,8 @@ const ProjectCreate = require('./Project/ProjectCreate');
 const ProjectUpdate = require('./Project/ProjectUpdate');
 const ProjectDelete = require('./Project/ProjectDelete');
 const DomainCreate = require('./Domain/DomainCreate');
+const DomainUpdate = require('./Domain/DomainUpdate');
+const DomainDelete = require('./Domain/DomainDelete');
 
 module.exports = {
   UserCreate,
@@ -18,4 +20,6 @@ module.exports = {
   ProjectUpdate,
   ProjectDelete,
   DomainCreate,
+  DomainUpdate,
+  DomainDelete,
 };

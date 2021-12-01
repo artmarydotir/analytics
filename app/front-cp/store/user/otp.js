@@ -1,7 +1,6 @@
 export const actions = {
   // ***************************************
   async otpGenerate({ commit }, userData) {
-    console.log(userData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -19,7 +18,7 @@ export const actions = {
       );
 
       const result = data.data.OtpGenerate;
-      console.log(result);
+
       if (data.errors) {
         throw new Error(data.errors['0'].message);
       }

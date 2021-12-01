@@ -83,7 +83,6 @@ export default {
   },
   mounted() {
     if (this.fillingId) {
-      console.log('fillingId:', this.fillingId);
       this.findUserById();
     } else {
       this.fetchNewList();
