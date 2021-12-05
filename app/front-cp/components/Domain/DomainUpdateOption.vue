@@ -1,7 +1,6 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      {{ value }}
       <v-checkbox
         v-model="options.ACTIVE"
         :label="$t('active')"

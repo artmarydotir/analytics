@@ -7,9 +7,10 @@
             mx-auto
             justify-center
             font-weight-bold
-            text-h2 text-center
+            text-h3 text-center
             white--text
             pb-10
+            pt-4
           "
         >
           {{ title }}

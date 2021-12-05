@@ -52,7 +52,9 @@
           <v-card-actions class="mt-4 pb-10 mx-auto text-center justify-center">
             <v-btn dark type="submit" x-large color="cyan" class="pl-12 pr-12">
               {{ $t('login') }}
-              <v-icon right dark> mdi-arrow-right </v-icon>
+              <v-icon right class="pt-1" small dark>
+                mdi-arrow-{{ arrow }}
+              </v-icon>
             </v-btn>
           </v-card-actions>
         </v-form>
@@ -77,6 +79,11 @@ export default {
         otp: '',
       },
     };
+  },
+  computed: {
+    arrow() {
+      return this.$vuetify.rtl ? 'left' : 'right';
+    },
   },
   methods: {
     async onSubmit() {

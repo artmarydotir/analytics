@@ -69,7 +69,7 @@
               <v-col v-if="editMood" cols="12" md="6" lg="4">
                 <DomainUpdateOption
                   :value.sync="innerDomain.options"
-                  @sendOptions="reciveOptions"
+                  @sendOptions="receiveOptions"
                 />
               </v-col>
               <v-col cols="12">
@@ -194,7 +194,7 @@ export default {
     updateOptions(value) {
       this.$set(this.innerDomain, 'options', value);
     },
-    reciveOptions(options) {
+    receiveOptions(options) {
       this.temporaryOptions = options;
     },
     onSendProject(value) {
@@ -223,7 +223,6 @@ export default {
       }
     },
 
-    // eslint-disable-next-line require-await
     async editingMethod() {
       const readyData = this.updatingFunction();
 

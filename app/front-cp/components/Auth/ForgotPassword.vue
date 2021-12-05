@@ -4,7 +4,7 @@
     <ValidationObserver ref="obs">
       <v-card flat class="mx-auto" min-height="500px" elevation="7">
         <v-card-title class="pt-12 my-9 text-center justify-center text-h6">
-          <p>Enter your email in order to send you a code.</p>
+          <p class="grey--text text--darken-3">{{ $t('enterEmail') }}</p>
         </v-card-title>
         <v-card-text>
           <v-form

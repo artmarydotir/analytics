@@ -51,7 +51,7 @@ export default {
   watch: {
     'captcha.value'(v) {
       if (v.length >= this.min && v.length <= this.max) {
-        this.$emit('solvedCapatcha', this.captcha);
+        this.$emit('solvedCaptcha', this.captcha);
       }
     },
   },

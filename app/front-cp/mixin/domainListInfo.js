@@ -36,11 +36,11 @@ const listInfo = {
           width: '12%',
           items: [
             {
-              name: 'active',
+              name: this.$t('active'),
               value: 1,
             },
             {
-              name: 'deleted',
+              name: this.$t('deleted'),
               value: 2,
             },
           ],

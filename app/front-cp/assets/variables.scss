@@ -12,3 +12,7 @@ $rounded: (
 );
 
 $tabs-bar-height: 60px;
+
+.v-tabs a {
+  letter-spacing: 0 !important;
+}

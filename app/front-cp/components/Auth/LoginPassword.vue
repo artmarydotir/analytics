@@ -50,13 +50,15 @@
               </ValidationProvider>
             </v-col>
             <v-col cols="12" md="9" lg="8" class="pb-0">
-              <Captcha @solvedCapatcha="getcaptchaValue" />
+              <Captcha @solvedCaptcha="getCaptchaValue" />
             </v-col>
           </v-row>
           <v-card-actions class="mt-4 pb-10 mx-auto text-center justify-center">
             <v-btn dark type="submit" x-large color="cyan" class="pl-12 pr-12">
               {{ $t('login') }}
-              <v-icon right dark> mdi-arrow-right </v-icon>
+              <v-icon right class="pt-1" small dark>
+                mdi-arrow-{{ arrow }}
+              </v-icon>
             </v-btn>
           </v-card-actions>
           <v-divider></v-divider>
@@ -91,8 +93,13 @@ export default {
       },
     };
   },
+  computed: {
+    arrow() {
+      return this.$vuetify.rtl ? 'left' : 'right';
+    },
+  },
   methods: {
-    getcaptchaValue(v) {
+    getCaptchaValue(v) {
       this.user.captcha = v;
     },
     async onSubmit() {

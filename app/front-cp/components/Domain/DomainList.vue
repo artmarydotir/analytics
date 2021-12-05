@@ -112,7 +112,7 @@
             :disabled="isDisabledMore"
             @click="fetchMoreItem()"
           >
-            load more item
+            {{ $t('loadMore') }}
 
             <v-icon right> mdi-arrow-down </v-icon>
           </v-btn>

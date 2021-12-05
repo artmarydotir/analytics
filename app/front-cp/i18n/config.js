@@ -27,9 +27,9 @@ export const I18N = {
     syncRouteParams: true,
   },
   detectBrowserLanguage: {
-    useCookie: true,
+    useCookie: false,
     cookieKey: 'lang',
-    alwaysRedirect: true,
+    alwaysRedirect: false,
     onlyOnRoot: true,
   },
   alwaysRedirect: true,

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <IntroTemplate title="Login">
+    <IntroTemplate :title="$t('login')">
       <template v-slot:frame>
         <LoginForm />
       </template>
@@ -17,10 +17,10 @@ export default {
       text: 'aaa',
     };
   },
-  // head() {
-  //   return {
-  //     title: this.$t('login'),
-  //   };
-  // },
+  head() {
+    return {
+      title: this.$t('login'),
+    };
+  },
 };
 </script>
