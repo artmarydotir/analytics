@@ -10,6 +10,7 @@ const {
 } = require('../../JoySchema/Domain');
 
 const { constants: domainOption } = require('../../Schema/DomainOption');
+const SequelizeErrorHandler = require('../../Utils/SequelizeErrorHandler');
 
 class DomainUpdate {
   constructor({ sequelize, DomainCreateRepository }) {
@@ -192,6 +193,12 @@ class DomainUpdate {
       },
     });
 
+    if (!domain) {
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    }
+
     let newOption = domain.dataValues.options;
 
     // eslint-disable-next-line sonarjs/no-identical-functions
@@ -207,18 +214,23 @@ class DomainUpdate {
 
     newOption = uniq(newOption);
 
-    const affectedRow = await Domain.update(
-      {
-        options: newOption,
-      },
-      {
-        where: {
-          id,
+    try {
+      const affectedRow = await Domain.update(
+        {
+          options: newOption,
         },
-      },
-    );
-
-    return { affectedRow, id };
+        {
+          where: {
+            id,
+          },
+        },
+      );
+      return { affectedRow, id };
+    } catch (e) {
+      if (e.errors) {
+        SequelizeErrorHandler(e);
+      }
+    }
   }
 }
 

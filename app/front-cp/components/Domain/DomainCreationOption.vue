@@ -37,7 +37,7 @@ export default {
         if (options.remove) {
           list.push(options.remove);
         }
-        console.log(list);
+
         this.$emit('sendOptions', list);
       },
       deep: true,

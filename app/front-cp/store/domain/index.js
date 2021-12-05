@@ -1,15 +1,6 @@
-export const state = () => ({
-  profileData: {},
-});
-
-export const mutations = {};
-
-export const getters = {};
-
 export const actions = {
   // ***************************************
   async showDomainProfile({ commit }, domainId) {
-    console.log(domainId, 'domainId');
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -52,7 +43,6 @@ export const actions = {
   },
   // ***************************************
   async addDomain({ commit }, inputData) {
-    console.log(inputData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -121,9 +111,9 @@ export const actions = {
         {
           query: `mutation (
               $id: Int!
-              $data: InputProjectUpdate
+              $data: InputDomainUpdate
             ) {
-              ProjectUpdate(
+              DomainUpdate(
                 id: $id
                 data: $data
               )
@@ -132,7 +122,7 @@ export const actions = {
         },
       );
 
-      const result = data.data.ProjectUpdate;
+      const result = data.data.DomainUpdate;
 
       if (data.errors) {
         throw new Error(data.errors['0'].message);
@@ -143,7 +133,7 @@ export const actions = {
           {
             show: true,
             color: 'green',
-            message: 'Successfully Edited Project.',
+            message: 'Successfully Edited domain.',
           },
           { root: true },
         );
@@ -170,7 +160,7 @@ export const actions = {
         `${window.applicationBaseURL}api/graphql/graphql`,
         {
           query: `mutation ($id: Int!) {
-            ProjectDelete(
+            DomainDelete(
                 data: {
                   id: $id,
                 }
@@ -182,8 +172,7 @@ export const actions = {
         },
       );
 
-      console.log(data);
-      const result = data.data.ProjectDelete;
+      const result = data.data.DomainDelete;
       if (data.errors) {
         throw new Error(data.errors['0'].message);
       }
@@ -193,7 +182,7 @@ export const actions = {
           {
             show: true,
             color: 'green',
-            message: 'Successfully Deleted project.',
+            message: 'Successfully Deleted domain.',
           },
           { root: true },
         );
@@ -213,5 +202,4 @@ export const actions = {
       throw new Error('error');
     }
   },
-  // ***************************************
 };

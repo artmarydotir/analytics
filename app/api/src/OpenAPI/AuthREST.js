@@ -14,7 +14,7 @@ class AuthREST {
     const refreshURL = this.fastify.openAPIBaseURL('/user/auth/refresh');
 
     /** @type {import('../Core/Fastify/GenericResponse').GenericResponse} */
-    const e403 = Fastify.getGenericError(403);
+    const e405 = Fastify.getGenericError(405);
 
     this.fastify.route({
       url: refreshURL,
@@ -26,14 +26,14 @@ class AuthREST {
         const refreshToken = req.cookies[Config.ASM_AUTH_REFRESH_COOKIE];
 
         if (!refreshToken) {
-          return e403.reply(reply);
+          return e405.reply(reply);
         }
 
         const [err, refreshTokenData] = await to(JWT.verify(refreshToken));
         const { payload } = refreshTokenData;
 
         if (err || !payload.expire || payload.expire < Date.now()) {
-          return e403.reply(reply);
+          return e405.reply(reply);
         }
 
         const user = await UserProcessRepository.returnActiveUserDataByID(
@@ -123,7 +123,7 @@ class AuthREST {
               roles: { type: 'string' },
             },
           },
-          403: e403.getSchema(),
+          403: e405.getSchema(),
         },
       },
       handler: async (req, reply) => {

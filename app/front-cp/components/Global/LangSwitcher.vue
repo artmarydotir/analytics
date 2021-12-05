@@ -22,7 +22,7 @@
         <v-list-item
           v-for="locale in availableLocales"
           :key="locale.code"
-          :to="switchLocalePath(locale.code)"
+          @click.prevent.stop="$i18n.setLocale(locale.code)"
           @change="checkDirection(locale.code)"
         >
           <v-list-item-title>{{ locale.name }}</v-list-item-title>

@@ -9,7 +9,6 @@ export const getters = {};
 export const actions = {
   // ***************************************
   async showProjectProfile({ commit }, projectId) {
-    console.log(projectId, 'vuex');
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -52,7 +51,6 @@ export const actions = {
   },
   // ***************************************
   async addProject({ commit }, inputData) {
-    console.log(inputData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -180,7 +178,6 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.ProjectDelete;
       if (data.errors) {
         throw new Error(data.errors['0'].message);

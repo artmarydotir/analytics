@@ -1,35 +1,23 @@
-const { ErrorWithProps } = require('mercurius').default;
 const { constants: userRoles } = require('../../../Schema/UserRoles');
-
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const checkToken = require('../../../Utils/CheckToken');
 
 module.exports = async (_, { args }, { container, token }) => {
   const { lastSeen, filter, limit } = args;
 
   const { DomainListRepository } = container;
 
-  if (!token || token.roles === userRoles.VIEWER) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  const hasAccess = checkToken(token, _, [
+    userRoles.ADMIN,
+    userRoles.SUPERADMIN,
+  ]);
 
   let list = [];
 
-  if (token.roles === userRoles.ADMIN || token.roles === userRoles.SUPERADMIN) {
+  if (hasAccess) {
     list = await DomainListRepository.fetchDomainList({
       lastSeen,
       filter,
       limit,
-    });
-  }
-
-  console.log(list);
-  if (!list) {
-    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
-      statusCode: 404,
     });
   }
 

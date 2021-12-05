@@ -11,7 +11,7 @@ module.exports = {
   loading: 'Loading...',
   contactSupport: 'Contact {name} support',
   telSupport: 'Tel {name}',
-
+  pageNotFound: 'page    dddNotFound',
   // ## Login
   email: 'Email',
   password: 'Password',

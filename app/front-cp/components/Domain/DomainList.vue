@@ -38,7 +38,9 @@
 
               <div class="text-center mx-auto pt-5 pb-5">
                 <span class="text-h5 primary--text">
-                  : {{ modalData.title }} with id: {{ modalData.id }}
+                  {{ modalData.domain }}
+                  {{ modalData.wildcardDomain }}
+                  with id: {{ modalData.id }}
                 </span>
               </div>
             </template>
@@ -84,6 +86,7 @@
           </nuxt-link>
 
           <v-icon
+            :disabled="item.options.includes(2)"
             tag="button"
             class="mr-1 ml-1"
             color="error"
@@ -109,7 +112,7 @@
             :disabled="isDisabledMore"
             @click="fetchMoreItem()"
           >
-            load more item
+            {{ $t('loadMore') }}
 
             <v-icon right> mdi-arrow-down </v-icon>
           </v-btn>

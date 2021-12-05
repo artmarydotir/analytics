@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <IntroTemplate title="Forgot Password">
+    <IntroTemplate :title="$t('forgetPassword')">
       <template v-slot:frame>
         <ForgotPassword />
       </template>

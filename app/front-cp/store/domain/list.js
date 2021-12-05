@@ -24,7 +24,6 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.DomainList;
 
       if (data.errors) {

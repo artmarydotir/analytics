@@ -64,14 +64,20 @@ export default {
   data() {
     return {
       // loginRole: this.$store.getters['user/auth/GET_ROLE'],
-      simpleItems: [
+    };
+  },
+  computed: {
+    simpleItems() {
+      return [
         {
           title: this.$t('dashboard'),
           action: 'mdi-view-dashboard',
           link: '/dashboard',
         },
-      ],
-      groupItems: [
+      ];
+    },
+    groupItems() {
+      return [
         {
           action: 'mdi-domain',
           title: this.$t('domainManagement'),
@@ -125,25 +131,8 @@ export default {
             },
           ],
         },
-        {
-          action: 'mdi-cog-refresh',
-          title: this.$t('setting'),
-          active: this.$route.path.includes('setting'),
-          items: [
-            {
-              title: this.$t('generalSetting'),
-              link: '/setting/config',
-              canSee: true,
-            },
-            {
-              title: this.$t('backupRestore'),
-              link: '/setting/backup',
-              canSee: true,
-            },
-          ],
-        },
-      ],
-    };
+      ];
+    },
   },
 };
 </script>

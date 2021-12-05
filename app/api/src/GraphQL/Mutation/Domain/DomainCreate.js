@@ -1,25 +1,12 @@
-const { ErrorWithProps } = require('mercurius').default;
 const { constants: userRoles } = require('../../../Schema/UserRoles');
 
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const checkToken = require('../../../Utils/CheckToken');
 
 module.exports = async (_, { data }, { container, token }) => {
   const { DomainCreateRepository } = container;
 
-  if (!token || token.roles !== userRoles.SUPERADMIN) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  checkToken(token, [userRoles.SUPERADMIN]);
 
-  try {
-    const domain = await DomainCreateRepository.addDomain(data);
-    return domain.id;
-  } catch (e) {
-    throw new ErrorWithProps(e.message, {
-      statusCode: e.extensions ? e.extensions.statusCode : 500,
-    });
-  }
+  const domain = await DomainCreateRepository.addDomain(data);
+  return domain.id;
 };

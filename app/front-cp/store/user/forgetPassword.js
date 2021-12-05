@@ -1,7 +1,6 @@
 export const actions = {
   // ***************************************
   async sendCode({ commit }, inputData) {
-    console.log(inputData);
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,

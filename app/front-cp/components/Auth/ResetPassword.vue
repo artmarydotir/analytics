@@ -4,14 +4,14 @@
     <ValidationObserver ref="obs">
       <v-card class="mx-auto" min-height="550px" elevation="7">
         <v-card-title class="pt-12 my-9 text-center justify-center text-h6">
-          <p>
+          <p class="grey--text text--darken-3">
             {{ $t('enterRecoverCode') }}
           </p>
           <nuxt-link
             :to="localePath('forgot-password')"
             class="cyan--text text--darken-3 caption d-flex pb-4 pr-3 pl-3"
           >
-            {{ $t('resend code?') }}
+            {{ $t('resendCode') }}
           </nuxt-link>
         </v-card-title>
         <v-card-text>

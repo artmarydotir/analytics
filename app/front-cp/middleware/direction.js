@@ -1,11 +1,35 @@
-const rtlLanguagesRoutes = /^\/(ar|dv|fa|he|ps|ur|yi)/;
+const allRTLLanguages = ['ar', 'dv', 'fa', 'he', 'ps', 'ur', 'yi'];
 
-export default function ({ app, route }) {
+const supportedLocales = process.env.ASM_BUILD_SUPPORTED_LOCALES
+  ? process.env.ASM_BUILD_SUPPORTED_LOCALES.trim()
+      .split(',')
+      .map((l) => l.trim())
+  : ['fa', 'en'];
 
-  // check for rtl language
-  if (rtlLanguagesRoutes.test(route.path)) {
-    app.vuetify.framework.rtl = true;
+const defaultLocale = process.env.ASM_BUILD_DEFAULT_LOCALE
+  ? process.env.ASM_BUILD_DEFAULT_LOCALE
+  : 'en';
+
+const rtlLanguages = [];
+const ltrLanguages = [];
+supportedLocales.forEach((l) => {
+  if (allRTLLanguages.includes(l)) {
+    rtlLanguages.push(l);
   } else {
-    app.vuetify.framework.rtl = false;
+    ltrLanguages.push(l);
   }
+});
+
+export default function ({ app, route, store }) {
+  const input = route.path.split('/')[1];
+
+  let applicationLanguage = defaultLocale;
+
+  if (supportedLocales.includes(input)) {
+    applicationLanguage = input;
+  }
+
+  app.i18n.locale = applicationLanguage;
+
+  app.vuetify.framework.rtl = rtlLanguages.includes(applicationLanguage);
 }

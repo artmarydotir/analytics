@@ -245,6 +245,15 @@ type OutputDomainProfile {
   options: [Int]
 }
 
+input InputDomainUpdate {
+  domain: String
+  wildcardDomain: String
+  projectId: Int
+  description: String
+  options: JSON
+  additional: [JSONObject]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -257,6 +266,8 @@ type Mutation {
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
   DomainCreate(data: InputDomainCreate): Int
+  DomainUpdate(id: Int!, data: InputDomainUpdate): Int
+  DomainDelete(data: InputGlobalID): Int
 }
 
 # Query list

@@ -10,7 +10,7 @@
       />
     </template>
     <template v-else>
-      {{ $t('domainNotFound') }}
+      {{ $t('noResult') }}
     </template>
   </v-container>
 </template>
@@ -26,7 +26,7 @@ export default {
   },
   head() {
     return {
-      title: this.$t('editDomain'),
+      title: this.$t('domainEdit'),
     };
   },
   async mounted() {
