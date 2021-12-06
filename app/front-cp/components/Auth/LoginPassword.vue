@@ -19,6 +19,7 @@
                   :label="$t('email')"
                   type="text"
                   outlined
+                  dir="ltr"
                   required
                   :error-messages="errors"
                   prepend-inner-icon="mdi-email-outline"
@@ -44,6 +45,7 @@
                   :append-icon="show ? 'mdi-eye-off-outline' : 'mdi-eye'"
                   :type="show ? 'text' : 'password'"
                   outlined
+                  dir="ltr"
                   prepend-inner-icon="mdi-lock-outline"
                   @click:append="show = !show"
                 />

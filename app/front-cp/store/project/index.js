@@ -50,6 +50,49 @@ export const actions = {
     }
   },
   // ***************************************
+  async showPrivateToken({ commit }, input) {
+    console.log(input);
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `query (
+            $projectId: Int!
+            $password: String!
+            ) {
+            ProjectShowPrivateToken(
+              data: {
+                projectId: $projectId
+                password: $password
+              }
+            )
+          }`,
+          variables: input,
+        },
+      );
+
+      const result = data.data.ProjectShowPrivateToken;
+
+      if (data.errors) {
+        throw data.errors;
+      }
+      if (result) {
+        return result;
+      }
+    } catch (error) {
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: `${error}`,
+        },
+        { root: true },
+      );
+      throw error;
+    }
+  },
+  // ***************************************
   async addProject({ commit }, inputData) {
     try {
       const { data } = await this.$axios.post(
@@ -209,4 +252,52 @@ export const actions = {
     }
   },
   // ***************************************
+  async generatePrivateToken({ commit }, id) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation ($id: Int!) {
+            PrivateTokenRegenerate(
+                data: {
+                  id: $id,
+                }
+              )
+          }`,
+          variables: {
+            id,
+          },
+        },
+      );
+
+      const result = data.data.PrivateTokenRegenerate;
+      if (data.errors) {
+        throw new Error(data.errors['0'].message);
+      }
+      if (result) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'Successfully Generate private token.',
+          },
+          { root: true },
+        );
+        return result;
+      }
+    } catch (error) {
+      const { data } = error.response;
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };

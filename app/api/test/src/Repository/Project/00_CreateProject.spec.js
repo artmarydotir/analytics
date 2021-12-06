@@ -116,11 +116,15 @@ describe(__filename.replace(__dirname, ''), () => {
             rules: ['ALL', 'VIEW_A'],
           },
         ],
+        primaryOwner: user3.dataValues.id,
         additional: {},
       }),
     ).toBeTruthy();
 
     await profile.returnProjectData(pData.id);
+
+    // check later
+    expect(await createProject.regeneratePrivateToken(pData.id)).toBeTruthy();
 
     expect(
       await createProject.addProject({

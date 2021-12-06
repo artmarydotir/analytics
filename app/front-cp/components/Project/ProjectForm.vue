@@ -48,11 +48,14 @@
                 <SelectPrimaryOwner
                   :filling-id="innerProject.primaryOwner"
                   :is-required="true"
-                  @sendPrimeryUserValue="onSendPrime"
+                  @sendPrimaryUserValue="onSendPrime"
                 />
               </v-col>
               <v-col v-if="!editMood" cols="12" md="6" lg="4">
                 <ProjectCreationOption @sendOptions="updateOptions" />
+              </v-col>
+              <v-col v-if="editMood" cols="12" md="4" lg="3">
+                <ProjectPrivateToken :project-id="innerProject.id" />
               </v-col>
               <v-col v-if="editMood" cols="12" md="6" lg="4">
                 <ProjectUpdateOption
@@ -168,12 +171,12 @@ export default {
       }
 
       if (this.editMood) {
-        await this.editingMethode();
+        await this.editingMethod();
       } else {
-        await this.creatingMethode();
+        await this.creatingMethod();
       }
     },
-    async editingMethode() {
+    async editingMethod() {
       const re = this.updatingFunction();
       const [, data] = await to(
         this.$store.dispatch('project/updateProject', re),
@@ -186,7 +189,7 @@ export default {
       }
     },
 
-    async creatingMethode() {
+    async creatingMethod() {
       const validity = await this.$refs.obs.validate();
       if (!validity) {
         return;
