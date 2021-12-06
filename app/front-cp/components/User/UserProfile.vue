@@ -15,35 +15,39 @@
           <v-card flat class="mx-auto my-12" max-width="500">
             <v-card-title>
               <v-icon color="primary" large left> mdi-account </v-icon>
-              Welcome {{ profile.username }}
+              {{ $t('welcome') }} {{ profile.username }}
             </v-card-title>
 
             <v-card-text>
               <div class="my-8">
                 <v-row no-gutters>
                   <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
-                    <v-card class="pa-2" outlined tile> Email: </v-card>
+                    <v-card class="pa-2" outlined tile>
+                      {{ $t('email') }} :
+                    </v-card>
                   </v-col>
                   <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
                     <v-card class="pa-2" outlined tile>
                       {{ profile.email }}
                     </v-card>
                   </v-col>
+                  <template v-if="profile.mobile">
+                    <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
+                      <v-card class="pa-2" outlined tile>
+                        {{ $t('mobile') }} :
+                      </v-card>
+                    </v-col>
+                    <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
+                      <v-card class="pa-2" outlined tile>
+                        {{ profile.mobile }}
+                      </v-card>
+                    </v-col>
+                  </template>
+
                   <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
-                    <v-card class="pa-2" outlined tile> Mobile: </v-card>
-                  </v-col>
-                  <v-col
-                    v-if="profile.mobile"
-                    cols="12"
-                    md="6"
-                    class="flex-grow-0 flex-shrink-0"
-                  >
                     <v-card class="pa-2" outlined tile>
-                      {{ profile.mobile }}
+                      {{ $t('status') }} :
                     </v-card>
-                  </v-col>
-                  <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
-                    <v-card class="pa-2" outlined tile> Status </v-card>
                   </v-col>
 
                   <v-col cols="12" md="6" class="flex-grow-0 flex-shrink-0">
@@ -60,11 +64,18 @@
             <v-divider class="mx-4"></v-divider>
 
             <v-card-text class="d-flex align-center">
-              <v-card-title class="pr-0 pl-0">Role:</v-card-title>
-              <v-chip color="primary darken-2 accent-4 ml-3 mr-3" dark small>
-                <span v-if="profile.role === 'AD'"> Admin </span>
-                <span v-if="profile.role === 'VI'"> Viewer </span>
-                <span v-if="profile.role === 'SA'"> Super Admin </span>
+              <v-card-title class="pr-0 pl-0">{{ $t('role') }} :</v-card-title>
+              <v-chip
+                color="primary darken-2 accent-4 ml-3 mr-3"
+                dark
+                small
+                class="mt-1"
+              >
+                <span v-if="profile.role === 'AD'"> {{ $t('admin') }} </span>
+                <span v-if="profile.role === 'VI'"> {{ $t('viewer') }} </span>
+                <span v-if="profile.role === 'SA'">
+                  {{ $t('superAdmin') }}
+                </span>
               </v-chip>
             </v-card-text>
 

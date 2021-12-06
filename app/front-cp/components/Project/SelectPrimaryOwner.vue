@@ -91,7 +91,7 @@ export default {
 
   methods: {
     sendData(v) {
-      this.$emit('sendPrimeryUserValue', v);
+      this.$emit('sendPrimaryUserValue', v);
     },
     async findUserById() {
       const [, data] = await to(

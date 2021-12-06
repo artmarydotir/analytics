@@ -24,6 +24,7 @@
           :label="$t('captcha')"
           type="text"
           outlined
+          dir="ltr"
           :counter="max"
           :error-messages="errors"
           required

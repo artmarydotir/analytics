@@ -204,6 +204,10 @@ type OutputSimpleProjectList {
   docs: [OutputSimpleProjectListDocs]
 }
 
+input InputProjectShowPPToken {
+  projectId: Int!
+  password: String!
+}
 # ********** DOMAIN *************
 
 input InputDomainCreate {
@@ -265,6 +269,7 @@ type Mutation {
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
+  PrivateTokenRegenerate(data: InputGlobalID): String
   DomainCreate(data: InputDomainCreate): Int
   DomainUpdate(id: Int!, data: InputDomainUpdate): Int
   DomainDelete(data: InputGlobalID): Int
@@ -279,6 +284,7 @@ type Query {
   ProjectList(args: InputProjectList): OutputProjectList
   ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
   ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
+  ProjectShowPrivateToken(data: InputProjectShowPPToken): JSONObject
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
 }

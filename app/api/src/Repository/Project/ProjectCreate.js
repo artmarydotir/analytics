@@ -4,6 +4,10 @@ const {
   CreateProjectSchema: projectJoiSchema,
 } = require('../../JoySchema/Project');
 
+const {
+  constantsMerge: errorConstMerge,
+} = require('../../Schema/ErrorMessage');
+
 const { constants: projectOption } = require('../../Schema/ProjectOption');
 
 class ProjectCreate {
@@ -132,6 +136,24 @@ class ProjectCreate {
       .toString('base64')
       .replace(/[^a-z0-9]/gi, '')
       .substr(0, 12);
+  }
+
+  /**
+   *
+   * @param {*} projectId
+   * @returns
+   */
+  async regeneratePrivateToken(projectId) {
+    const { Project } = this.sequelize.models;
+    const project = await Project.findByPk(projectId);
+    if (!project) {
+      throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+        statusCode: 404,
+      });
+    }
+    project.privateToken = this.generatePrivateToken();
+    await project.save();
+    return project.dataValues;
   }
 }
 

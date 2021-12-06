@@ -20,6 +20,7 @@
                   type="text"
                   outlined
                   required
+                  dir="ltr"
                   :error-messages="errors"
                   :success="valid"
                   prepend-inner-icon="mdi-email-outline"
@@ -42,6 +43,7 @@
                   :success="valid"
                   :label="$t('otpCode')"
                   type="text"
+                  dir="ltr"
                   outlined
                   prepend-inner-icon="mdi-lock-reset"
                   @click:append="show = !show"

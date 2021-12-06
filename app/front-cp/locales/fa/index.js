@@ -40,7 +40,15 @@ module.exports = {
   userManagement: 'مدیریت کاربران',
   userAdd: 'افزودن کاربر',
   userList: 'لیست کاربر',
+  showProfile: 'نمایش پروفایل',
+  logOut: 'خروج',
 
+  // ## Profile
+  welcome: 'خوش آمدید',
+  mobile: 'موبایل',
+  role: 'نقش',
+  viewer: 'مشاهده کننده',
+  superAdmin: 'سوپر ادمین',
   // ## DOMAIN
   domain: 'دامنه',
   wildcardDomain: 'دامنه ی وایلدکارد',
@@ -57,6 +65,8 @@ module.exports = {
   noResult: 'هیچ داده ای یافت نشد.',
   loadMore: 'بیشتر...',
   domainEdit: 'ویرایش دامنه',
+  // ## PROJECT
+  showPrivateToken: 'نمایش کد خصوصی',
   validations: {
     mobileNumber: '{_field_} صحیح نمی‌باشد.',
     min: '{_field_} حداقل باید {length} باشد.',
