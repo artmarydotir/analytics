@@ -18,7 +18,7 @@ module.exports = async (_, { args }, { container, token }) => {
 
   let list = [];
 
-  if (token.roles !== userRoles.VIEWER) {
+  if (token.roles !== userRoles.CLIENT) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });

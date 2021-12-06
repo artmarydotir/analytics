@@ -42,7 +42,7 @@ module.exports = {
   userList: 'لیست کاربر',
   showProfile: 'نمایش پروفایل',
   logOut: 'خروج',
-
+  client: 'کلاینت',
   // ## Profile
   welcome: 'خوش آمدید',
   mobile: 'موبایل',
@@ -66,7 +66,28 @@ module.exports = {
   loadMore: 'بیشتر...',
   domainEdit: 'ویرایش دامنه',
   // ## PROJECT
+  title: 'عنوان',
+  publicToken: 'کد عمومی',
+  primaryOwner: 'صاحب اصلی پروژه',
+  selectUserSearch: 'کاربر مورد نظر را جستجو کنید',
+  selectUser: 'افزودن کاربر',
+  selectRules: 'انتخاب قواعد',
   showPrivateToken: 'نمایش کد خصوصی',
+  createdAt: 'تاریخ ایجاد',
+  users: 'کاربران',
+  showPrivateTokenQuote:
+    'کاربر گرامی ، جهت مشاهده ی توکن خصوصی این پروژه لطفا رمز عبور خود را وارد نمایید.',
+  privateToken: 'کد خصوصی',
+  close: 'بستن',
+  projectEdit: 'ویرایش پروژه',
+  projectNotFound: 'پروژه یافت نشد',
+  // ## USERS
+  username: 'نام کاربری',
+  chooseRole: 'انتخاب نقش',
+  chooseLang: 'انتخاب زبان',
+  selectCountry: 'انتخاب کشور',
+  mobileNumber: 'شماره موبایل',
+  id: 'آیدی',
   validations: {
     mobileNumber: '{_field_} صحیح نمی‌باشد.',
     min: '{_field_} حداقل باید {length} باشد.',

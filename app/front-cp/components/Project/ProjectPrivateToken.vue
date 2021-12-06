@@ -13,7 +13,7 @@
       </v-card-title>
 
       <v-card-text>
-        <p class="body2 pa-5">
+        <p class="body2 pt-5 pb-5">
           {{ $t('showPrivateTokenQuote') }}
         </p>
         <ValidationObserver ref="obs">

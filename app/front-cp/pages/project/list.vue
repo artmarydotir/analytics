@@ -2,7 +2,7 @@
   <v-container class="pt-6" fluid>
     <template v-if="userRole === 'VI'">
       <ProjectOwnerList
-        :headers="headersViewer"
+        :headers="headersClient"
         :general-action="ownerGeneralAction"
         :module-info="ownerModuleData"
       />
@@ -41,7 +41,7 @@ export default {
         editable: true,
       },
       ownerModuleData: {
-        url: 'project/list/viewerListProject',
+        url: 'project/list/clientListProject',
         name: 'projectEntity',
       },
       ownerGeneralAction: {

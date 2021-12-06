@@ -1,7 +1,7 @@
 const constants = {
   SUPERADMIN: 'SA',
   ADMIN: 'AD',
-  VIEWER: 'VI',
+  CLIENT: 'CL',
 };
 
 const list = Object.values(constants);

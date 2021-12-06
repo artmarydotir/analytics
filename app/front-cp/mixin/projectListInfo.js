@@ -59,7 +59,7 @@ const listInfo = {
         },
       ];
     },
-    headersViewer() {
+    headersClient() {
       return [
         {
           text: this.$t('title'),

@@ -117,8 +117,8 @@ export default {
           value: 'AD',
         },
         {
-          name: 'Viewer',
-          value: 'VI',
+          name: 'Client',
+          value: 'CL',
         },
       ],
       isDisabled: false,

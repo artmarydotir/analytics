@@ -29,17 +29,6 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <!-- <template v-slot:[`item.role`]="{ item }">
-          <v-chip dark small label class="ma-1" color="secondary">
-            {{ calculateRole(item.role) }}
-             <span v-if="item.role == 'AD'"> Admin </span>
-            <span v-if="item.role == 'SA'"> Super Admin </span>
-            <span v-if="item.role == 'VI'"> Viewer </span>
-          </v-chip>
-        </template> -->
-
-        <!-- dynamicslot  -->
-
         <!-- Action  -->
         <template v-slot:[`item.actions`]="{ item }">
           <nuxt-link

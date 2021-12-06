@@ -158,20 +158,6 @@ export default {
   },
   data() {
     return {
-      roleList: [
-        {
-          name: 'superAdmin',
-          value: 'SA',
-        },
-        {
-          name: 'Admin',
-          value: 'AD',
-        },
-        {
-          name: 'Viewer',
-          value: 'VI',
-        },
-      ],
       confirmation: '',
       show: false,
       show1: false,

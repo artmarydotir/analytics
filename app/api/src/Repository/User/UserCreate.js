@@ -31,7 +31,7 @@ class UserCreate {
       username,
       email,
       password,
-      role = userRoleObject.VIEWER,
+      role = userRoleObject.CLIENT,
       lang = 'fa',
       options = [userOption.ACTIVE],
       country = 'IR',

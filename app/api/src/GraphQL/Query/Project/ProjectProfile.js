@@ -15,7 +15,7 @@ module.exports = async (_, { data }, { container, token }) => {
     });
   }
 
-  if (!token.roles || token.roles === userRoles.VIEWER) {
+  if (!token.roles || token.roles === userRoles.CLIENT) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });

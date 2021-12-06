@@ -99,8 +99,8 @@ export const actions = {
       throw new Error('error');
     }
   },
-  // ****************role=viewer***********************
-  async viewerListProject({ commit }, input) {
+  // ****************role=client***********************
+  async clientListProject({ commit }, input) {
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,

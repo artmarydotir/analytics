@@ -10,7 +10,7 @@ module.exports = async (_, { args }, { container, token }) => {
 
   const { ProjectListRepository } = container;
 
-  if (!token || token.roles === userRoles.VIEWER) {
+  if (!token || token.roles === userRoles.CLIENT) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });

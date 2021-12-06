@@ -10,7 +10,7 @@
       item-value="alpha2Code"
       autocomplete
       prepend-inner-icon="mdi-earth-plus"
-      :label="`${$t('selectCountry')}`"
+      :label="$t('selectCountry')"
     >
       <template slot="item" slot-scope="{ item }">
         <span class="pr-2">{{ item.emoji }}</span>

@@ -45,7 +45,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await helper.CreateUserHeaderAndToken(
       'forlistcheck',
       'forlistcheck@gmail.com',
-      'VI',
+      'CL',
       [1],
     );
 

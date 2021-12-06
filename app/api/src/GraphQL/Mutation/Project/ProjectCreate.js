@@ -9,7 +9,7 @@ module.exports = async (_, { data }, { container, token }) => {
   const { ProjectCreateRepository } = container;
   console.log(data);
 
-  if (!token || token.roles === userRoles.VIEWER) {
+  if (!token || token.roles === userRoles.CLIENT) {
     throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });

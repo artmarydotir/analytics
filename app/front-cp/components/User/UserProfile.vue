@@ -72,7 +72,7 @@
                 class="mt-1"
               >
                 <span v-if="profile.role === 'AD'"> {{ $t('admin') }} </span>
-                <span v-if="profile.role === 'VI'"> {{ $t('viewer') }} </span>
+                <span v-if="profile.role === 'CL'"> {{ $t('client') }} </span>
                 <span v-if="profile.role === 'SA'">
                   {{ $t('superAdmin') }}
                 </span>
