@@ -37,7 +37,7 @@ class DomainCreate {
       wildcardDomain,
       projectId,
       description,
-      options = [domainOption.ACTIVE],
+      options,
       additional = {},
     } = data;
 
@@ -64,7 +64,7 @@ class DomainCreate {
       domain: null,
       wildcardDomain: null,
       description: null,
-      options: null,
+      options: [domainOption.ACTIVE],
       additional: null,
       ProjectId: null,
       enabled: true,
@@ -108,7 +108,7 @@ class DomainCreate {
     if (description) {
       initialValues.description = description;
     }
-    if (options) {
+    if (options.length > 0) {
       initialValues.options = options;
     }
     if (additional) {

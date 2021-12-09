@@ -100,7 +100,7 @@ export default {
       userDocs: [],
       search: '',
       user: '',
-      rules: ['ALL', 'VIEW_A', 'VIEW_C'],
+      rules: ['PROJECTADMIN', 'VIEWALL'],
       userAndRules: [],
       loopingList: [],
       delivers: [],

@@ -17,5 +17,6 @@ module.exports = async (_, { data }, { container, token }) => {
     id,
     removingData,
   );
+  console.log(result);
   return result.id;
 };

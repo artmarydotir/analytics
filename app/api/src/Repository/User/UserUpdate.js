@@ -102,8 +102,6 @@ class UserUpdate {
     let owners = [];
     if (inabilityStatus === false) {
       owners = await this.findPrimaryOwnerOfProject(id);
-
-      console.log('-----------', owners);
     }
 
     if (additional && typeof additional === 'object') {
@@ -158,11 +156,10 @@ class UserUpdate {
         });
       }
       if (inabilityStatus === false) {
-        const c = await UserProject.destroy({
+        await UserProject.destroy({
           where: { UserId: id },
           transaction: t,
         });
-        console.log('------affected-----', c);
       }
 
       await t.commit();
@@ -274,7 +271,7 @@ class UserUpdate {
    * @param {Number} id
    * @param {Object.<string, boolean>} props
    */
-  // FIXME: This method is not used anymore for delete user. must change
+
   async patchUserOptions(id, props) {
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -282,8 +279,8 @@ class UserUpdate {
       });
     }
 
-    const getOptions = await this.retrieveUserOptions(id, props);
     let inabilityStatus = false;
+    const getOptions = await this.retrieveUserOptions(id, props);
 
     if (
       getOptions.includes(userOption.DELETED) ||
@@ -297,8 +294,6 @@ class UserUpdate {
     let owners = [];
     if (inabilityStatus === false) {
       owners = await this.findPrimaryOwnerOfProject(id);
-
-      console.log('-----------', owners);
     }
 
     const t = await this.sequelize.transaction();
@@ -347,11 +342,10 @@ class UserUpdate {
       }
       // Remove this user from user projects rules.
       if (inabilityStatus === false) {
-        const c = await UserProject.destroy({
+        await UserProject.destroy({
           where: { UserId: id },
           transaction: t,
         });
-        console.log('------affected-----', c);
       }
 
       await t.commit();

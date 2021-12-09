@@ -1,6 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
-    <template v-if="userRole === 'VI'">
+    <template v-if="userRole === 'CL'">
       <ProjectOwnerList
         :headers="headersClient"
         :general-action="ownerGeneralAction"

@@ -273,6 +273,10 @@ class ProjectUpdate {
 
     return newOption;
   }
+
+  // async updateRulesByClient(id, rules) {
+
+  // }
 }
 
 module.exports = ProjectUpdate;

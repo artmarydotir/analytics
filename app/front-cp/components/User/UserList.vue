@@ -133,7 +133,7 @@ import tableFunctions from '@/mixin/tableFunctions';
 const { to } = require('await-to-js');
 
 export default {
-  name: 'Userable',
+  name: 'UserTable',
   mixins: [tableFunctions],
   props: {
     generalAction: {
@@ -231,8 +231,9 @@ export default {
       const [err, data] = await to(
         this.$store.dispatch(this.moduleInfo.rmUrl, id),
       );
+      console.log(data, '00');
       if (data) {
-        this.dialog = false;
+        console.log('---deleteddvsvsdv');
         const result = await this.callTableListApi(
           {
             lastSeen: undefined,
@@ -242,6 +243,8 @@ export default {
           this.moduleInfo.url,
         );
         this.userDocs = result;
+        console.log('---deleted');
+        // this.dialog = false;
       }
       if (err) {
         this.dialog = false;

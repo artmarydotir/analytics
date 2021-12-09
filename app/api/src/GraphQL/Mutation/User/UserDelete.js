@@ -20,12 +20,6 @@ module.exports = async (_, { data }, { container, token }) => {
     DELETED: true,
   };
 
-  try {
-    return await UserUpdateRepository.patchUserOptions(id, removingData);
-  } catch (e) {
-    throw new ErrorWithProps(e.message, {
-      statusCode: e.extensions ? e.extensions.statusCode : 500,
-      message: e.extensions ? e.extensions.validation : '',
-    });
-  }
+  const result = await UserUpdateRepository.patchUserOptions(id, removingData);
+  return result.id;
 };

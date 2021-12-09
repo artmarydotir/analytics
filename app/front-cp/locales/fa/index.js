@@ -88,6 +88,9 @@ module.exports = {
   selectCountry: 'انتخاب کشور',
   mobileNumber: 'شماره موبایل',
   id: 'آیدی',
+  editProfile: 'ویرایش پروفایل',
+  editData: 'ویرایش اطلاعات',
+  editPassword: 'ویرایش رمز عبور',
   validations: {
     mobileNumber: '{_field_} صحیح نمی‌باشد.',
     min: '{_field_} حداقل باید {length} باشد.',

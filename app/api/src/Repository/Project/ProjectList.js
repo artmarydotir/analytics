@@ -178,7 +178,13 @@ class ProjectList {
       queryBuilding.length > 0 ? `AND ${queryBuilding.join(' AND ')}` : '';
 
     const projectDataList = await this.sequelize.query(
-      `SELECT "title", "id", "description", "publicToken"
+      `SELECT
+      "Projects"."id",
+      "Projects"."title",
+      "Projects"."description",
+      "Projects"."publicToken",
+      "UserProjects"."rules",
+
         FROM "UserProjects"
           LEFT JOIN "Projects" ON (
             "Projects"."id" = "UserProjects"."ProjectId"
@@ -200,6 +206,9 @@ class ProjectList {
       },
     );
 
+    console.log('--------------');
+    console.log(projectDataList);
+    console.log('--------------');
     const result = projectDataList.map((project) => ({
       ...project.dataValues,
     }));

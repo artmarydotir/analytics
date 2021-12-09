@@ -117,7 +117,7 @@ export const actions = {
                 lastSeen: $lastSeen
               }
             ) {
-              docs { id title publicToken description }
+              docs { id title publicToken description rules}
             }
           }`,
           variables: input,

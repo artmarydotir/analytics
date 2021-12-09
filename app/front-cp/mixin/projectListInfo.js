@@ -80,6 +80,13 @@ const listInfo = {
           value: 'publicToken',
           width: '15%',
         },
+        {
+          text: this.$t('action'),
+          value: 'actions',
+          sortable: false,
+          width: '11%',
+          align: 'center',
+        },
       ];
     },
   },

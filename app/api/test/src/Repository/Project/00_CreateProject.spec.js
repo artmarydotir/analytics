@@ -91,14 +91,15 @@ describe(__filename.replace(__dirname, ''), () => {
     const pData = await createProject.addProject({
       title: 'for profile test',
       description: 'hey hello',
+
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL'],
+          rules: ['VIEWALL'],
         },
         {
           UserId: user2.dataValues.id,
-          rules: ['VIEW_A'],
+          rules: ['VIEWALL'],
         },
       ],
       primaryOwner: user3.dataValues.id,
@@ -113,7 +114,7 @@ describe(__filename.replace(__dirname, ''), () => {
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_A'],
+            rules: ['VIEWALL'],
           },
         ],
         primaryOwner: user3.dataValues.id,
@@ -134,11 +135,11 @@ describe(__filename.replace(__dirname, ''), () => {
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_A'],
+            rules: ['PROJECTADMIN'],
           },
           {
             UserId: user2.dataValues.id,
-            rules: ['ALL', 'VIEW_A'],
+            rules: ['PROJECTADMIN'],
           },
         ],
         primaryOwner: user.dataValues.id,
@@ -148,12 +149,12 @@ describe(__filename.replace(__dirname, ''), () => {
 
     expect(
       await createProject.addProject({
-        title: 'donyayeEf',
+        title: 'maryychecjkkk',
         description: 'hey this is a description',
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_A'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
         ],
         additional: {},

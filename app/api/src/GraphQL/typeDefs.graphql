@@ -187,6 +187,7 @@ type OutputProjectListOwnerDocs {
   title: String
   description: String
   publicToken: String
+  rules: [String]
 }
 
 input InputProjectListOwner {
@@ -258,6 +259,10 @@ input InputDomainUpdate {
   additional: [JSONObject]
 }
 
+input InputGravatar {
+  email: String!
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -265,7 +270,7 @@ type Mutation {
   UserUpdate(id: Int!, data: InputUserUpdate): Int
   UserUpdatePassword(data: InputUpdatePassword): JSON
   OtpGenerate(data: InputOtpGenerate): String
-  UserDelete(data: InputGlobalID): JSON
+  UserDelete(data: InputGlobalID): Int
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
@@ -279,6 +284,7 @@ type Mutation {
 type Query {
   UserForgotPassword(data: InputForgotPassword): String
   UserProfile(data: InputGlobalID): OutputUserProfile
+  Gravatar(data: InputGravatar): String
   UserList(args: InputUserList): OutputUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
   ProjectList(args: InputProjectList): OutputProjectList

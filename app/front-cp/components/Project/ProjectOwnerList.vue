@@ -7,7 +7,6 @@
         {{ $t(generalAction.title) }}
         <v-spacer />
       </v-card-title>
-
       <v-data-table
         single-select
         item-key="id"
@@ -23,9 +22,9 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <template v-slot:[`item.options`]="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-chip
-            v-if="item.options.includes(1)"
+            v-if="item.rules.includes('PROJECTADMIN')"
             dark
             small
             label
@@ -33,18 +32,7 @@
             class="ma-1"
             color="green"
           >
-            {{ $t('active') }}
-          </v-chip>
-          <v-chip
-            v-if="item.options.includes(2)"
-            dark
-            label
-            small
-            outlined
-            class="ma-1"
-            color="orange"
-          >
-            {{ $t('deleted') }}
+            yes
           </v-chip>
         </template>
 

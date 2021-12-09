@@ -20,6 +20,7 @@ const constants = {
   FORBIDDEN: '',
   DUPLICATE_ENTRY: '',
   NOT_ALLOWED: '',
+  INVALID_PROJECT_RULE: '',
 };
 
 const list = Object.values(constants);

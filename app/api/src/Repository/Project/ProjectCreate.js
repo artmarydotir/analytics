@@ -9,6 +9,7 @@ const {
 } = require('../../Schema/ErrorMessage');
 
 const { constants: projectOption } = require('../../Schema/ProjectOption');
+const { list: projectRule } = require('../../Schema/ProjectRules');
 
 class ProjectCreate {
   constructor({ sequelize }) {
@@ -32,7 +33,7 @@ class ProjectCreate {
       publicToken,
       description,
       userAndRules,
-      options = [projectOption.ACTIVE],
+      options,
       additional = {},
       primaryOwner,
     } = data;
@@ -59,7 +60,7 @@ class ProjectCreate {
     const initialValues = {
       title: null,
       description: null,
-      options: null,
+      options: [projectOption.ACTIVE],
       privateToken: null,
       publicToken: null,
       additional: null,
@@ -74,7 +75,7 @@ class ProjectCreate {
     if (description) {
       initialValues.description = description;
     }
-    if (options) {
+    if (options.length > 0) {
       initialValues.options = options;
     }
     if (additional) {
@@ -87,6 +88,15 @@ class ProjectCreate {
     }
     initialValues.privateToken = this.generatePrivateToken();
     initialValues.primaryOwner = primaryOwner;
+
+    userAndRules.forEach((element) => {
+      const valid = element.rules.every((elem) => projectRule.includes(elem));
+      if (!valid) {
+        throw new ErrorWithProps(errorConstMerge.INVALID_PROJECT_RULE, {
+          statusCode: 422,
+        });
+      }
+    });
 
     if (userAndRules) {
       middleTable.userAndRules = userAndRules;
