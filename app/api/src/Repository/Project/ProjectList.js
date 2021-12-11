@@ -183,7 +183,7 @@ class ProjectList {
       "Projects"."title",
       "Projects"."description",
       "Projects"."publicToken",
-      "UserProjects"."rules",
+      "UserProjects"."rules"
 
         FROM "UserProjects"
           LEFT JOIN "Projects" ON (
@@ -206,14 +206,57 @@ class ProjectList {
       },
     );
 
-    console.log('--------------');
-    console.log(projectDataList);
-    console.log('--------------');
-    const result = projectDataList.map((project) => ({
-      ...project.dataValues,
-    }));
+    const promises = [];
 
-    return { docs: result };
+    projectDataList.forEach((project) => {
+      const re = this.findAllUserByProjectId(project.id).then((users) => {
+        project.members = users;
+      });
+      promises.push(re);
+    });
+
+    await Promise.all(promises).then(() => projectDataList);
+
+    return projectDataList;
+  }
+
+  /**
+   *
+   * @param {*} projectId
+   * @returns
+   */
+  async findAllUserByProjectId(projectId) {
+    const { UserProject } = this.sequelize.models;
+
+    const rawQueryFindAllUsernameProjectById = `
+      SELECT
+        "Users"."id",
+        "Users"."username"
+      FROM "Users"
+        LEFT JOIN "UserProjects" ON (
+          "Users"."id" = "UserProjects"."UserId"
+        )
+      WHERE
+        "UserProjects"."ProjectId" = :projectId
+      AND
+        "Users"."options" = ARRAY[1]
+      ORDER BY "Users"."id" ASC;
+    `;
+
+    const result = await this.sequelize.query(
+      rawQueryFindAllUsernameProjectById,
+      {
+        replacements: { projectId },
+        model: UserProject,
+        mapToModel: true,
+        type: QueryTypes.SELECT,
+      },
+    );
+
+    return result.map((user) => ({
+      id: user.dataValues.id,
+      username: user.dataValues.username,
+    }));
   }
 }
 

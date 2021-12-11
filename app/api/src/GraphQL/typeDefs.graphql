@@ -50,6 +50,12 @@ input InputGlobalID {
   id: Int!
 }
 
+input InputGlobalList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
 # ********** FORGOT_PASSWORD *************
 input InputForgotPassword {
   email: EmailAddress!
@@ -177,24 +183,7 @@ type OutputProjectList {
   docs: [OutputProjectListDocs]
 }
 
-## project owner
-type OutputProjectOwnerList {
-  docs: [OutputProjectListOwnerDocs]
-}
-
-type OutputProjectListOwnerDocs {
-  id: Int
-  title: String
-  description: String
-  publicToken: String
-  rules: [String]
-}
-
-input InputProjectListOwner {
-  filter: JSON = {}
-  lastSeen: Int
-  limit: Int = 9
-}
+## project owner-resolver
 
 type OutputSimpleProjectListDocs {
   id: Int
@@ -263,6 +252,20 @@ input InputGravatar {
   email: String!
 }
 
+## RESOLVERS
+type Project {
+  id: Int
+  title: String
+  description: String
+  publicToken: String
+  rules: [String]
+  members: [JSONObject]
+}
+
+type OutputProjectOwnerList {
+  docs: [Project]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -289,8 +292,10 @@ type Query {
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
   ProjectList(args: InputProjectList): OutputProjectList
   ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
-  ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
   ProjectShowPrivateToken(data: InputProjectShowPPToken): JSONObject
+
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
+  ##
+  GetProjects(args: InputGlobalList): OutputProjectOwnerList
 }

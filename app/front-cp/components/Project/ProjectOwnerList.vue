@@ -90,6 +90,7 @@ export default {
       loading: false,
       filter: {},
       isDisabledMore: false,
+      allUsers: [],
     };
   },
   computed: {

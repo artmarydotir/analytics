@@ -49,6 +49,7 @@ const {
 
 const Query = require('./Query');
 const Mutation = require('./Mutation');
+// const OtherResolvers = require('./Resolvers');
 
 module.exports = {
   // graphql-scalars
@@ -101,4 +102,15 @@ module.exports = {
   // custom
   Query,
   Mutation,
+  // OtherResolvers,
+  // Project: {
+  //   members: async (root, args, { container }) => {
+  //     console.log(root);
+  //     console.log(args);
+  //     // const { ProjectListRepository } = container;
+  //     // return ProjectListRepository.findAllUserByProjectId(id);
+  //     // console.log(context.event);
+  //   },
+  //   // data: async (parent, args, context) => parent,
+  // },
 };

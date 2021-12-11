@@ -81,6 +81,12 @@ const listInfo = {
           width: '15%',
         },
         {
+          text: this.$t('members'),
+          sortable: false,
+          value: 'members',
+          width: '15%',
+        },
+        {
           text: this.$t('action'),
           value: 'actions',
           sortable: false,

@@ -110,21 +110,22 @@ export const actions = {
               $limit: Int,
               $filter: JSON
             ) {
-            ProjectOwnerList(
+            GetProjects(
               args: {
                 filter: $filter,
                 limit: $limit,
                 lastSeen: $lastSeen
               }
             ) {
-              docs { id title publicToken description rules}
+              docs { title, id , rules, members }
             }
           }`,
           variables: input,
         },
       );
 
-      const result = data.data.ProjectOwnerList;
+      console.log(data);
+      const result = data.data.GetProjects;
 
       if (data.errors) {
         throw data.errors;
