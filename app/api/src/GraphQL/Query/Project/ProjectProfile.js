@@ -1,33 +1,20 @@
-const { ErrorWithProps } = require('mercurius').default;
-const { constants: userRoles } = require('../../../Schema/UserRoles');
+const checkToken = require('../../../Utils/CheckToken');
 
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const { constants: userRoles } = require('../../../Schema/UserRoles');
 
 module.exports = async (_, { data }, { container, token }) => {
   const { ProjectProfileRepository } = container;
   const { id } = data;
 
-  if (!token) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
+  checkToken(token, _, [
+    userRoles.ADMIN,
+    userRoles.SUPERADMIN,
+    userRoles.CLIENT,
+  ]);
+
+  // bug detected
+  if (token.roles === userRoles.CLIENT) {
+    return ProjectProfileRepository.returnProjectData(id, true);
   }
-
-  if (!token.roles || token.roles === userRoles.CLIENT) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
-
-  const project = ProjectProfileRepository.returnProjectData(id);
-
-  if (!project) {
-    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
-      statusCode: 404,
-    });
-  }
-
-  return project;
+  return ProjectProfileRepository.returnProjectData(id);
 };

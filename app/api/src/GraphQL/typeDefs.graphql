@@ -162,12 +162,6 @@ input InputProjectUpdate {
   primaryOwner: Int
 }
 
-input InputProjectList {
-  filter: JSON = {}
-  lastSeen: Int
-  limit: Int = 9
-}
-
 type OutputProjectListDocs {
   id: Int
   title: String
@@ -182,8 +176,6 @@ type OutputProjectListDocs {
 type OutputProjectList {
   docs: [OutputProjectListDocs]
 }
-
-## project owner-resolver
 
 type OutputSimpleProjectListDocs {
   id: Int
@@ -252,18 +244,17 @@ input InputGravatar {
   email: String!
 }
 
-## RESOLVERS
-type Project {
+type MemberListDocs {
   id: Int
   title: String
-  description: String
   publicToken: String
+  description: String
   rules: [String]
   members: [JSONObject]
 }
 
 type OutputProjectOwnerList {
-  docs: [Project]
+  docs: [MemberListDocs]
 }
 
 # Mutation list
@@ -290,12 +281,11 @@ type Query {
   Gravatar(data: InputGravatar): String
   UserList(args: InputUserList): OutputUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
-  ProjectList(args: InputProjectList): OutputProjectList
-  ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
+  ProjectList(args: InputGlobalList): OutputProjectList
+  ClientProjectList(args: InputGlobalList): OutputProjectOwnerList
+  ProjectSimpleList(args: InputGlobalList): OutputSimpleProjectList
   ProjectShowPrivateToken(data: InputProjectShowPPToken): JSONObject
 
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
-  ##
-  GetProjects(args: InputGlobalList): OutputProjectOwnerList
 }

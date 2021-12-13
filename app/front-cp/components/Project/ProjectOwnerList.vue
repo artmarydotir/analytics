@@ -22,18 +22,30 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <template v-slot:[`item.actions`]="{ item }">
+        <template v-slot:[`item.members`]="{ item }">
           <v-chip
-            v-if="item.rules.includes('PROJECTADMIN')"
+            v-for="member in item.members"
+            :key="member.id"
             dark
             small
             label
             outlined
             class="ma-1"
-            color="green"
+            color="purple"
           >
-            yes
+            {{ member.username }}
           </v-chip>
+        </template>
+
+        <template v-slot:[`item.actions`]="{ item }">
+          <div v-if="item.rules.includes('PROJECTADMIN')">
+            <nuxt-link
+              :to="localePath({ path: `/project/management/${item.id}` })"
+              link
+            >
+              <v-icon text class="mr-1 ml-1"> mdi-pencil </v-icon>
+            </nuxt-link>
+          </div>
         </template>
 
         <template v-slot:no-results>

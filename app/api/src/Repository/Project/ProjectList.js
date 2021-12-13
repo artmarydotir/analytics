@@ -132,14 +132,6 @@ class ProjectList {
               }
             });
           }
-          // if (type === 'ids') {
-          //   query.forEach((q) => {
-          //     if (q.colName === `${name}`) {
-          //       q.colOp = '=';
-          //       q.colValue = value;
-          //     }
-          //   });
-          // }
         }
       });
     }
@@ -208,6 +200,7 @@ class ProjectList {
 
     const promises = [];
 
+    // console.log(projectDataList);
     projectDataList.forEach((project) => {
       const re = this.findAllUserByProjectId(project.id).then((users) => {
         project.members = users;
@@ -215,9 +208,16 @@ class ProjectList {
       promises.push(re);
     });
 
-    await Promise.all(promises).then(() => projectDataList);
+    await Promise.all(promises);
 
-    return projectDataList;
+    return projectDataList.map((project) => ({
+      id: project.dataValues.id,
+      title: project.dataValues.title,
+      description: project.dataValues.description,
+      publicToken: project.dataValues.publicToken,
+      rules: project.rules,
+      members: project.members,
+    }));
   }
 
   /**

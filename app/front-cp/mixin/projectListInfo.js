@@ -66,7 +66,7 @@ const listInfo = {
           sortable: false,
           value: 'title',
           type: 'text',
-          width: '18%',
+          width: '16%',
         },
         {
           text: this.$t('description'),

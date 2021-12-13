@@ -8,7 +8,9 @@ export const getters = {};
 
 export const actions = {
   // ***************************************
-  async showProjectProfile({ commit }, projectId) {
+  async showProjectProfile({ commit }, { projectId, fields }) {
+    const fieldString = fields.join(' ');
+
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -19,7 +21,7 @@ export const actions = {
                 id: $id
               }
             ) {
-              id title description options userAndRules publicToken primaryOwner
+              ${fieldString}
             }
           }`,
           variables: {

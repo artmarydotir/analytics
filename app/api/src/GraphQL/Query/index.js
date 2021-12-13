@@ -5,7 +5,7 @@ const ProjectProfile = require('./Project/ProjectProfile');
 const UserForgotPassword = require('./User/UserForgotPassword');
 const ProjectList = require('./Project/ProjectList');
 const ProjectSimpleList = require('./Project/ProjectSimpleList');
-const GetProjects = require('./Project/ClientProjectList');
+const ClientProjectList = require('./Project/ClientProjectList');
 const ProjectShowPrivateToken = require('./Project/ProjectShowPrivateToken');
 const DomainList = require('./Domain/DomainList');
 const DomainProfile = require('./Domain/DomainProfile');
@@ -17,9 +17,9 @@ module.exports = {
   UserForgotPassword,
   ProjectProfile,
   ProjectList,
+  ClientProjectList,
   ProjectSimpleList,
   ProjectShowPrivateToken,
   DomainList,
   DomainProfile,
-  GetProjects,
 };

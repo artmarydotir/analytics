@@ -1,12 +1,9 @@
 <template>
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
+    {{ $route.params.id }}
     <template v-if="loading">
-      <ProjectForm
-        :title="$t('projectEdit')"
-        :edit-mood="true"
-        :project="project"
-      />
+      <ProjectUserManagement />
     </template>
     <template v-else>
       {{ $t('projectNotFound') }}
@@ -25,23 +22,16 @@ export default {
   },
   head() {
     return {
-      title: this.$t('editProject'),
+      title: this.$t('manageProject'),
     };
   },
+  // eslint-disable-next-line require-await
   async mounted() {
     this.loading = false;
     if (this.projectId) {
       const result = await this.$store.dispatch('project/showProjectProfile', {
         projectId: this.projectId,
-        fields: [
-          'id',
-          'title',
-          'description',
-          'options',
-          'userAndRules',
-          'publicToken',
-          'primaryOwner',
-        ],
+        fields: ['id', 'title', 'userAndRules'],
       });
       if (result) {
         this.loading = true;
