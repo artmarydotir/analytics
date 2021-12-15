@@ -2,7 +2,7 @@
   <v-row>
     <v-toolbar dark color="teal">
       <v-toolbar-title v-show="$vuetify.breakpoint.mdAndUp" class="mr-3 ml-2">
-        Select User:
+        {{ $t('selectUser') }}
       </v-toolbar-title>
 
       <v-autocomplete
@@ -18,7 +18,7 @@
         clearable
         return-object
         solo-inverted
-        :label="$t('Which user you want to search?')"
+        :label="$t('selectUserSearch')"
         :search-input.sync="search"
         @change="makeAlist"
       >
@@ -100,7 +100,7 @@ export default {
       userDocs: [],
       search: '',
       user: '',
-      rules: ['ALL', 'VIEW_A', 'VIEW_C'],
+      rules: ['PROJECTADMIN', 'VIEWALL'],
       userAndRules: [],
       loopingList: [],
       delivers: [],

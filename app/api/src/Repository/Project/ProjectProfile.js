@@ -15,7 +15,7 @@ class ProjectProfile {
    * @returns {Promise<object>}
    */
 
-  async returnProjectData(projectId) {
+  async returnProjectData(projectId, client = false) {
     const { Project, UserProject } = this.sequelize.models;
 
     if (!projectId) {
@@ -25,20 +25,21 @@ class ProjectProfile {
     }
 
     const project = await Project.findOne({
-      attributes: [
-        'id',
-        'title',
-        'publicToken',
-        'description',
-        'options',
-        'primaryOwner',
-      ],
+      attributes: client
+        ? ['id', 'title']
+        : [
+            'id',
+            'title',
+            'publicToken',
+            'description',
+            'options',
+            'primaryOwner',
+          ],
       where: {
         id: projectId,
       },
     });
 
-    // todo AND "Users"."options" = ARRAY[1]
     const usersDoc = await this.sequelize.query(
       `
         SELECT

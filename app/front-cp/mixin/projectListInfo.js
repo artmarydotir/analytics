@@ -59,14 +59,14 @@ const listInfo = {
         },
       ];
     },
-    headersViewer() {
+    headersClient() {
       return [
         {
           text: this.$t('title'),
           sortable: false,
           value: 'title',
           type: 'text',
-          width: '18%',
+          width: '16%',
         },
         {
           text: this.$t('description'),
@@ -79,6 +79,19 @@ const listInfo = {
           sortable: false,
           value: 'publicToken',
           width: '15%',
+        },
+        {
+          text: this.$t('members'),
+          sortable: false,
+          value: 'members',
+          width: '15%',
+        },
+        {
+          text: this.$t('action'),
+          value: 'actions',
+          sortable: false,
+          width: '11%',
+          align: 'center',
         },
       ];
     },

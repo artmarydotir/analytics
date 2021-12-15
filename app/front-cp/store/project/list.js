@@ -99,8 +99,8 @@ export const actions = {
       throw new Error('error');
     }
   },
-  // ****************role=viewer***********************
-  async viewerListProject({ commit }, input) {
+  // ****************role=client***********************
+  async clientListProject({ commit }, input) {
     try {
       const { data } = await this.$axios.post(
         `${window.applicationBaseURL}api/graphql/graphql`,
@@ -110,21 +110,22 @@ export const actions = {
               $limit: Int,
               $filter: JSON
             ) {
-            ProjectOwnerList(
+            ClientProjectList(
               args: {
                 filter: $filter,
                 limit: $limit,
                 lastSeen: $lastSeen
               }
             ) {
-              docs { id title publicToken description }
+              docs { title id description publicToken rules members }
             }
           }`,
           variables: input,
         },
       );
 
-      const result = data.data.ProjectOwnerList;
+      console.log(data);
+      const result = data.data.ClientProjectList;
 
       if (data.errors) {
         throw data.errors;

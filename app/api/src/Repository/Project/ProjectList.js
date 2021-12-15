@@ -132,14 +132,6 @@ class ProjectList {
               }
             });
           }
-          // if (type === 'ids') {
-          //   query.forEach((q) => {
-          //     if (q.colName === `${name}`) {
-          //       q.colOp = '=';
-          //       q.colValue = value;
-          //     }
-          //   });
-          // }
         }
       });
     }
@@ -178,7 +170,13 @@ class ProjectList {
       queryBuilding.length > 0 ? `AND ${queryBuilding.join(' AND ')}` : '';
 
     const projectDataList = await this.sequelize.query(
-      `SELECT "title", "id", "description", "publicToken"
+      `SELECT
+      "Projects"."id",
+      "Projects"."title",
+      "Projects"."description",
+      "Projects"."publicToken",
+      "UserProjects"."rules"
+
         FROM "UserProjects"
           LEFT JOIN "Projects" ON (
             "Projects"."id" = "UserProjects"."ProjectId"
@@ -200,11 +198,65 @@ class ProjectList {
       },
     );
 
-    const result = projectDataList.map((project) => ({
-      ...project.dataValues,
-    }));
+    const promises = [];
 
-    return { docs: result };
+    // console.log(projectDataList);
+    projectDataList.forEach((project) => {
+      const re = this.findAllUserByProjectId(project.id).then((users) => {
+        project.members = users;
+      });
+      promises.push(re);
+    });
+
+    await Promise.all(promises);
+
+    return projectDataList.map((project) => ({
+      id: project.dataValues.id,
+      title: project.dataValues.title,
+      description: project.dataValues.description,
+      publicToken: project.dataValues.publicToken,
+      rules: project.rules,
+      members: project.members,
+    }));
+  }
+
+  /**
+   *
+   * @param {*} projectId
+   * @returns
+   */
+  async findAllUserByProjectId(projectId) {
+    const { UserProject } = this.sequelize.models;
+
+    const rawQueryFindAllUsernameProjectById = `
+      SELECT
+        "Users"."id",
+        "Users"."username"
+      FROM "Users"
+        LEFT JOIN "UserProjects" ON (
+          "Users"."id" = "UserProjects"."UserId"
+        )
+      WHERE
+        "UserProjects"."ProjectId" = :projectId
+      AND
+        "Users"."options" = ARRAY[1]
+      ORDER BY "Users"."id" ASC;
+    `;
+
+    const result = await this.sequelize.query(
+      rawQueryFindAllUsernameProjectById,
+      {
+        replacements: { projectId },
+        model: UserProject,
+        mapToModel: true,
+        type: QueryTypes.SELECT,
+      },
+    );
+
+    return result.map((user) => ({
+      id: user.dataValues.id,
+      username: user.dataValues.username,
+    }));
   }
 }
 

@@ -19,7 +19,7 @@
       data-vv-name="primaryOwner"
       return-object
       required
-      :label="$t('selectPrimaryOwner')"
+      :label="$t('primaryOwner')"
       @change="sendData"
     >
     </v-autocomplete>

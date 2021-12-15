@@ -273,6 +273,33 @@ class ProjectUpdate {
 
     return newOption;
   }
+
+  /**
+   *
+   * @param {*} projectId
+   * @param {*} userAndRules
+   */
+  async updateRulesByClient(projectId, userAndRules) {
+    if (!projectId || !userAndRules) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
+    const { UserProject } = this.sequelize.models;
+    const readyData = userAndRules.map((obj) => ({
+      ...obj,
+      ProjectId: projectId,
+    }));
+
+    await UserProject.destroy({ where: { ProjectId: projectId } });
+
+    await UserProject.bulkCreate(readyData, {
+      updateOnDuplicate: ['UserId', 'rules'],
+    });
+
+    return projectId;
+  }
 }
 
 module.exports = ProjectUpdate;

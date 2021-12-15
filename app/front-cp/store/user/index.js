@@ -252,6 +252,7 @@ export const actions = {
       if (data.errors) {
         throw new Error(data.errors['0'].message);
       }
+      console.log('oooooo', data);
       if (result.id) {
         commit(
           'SET_NOTIFICATION',

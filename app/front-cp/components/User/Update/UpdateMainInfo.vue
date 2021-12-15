@@ -54,7 +54,7 @@
             <v-col cols="12" md="6" lg="4">
               <CountrySelect :model.sync="user.country" />
             </v-col>
-            <v-col cols="12" md="6" lg="4">
+            <v-col v-if="user.country" cols="12" md="6" lg="4">
               <PhoneNumber
                 :model.sync="user.mobile"
                 :country-code="user.country"
@@ -117,8 +117,8 @@ export default {
           value: 'AD',
         },
         {
-          name: 'Viewer',
-          value: 'VI',
+          name: 'Client',
+          value: 'CL',
         },
       ],
       isDisabled: false,
@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     user: {
-      cache: false,
+      // cache: false,
       get() {
         return this.dataGiven;
       },
@@ -150,10 +150,12 @@ export default {
       delete cloneUser.options;
       cloneUser.options = this.temporaryOptions;
       delete cloneUser.id;
-      if (this.userStateRole === 'VI' || this.userStateRole === 'AD') {
+
+      if (this.userStateRole === 'CL' || this.userStateRole === 'AD') {
         delete cloneUser.role;
         delete cloneUser.options;
       }
+
       const updatedData = { id: this.user.id, data: cloneUser };
 
       const [err, data] = await to(

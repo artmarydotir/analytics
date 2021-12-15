@@ -1,16 +1,15 @@
 const constants = {
-  SUPERADMIN: 'SA',
-  ADMIN: 'AD',
-  CLIENT: 'CL',
+  PROJECTADMIN: 'PROJECTADMIN',
+  VIEWALL: 'VIEWALL',
 };
 
 const list = Object.values(constants);
 
 /** @type {import('json-schema').JSONSchema7} */
 const schema = {
-  $id: 'UserRoles',
-  title: 'User Roles',
-  description: 'Possible values for user roles',
+  $id: 'ProjectRules',
+  title: 'Project Rules',
+  description: 'Possible values for project rules',
   type: 'string',
   enum: list,
 };

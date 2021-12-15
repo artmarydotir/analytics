@@ -31,10 +31,10 @@ class UserCreate {
       username,
       email,
       password,
-      role = userRoleObject.VIEWER,
-      lang = 'fa',
-      options = [userOption.ACTIVE],
-      country = 'IR',
+      role,
+      lang,
+      options,
+      country,
       mobile,
       additional = {},
     } = data;
@@ -62,11 +62,11 @@ class UserCreate {
       username: null,
       email: null,
       password: null,
-      role: null,
+      role: userRoleObject.CLIENT,
       otpSecret: null,
       lang: null,
-      options: null,
-      country: null,
+      options: [userOption.ACTIVE],
+      country: 'IR',
       mobile: null,
       additional: null,
     };
@@ -101,7 +101,7 @@ class UserCreate {
       }
     }
 
-    if (options) {
+    if (options.length > 0) {
       initialValues.options = options;
     }
 

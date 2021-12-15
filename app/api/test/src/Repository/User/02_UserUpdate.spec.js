@@ -74,7 +74,7 @@ describe(__filename.replace(__dirname, ''), () => {
       username: 'heytester2',
       email: 'heyteste2@gmail.com',
       password: 'a1asQW12!@AS*&',
-      role: 'VI',
+      role: 'CL',
       lang: 'en',
       options: [1],
       additional: {

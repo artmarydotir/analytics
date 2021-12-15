@@ -1,10 +1,7 @@
 const { fieldsMap } = require('graphql-fields-list');
-const { ErrorWithProps } = require('mercurius').default;
-const { constants: userRoles } = require('../../../Schema/UserRoles');
+const checkToken = require('../../../Utils/CheckToken');
 
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const { constants: userRoles } = require('../../../Schema/UserRoles');
 
 module.exports = async (_, { args }, { container, token }, info) => {
   const { lastSeen, filter, limit } = args;
@@ -16,24 +13,12 @@ module.exports = async (_, { args }, { container, token }, info) => {
     ? Object.keys(fieldsMap(info).docs)
     : ['id', 'email', 'role'];
 
-  if (!token || token.roles !== userRoles.SUPERADMIN) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  checkToken(token, _, [userRoles.ADMIN, userRoles.SUPERADMIN]);
 
-  const list = await UserListRepository.fetchUserList({
+  return UserListRepository.fetchUserList({
     lastSeen,
     filter,
     limit,
     attributes: selectedAttribute,
   });
-
-  if (!list) {
-    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
-      statusCode: 404,
-    });
-  }
-
-  return list;
 };

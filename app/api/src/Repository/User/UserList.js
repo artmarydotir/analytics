@@ -79,6 +79,25 @@ class UserList {
 
     return { docs: result };
   }
+
+  /**
+   *
+   * @param {*} clientId
+   * @param {*} projectId
+   * @returns
+   */
+  async isClientWithAdminAccess(clientId, projectId) {
+    const { UserProject } = this.sequelize.models;
+    const hasProjectAdminRule = await UserProject.findOne({
+      where: {
+        UserId: clientId,
+        ProjectId: projectId,
+      },
+      rules: { [Op.contains]: ['PROJECTADMIN'] },
+    });
+
+    return !!hasProjectAdminRule;
+  }
 }
 
 module.exports = UserList;

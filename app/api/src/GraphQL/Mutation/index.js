@@ -6,6 +6,7 @@ const UserDelete = require('./User/UserDelete');
 const ProjectCreate = require('./Project/ProjectCreate');
 const ProjectUpdate = require('./Project/ProjectUpdate');
 const ProjectDelete = require('./Project/ProjectDelete');
+const ProjectUpdateUserRules = require('./Project/ProjectUpdateUserRules');
 const PrivateTokenRegenerate = require('./Project/PrivateTokenRegenerate');
 const DomainCreate = require('./Domain/DomainCreate');
 const DomainUpdate = require('./Domain/DomainUpdate');
@@ -19,6 +20,7 @@ module.exports = {
   UserUpdatePassword,
   ProjectCreate,
   ProjectUpdate,
+  ProjectUpdateUserRules,
   ProjectDelete,
   PrivateTokenRegenerate,
   DomainCreate,

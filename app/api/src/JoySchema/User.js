@@ -46,10 +46,11 @@ const CreateUserSchema = () =>
       }),
     country: Joi.any()
       .valid(...countryCode)
+
       .when('mobile', {
         is: Joi.exist(),
         then: Joi.required(),
-        otherwise: Joi.optional(),
+        otherwise: Joi.optional().allow(null),
       })
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
@@ -97,10 +98,11 @@ const UpdateUserSchemaSA = () =>
       }),
     country: Joi.any()
       .valid(...countryCode)
+      .allow(null, '')
       .when('mobile', {
         is: Joi.exist(),
         then: Joi.required(),
-        otherwise: Joi.optional(),
+        otherwise: Joi.optional().allow(null, ''),
       })
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
@@ -140,11 +142,12 @@ const UpdateUserSchemaME = () =>
         'any.only': errorConstMerge.INVALID_LANG,
       }),
     country: Joi.any()
+      .allow(null, '')
       .valid(...countryCode)
       .when('mobile', {
         is: Joi.exist(),
         then: Joi.required(),
-        otherwise: Joi.optional(),
+        otherwise: Joi.optional().allow(null, ''),
       })
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,

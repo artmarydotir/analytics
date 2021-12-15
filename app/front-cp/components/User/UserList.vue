@@ -48,14 +48,13 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <!-- <template v-slot:[`item.role`]="{ item }">
-          <v-chip dark small label class="ma-1" color="secondary">
-            {{ calculateRole(item.role) }}
-             <span v-if="item.role == 'AD'"> Admin </span>
-            <span v-if="item.role == 'SA'"> Super Admin </span>
-            <span v-if="item.role == 'VI'"> Viewer </span>
+        <template v-slot:[`item.role`]="{ item }">
+          <v-chip dark small label class="ma-1" color="grey darken-1">
+            <span v-if="item.role == 'AD'"> {{ $t('admin') }} </span>
+            <span v-if="item.role == 'SA'"> {{ $t('superAdmin') }} </span>
+            <span v-if="item.role == 'CL'"> {{ $t('client') }} </span>
           </v-chip>
-        </template> -->
+        </template>
 
         <template v-slot:[`item.options`]="{ item }">
           <v-chip
@@ -92,6 +91,7 @@
           </nuxt-link>
 
           <v-icon
+            :disabled="item.options.includes(2)"
             tag="button"
             class="mr-1 ml-1"
             color="error"
@@ -117,7 +117,7 @@
             :disabled="isDisabledMore"
             @click="fetchMoreItem()"
           >
-            load more item
+            {{ $t('loadMore') }}
 
             <v-icon right> mdi-arrow-down </v-icon>
           </v-btn>
@@ -133,7 +133,7 @@ import tableFunctions from '@/mixin/tableFunctions';
 const { to } = require('await-to-js');
 
 export default {
-  name: 'Userable',
+  name: 'UserTable',
   mixins: [tableFunctions],
   props: {
     generalAction: {
@@ -231,8 +231,9 @@ export default {
       const [err, data] = await to(
         this.$store.dispatch(this.moduleInfo.rmUrl, id),
       );
+      console.log(data, '00');
       if (data) {
-        this.dialog = false;
+        console.log('---deleteddvsvsdv');
         const result = await this.callTableListApi(
           {
             lastSeen: undefined,
@@ -242,6 +243,8 @@ export default {
           this.moduleInfo.url,
         );
         this.userDocs = result;
+        console.log('---deleted');
+        // this.dialog = false;
       }
       if (err) {
         this.dialog = false;

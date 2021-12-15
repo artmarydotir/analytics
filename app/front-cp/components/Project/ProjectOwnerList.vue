@@ -7,7 +7,6 @@
         {{ $t(generalAction.title) }}
         <v-spacer />
       </v-card-title>
-
       <v-data-table
         single-select
         item-key="id"
@@ -23,29 +22,30 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <template v-slot:[`item.options`]="{ item }">
+        <template v-slot:[`item.members`]="{ item }">
           <v-chip
-            v-if="item.options.includes(1)"
+            v-for="member in item.members"
+            :key="member.id"
             dark
             small
             label
             outlined
             class="ma-1"
-            color="green"
+            color="purple"
           >
-            {{ $t('active') }}
+            {{ member.username }}
           </v-chip>
-          <v-chip
-            v-if="item.options.includes(2)"
-            dark
-            label
-            small
-            outlined
-            class="ma-1"
-            color="orange"
-          >
-            {{ $t('deleted') }}
-          </v-chip>
+        </template>
+
+        <template v-slot:[`item.actions`]="{ item }">
+          <div v-if="item.rules.includes('PROJECTADMIN')">
+            <nuxt-link
+              :to="localePath({ path: `/project/management/${item.id}` })"
+              link
+            >
+              <v-icon text class="mr-1 ml-1"> mdi-pencil </v-icon>
+            </nuxt-link>
+          </div>
         </template>
 
         <template v-slot:no-results>
@@ -102,6 +102,7 @@ export default {
       loading: false,
       filter: {},
       isDisabledMore: false,
+      allUsers: [],
     };
   },
   computed: {

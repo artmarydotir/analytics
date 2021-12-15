@@ -20,16 +20,16 @@ export default {
     return {
       roleList: [
         {
-          name: 'superAdmin',
+          name: this.$t('superAdmin'),
           value: 'SA',
         },
         {
-          name: 'admin',
+          name: this.$t('admin'),
           value: 'AD',
         },
         {
-          name: 'viewer',
-          value: 'VI',
+          name: this.$t('client'),
+          value: 'CL',
         },
       ],
     };

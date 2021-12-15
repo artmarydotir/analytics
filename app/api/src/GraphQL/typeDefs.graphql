@@ -50,6 +50,12 @@ input InputGlobalID {
   id: Int!
 }
 
+input InputGlobalList {
+  filter: JSON = {}
+  lastSeen: Int
+  limit: Int = 9
+}
+
 # ********** FORGOT_PASSWORD *************
 input InputForgotPassword {
   email: EmailAddress!
@@ -124,8 +130,17 @@ type OutputUserListDocs {
   updatedAt: Date
 }
 
+type OutputClientUserListDocs {
+  id: Int
+  username: String
+  role: String
+}
+
 type OutputUserList {
   docs: [OutputUserListDocs]
+}
+type OutputClientUserList {
+  docs: [OutputClientUserListDocs]
 }
 
 # ********** PROJECT *************
@@ -156,12 +171,6 @@ input InputProjectUpdate {
   primaryOwner: Int
 }
 
-input InputProjectList {
-  filter: JSON = {}
-  lastSeen: Int
-  limit: Int = 9
-}
-
 type OutputProjectListDocs {
   id: Int
   title: String
@@ -177,24 +186,6 @@ type OutputProjectList {
   docs: [OutputProjectListDocs]
 }
 
-## project owner
-type OutputProjectOwnerList {
-  docs: [OutputProjectListOwnerDocs]
-}
-
-type OutputProjectListOwnerDocs {
-  id: Int
-  title: String
-  description: String
-  publicToken: String
-}
-
-input InputProjectListOwner {
-  filter: JSON = {}
-  lastSeen: Int
-  limit: Int = 9
-}
-
 type OutputSimpleProjectListDocs {
   id: Int
   title: String
@@ -208,6 +199,12 @@ input InputProjectShowPPToken {
   projectId: Int!
   password: String!
 }
+
+input InputClientAclUpdate {
+  projectId: Int!
+  userAndRules: [JSONObject]!
+}
+
 # ********** DOMAIN *************
 
 input InputDomainCreate {
@@ -258,6 +255,23 @@ input InputDomainUpdate {
   additional: [JSONObject]
 }
 
+input InputGravatar {
+  email: String!
+}
+
+type MemberListDocs {
+  id: Int
+  title: String
+  publicToken: String
+  description: String
+  rules: [String]
+  members: [JSONObject]
+}
+
+type OutputProjectOwnerList {
+  docs: [MemberListDocs]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -265,9 +279,10 @@ type Mutation {
   UserUpdate(id: Int!, data: InputUserUpdate): Int
   UserUpdatePassword(data: InputUpdatePassword): JSON
   OtpGenerate(data: InputOtpGenerate): String
-  UserDelete(data: InputGlobalID): JSON
+  UserDelete(data: InputGlobalID): Int
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
+  ProjectUpdateUserRules(data: InputClientAclUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
   PrivateTokenRegenerate(data: InputGlobalID): String
   DomainCreate(data: InputDomainCreate): Int
@@ -279,12 +294,18 @@ type Mutation {
 type Query {
   UserForgotPassword(data: InputForgotPassword): String
   UserProfile(data: InputGlobalID): OutputUserProfile
+  Gravatar(data: InputGravatar): String
   UserList(args: InputUserList): OutputUserList
+  UserListForAdminClient(
+    projectId: Int!
+    args: InputUserList
+  ): OutputClientUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
-  ProjectList(args: InputProjectList): OutputProjectList
-  ProjectSimpleList(args: InputProjectList): OutputSimpleProjectList
-  ProjectOwnerList(args: InputProjectListOwner): OutputProjectOwnerList
+  ProjectList(args: InputGlobalList): OutputProjectList
+  ClientProjectList(args: InputGlobalList): OutputProjectOwnerList
+  ProjectSimpleList(args: InputGlobalList): OutputSimpleProjectList
   ProjectShowPrivateToken(data: InputProjectShowPPToken): JSONObject
+
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
 }

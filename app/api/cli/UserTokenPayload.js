@@ -6,8 +6,6 @@ const { log } = console;
 
 const { list: UserRoles } = require('../src/Schema/UserRoles');
 
-UserRoles.push('G');
-
 const options = [
   {
     flags: '-u, --user <id>',

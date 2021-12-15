@@ -1,6 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
 const { waterfall } = require('async');
 const chalk = require('chalk');
+const _ = require('lodash');
 
 const { log } = console;
 const { list: userRoles } = require('../src/Schema/UserRoles');
@@ -20,7 +21,7 @@ module.exports = {
     if (config.ASM_PUBLIC_APP_TEST !== true) {
       log(
         `${chalk.yellow.bold(
-          '⚠️ fixture is not available on development mood ⚠️',
+          '⚠️ fixture is not available on production mood ⚠️',
         )}`,
       );
       return;
@@ -60,21 +61,18 @@ module.exports = {
       restartIdentity: true,
     });
 
-    const roles = userRoles;
     const lang = ['fa', 'en'];
 
     // user
     const userCallbacks = [];
     for (let index = 1; index < 121; index += 1) {
-      const roleIndex = index % roles.length;
-
       userCallbacks.push((cb) => {
         createUser
           .addUser({
             username: `user${index}`,
             password: `user${index}PassWord`,
             email: `user${index}@example.tld`,
-            role: roles[`${roleIndex}`],
+            role: _.sample(userRoles),
             lang: lang[Math.floor(Math.random() * lang.length)],
             options: [Math.floor(Math.random() * 2) + 1],
           })
@@ -107,11 +105,11 @@ module.exports = {
             userAndRules: [
               {
                 UserId: Math.floor(Math.random() * 10) + 1,
-                rules: ['ALL', 'VIEW_A'],
+                rules: ['PROJECTADMIN'],
               },
               {
                 UserId: Math.floor(Math.random() * 50) + 11,
-                rules: ['ALL', 'VIEW_C'],
+                rules: ['PROJECTADMIN', 'VIEWALL'],
               },
             ],
             primaryOwner: Math.floor(Math.random() * 10) + 1,

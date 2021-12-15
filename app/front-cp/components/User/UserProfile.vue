@@ -7,8 +7,8 @@
       :class="$vuetify.theme.dark ? 'elevation-10' : 'elevation-7'"
     >
       <v-row v-if="profile">
-        <v-col cols="12" md="5">
-          <UserAvatar />
+        <v-col v-if="profile.email" cols="12" md="5">
+          <UserAvatar :email="profile.email" />
         </v-col>
         <v-divider vertical></v-divider>
         <v-col cols="12" md="7">
@@ -72,7 +72,7 @@
                 class="mt-1"
               >
                 <span v-if="profile.role === 'AD'"> {{ $t('admin') }} </span>
-                <span v-if="profile.role === 'VI'"> {{ $t('viewer') }} </span>
+                <span v-if="profile.role === 'CL'"> {{ $t('client') }} </span>
                 <span v-if="profile.role === 'SA'">
                   {{ $t('superAdmin') }}
                 </span>
@@ -86,7 +86,7 @@
                 text
                 @click="edit(profile.id)"
               >
-                Edit profile
+                {{ $t('editProfile') }}
               </v-btn>
             </v-card-actions>
           </v-card>

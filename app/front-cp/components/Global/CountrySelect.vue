@@ -1,7 +1,7 @@
 <template>
   <ValidationProvider v-slot:default="{ errors, valid }" name="country">
     <v-autocomplete
-      v-model="innercountry"
+      v-model.trim="innercountry"
       :items="items"
       outlined
       :error-messages="errors"
@@ -10,7 +10,7 @@
       item-value="alpha2Code"
       autocomplete
       prepend-inner-icon="mdi-earth-plus"
-      :label="`${$t('selectCountry')}`"
+      :label="$t('selectCountry')"
     >
       <template slot="item" slot-scope="{ item }">
         <span class="pr-2">{{ item.emoji }}</span>
@@ -27,9 +27,10 @@ export default {
 
   props: {
     model: {
-      type: String,
+      type: [String],
       default: null,
       required: false,
+      validator: (prop) => typeof prop === 'string' || prop === null,
     },
   },
   data() {

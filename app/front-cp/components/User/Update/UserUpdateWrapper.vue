@@ -61,8 +61,6 @@ export default {
     return {
       userInfo: {},
       tab: null,
-      isActivetab2: false,
-      isActivetab3: false,
     };
   },
   async mounted() {

@@ -82,16 +82,16 @@ export default {
           type: 'equalBox',
           items: [
             {
-              name: 'Super Admin',
+              name: this.$t('superAdmin'),
               value: 'SA',
             },
             {
-              name: 'Admin',
+              name: this.$t('admin'),
               value: 'AD',
             },
             {
-              name: 'Viewer',
-              value: 'VI',
+              name: this.$t('client'),
+              value: 'CL',
             },
           ],
         },
