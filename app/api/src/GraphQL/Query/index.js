@@ -1,4 +1,5 @@
 const UserList = require('./User/UserList');
+const UserListForAdminClient = require('./User/UserListForAdminClient');
 const UserProfile = require('./User/UserProfile');
 const Gravatar = require('./User/Gravatar');
 const ProjectProfile = require('./Project/ProjectProfile');
@@ -12,6 +13,7 @@ const DomainProfile = require('./Domain/DomainProfile');
 
 module.exports = {
   UserList,
+  UserListForAdminClient,
   Gravatar,
   UserProfile,
   UserForgotPassword,

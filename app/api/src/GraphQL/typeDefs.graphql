@@ -130,8 +130,17 @@ type OutputUserListDocs {
   updatedAt: Date
 }
 
+type OutputClientUserListDocs {
+  id: Int
+  username: String
+  role: String
+}
+
 type OutputUserList {
   docs: [OutputUserListDocs]
+}
+type OutputClientUserList {
+  docs: [OutputClientUserListDocs]
 }
 
 # ********** PROJECT *************
@@ -190,6 +199,12 @@ input InputProjectShowPPToken {
   projectId: Int!
   password: String!
 }
+
+input InputClientAclUpdate {
+  projectId: Int!
+  userAndRules: [JSONObject]!
+}
+
 # ********** DOMAIN *************
 
 input InputDomainCreate {
@@ -267,6 +282,7 @@ type Mutation {
   UserDelete(data: InputGlobalID): Int
   ProjectCreate(data: InputProjectCreate): Int
   ProjectUpdate(id: Int!, data: InputProjectUpdate): Int
+  ProjectUpdateUserRules(data: InputClientAclUpdate): Int
   ProjectDelete(data: InputGlobalID): Int
   PrivateTokenRegenerate(data: InputGlobalID): String
   DomainCreate(data: InputDomainCreate): Int
@@ -280,6 +296,10 @@ type Query {
   UserProfile(data: InputGlobalID): OutputUserProfile
   Gravatar(data: InputGravatar): String
   UserList(args: InputUserList): OutputUserList
+  UserListForAdminClient(
+    projectId: Int!
+    args: InputUserList
+  ): OutputClientUserList
   ProjectProfile(data: InputGlobalID): OutputProjectProfile
   ProjectList(args: InputGlobalList): OutputProjectList
   ClientProjectList(args: InputGlobalList): OutputProjectOwnerList

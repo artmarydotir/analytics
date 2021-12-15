@@ -302,4 +302,59 @@ export const actions = {
       throw new Error('error');
     }
   },
+  // *****************client*******************
+  async addUserRulesByClient({ commit }, inputData) {
+    console.log(inputData);
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation (
+              $projectId: Int!
+              $userAndRules: [JSONObject]!
+                ) {
+                ProjectUpdateUserRules(
+                  data: {
+                    projectId: $projectId
+                    userAndRules: $userAndRules
+                  }
+                )
+            }`,
+          variables: inputData,
+        },
+      );
+
+      const result = data.data.ProjectUpdateUserRules;
+      if (data.errors) {
+        throw new Error(data.errors['0'].message);
+      }
+      if (result) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'Successfully updated project.',
+          },
+          { root: true },
+        );
+        return true;
+      }
+    } catch (error) {
+      const { data } = error.response;
+
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: data.errors['0']
+            ? `${data.errors['0'].message}`
+            : `Error Accrued`,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };

@@ -1,9 +1,12 @@
 <template>
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
-    {{ $route.params.id }}
+
     <template v-if="loading">
-      <ProjectUserManagement />
+      <ProjectUserManagement
+        :project="project"
+        :looping-list-o="project.userAndRules"
+      />
     </template>
     <template v-else>
       {{ $t('projectNotFound') }}
@@ -36,6 +39,7 @@ export default {
       if (result) {
         this.loading = true;
         this.project = { ...result };
+        console.log(result);
       }
     }
   },

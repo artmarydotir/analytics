@@ -1,5 +1,11 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["alexa", "heynewbie", "isrequire", "username"]
+  "cSpell.words": [
+    "alexa",
+    "heynewbie",
+    "isrequire",
+    "PROJECTADMIN",
+    "username"
+  ]
 }
