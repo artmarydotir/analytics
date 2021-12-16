@@ -259,7 +259,7 @@ class UserUpdate {
         });
       });
 
-      throw new ErrorWithProps('UnProcessable Entity', {
+      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,
       });

@@ -1,4 +1,7 @@
 const { ErrorWithProps } = require('mercurius').default;
+const {
+  constantsMerge: errorConstMerge,
+} = require('../../Schema/ErrorMessage');
 
 const {
   UpdateMemberPassword: membersPasswordSchema,
@@ -35,7 +38,7 @@ class UserUpdateMemberPassword {
         });
       });
 
-      throw new ErrorWithProps('UnProcessable Entity', {
+      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,
       });

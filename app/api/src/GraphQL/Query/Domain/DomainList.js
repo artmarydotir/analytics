@@ -6,20 +6,11 @@ module.exports = async (_, { args }, { container, token }) => {
 
   const { DomainListRepository } = container;
 
-  const hasAccess = checkToken(token, _, [
-    userRoles.ADMIN,
-    userRoles.SUPERADMIN,
-  ]);
+  checkToken(token, _, [userRoles.ADMIN, userRoles.SUPERADMIN]);
 
-  let list = [];
-
-  if (hasAccess) {
-    list = await DomainListRepository.fetchDomainList({
-      lastSeen,
-      filter,
-      limit,
-    });
-  }
-
-  return list;
+  return DomainListRepository.fetchDomainList({
+    lastSeen,
+    filter,
+    limit,
+  });
 };

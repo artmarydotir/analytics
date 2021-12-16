@@ -7,6 +7,7 @@ module.exports = async (_, { data }, { container, token }) => {
   const { UserCreateRepository } = container;
 
   checkToken(token, _, [userRoles.ADMIN, userRoles.SUPERADMIN]);
+
   if (token.roles === userRoles.ADMIN) {
     checkUserAddPermissions(data.role);
   }
