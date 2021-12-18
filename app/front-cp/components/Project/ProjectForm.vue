@@ -169,7 +169,7 @@ export default {
       if (!validity) {
         return;
       }
-
+      console.log('000');
       if (this.editMood) {
         await this.editingMethod();
       } else {
@@ -238,7 +238,7 @@ export default {
       this.isDisabled = false;
       setTimeout(() => {
         this.$store.commit('CLOSE_NOTIFICATION', false);
-      }, 1000);
+      }, 6000);
     },
   },
 };

@@ -1,13 +1,14 @@
 <template>
   <v-app dark>
-    {{ $t('pageNotFound') }}
+    <!-- {{ $t('pageNotFound') }} -->
+    <h1 v-if="error.statusCode === 403">403: forbidden</h1>
     <!-- <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
     </h1> -->
-    <NuxtLink to="/"> Home page </NuxtLink>
+    <h1 v-else>
+      {{ $t('otherError') }}
+    </h1>
+    <NuxtLink :to="localePath('/')"> Home page </NuxtLink>
   </v-app>
 </template>
 

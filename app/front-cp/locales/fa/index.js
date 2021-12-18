@@ -91,6 +91,8 @@ module.exports = {
   editProfile: 'ویرایش پروفایل',
   editData: 'ویرایش اطلاعات',
   editPassword: 'ویرایش رمز عبور',
+  otherError: 'خطای دیگر',
+  deleteUser: 'Delete User',
   validations: {
     mobileNumber: '{_field_} صحیح نمی‌باشد.',
     min: '{_field_} حداقل باید {length} باشد.',

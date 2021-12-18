@@ -47,7 +47,7 @@ class Authentication {
         });
       });
 
-      throw new ErrorWithProps('UnProcessable Entity', {
+      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,
       });
@@ -72,7 +72,7 @@ class Authentication {
       success = validOtp;
     }
     if (!success) {
-      throw new ErrorWithProps('Unauthorized', {
+      throw new ErrorWithProps(errorConstMerge.UNAUTHORIZED, {
         statusCode: 401,
       });
     }

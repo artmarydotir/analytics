@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  permissions: 'SA',
+  permissions: ['AD', 'SA'],
   head() {
     return {
       title: `${this.$t('userAdd')}`,

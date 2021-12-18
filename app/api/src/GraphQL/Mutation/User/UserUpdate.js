@@ -1,36 +1,17 @@
-const { ErrorWithProps } = require('mercurius').default;
 const { constants: userRoles } = require('../../../Schema/UserRoles');
-
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const checkToken = require('../../../Utils/CheckToken');
 
 module.exports = async (_, { id, data }, { container, token }) => {
   const { UserUpdateRepository } = container;
 
-  if (!token) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  checkToken(token, _, [
+    userRoles.ADMIN,
+    userRoles.SUPERADMIN,
+    userRoles.CLIENT,
+  ]);
 
-  if (token.roles === userRoles.SUPERADMIN) {
-    try {
-      return await UserUpdateRepository.updateUserBySuperAdmin(id, data);
-    } catch (e) {
-      throw new ErrorWithProps(e.message, {
-        statusCode: e.extensions ? e.extensions.statusCode : 500,
-        message: e.extensions ? e.extensions.validation : '',
-      });
-    }
-  } else {
-    try {
-      return await UserUpdateRepository.updateUserByMembers(id, data);
-    } catch (e) {
-      throw new ErrorWithProps(e.message, {
-        statusCode: e.extensions ? e.extensions.statusCode : 500,
-        message: e.extensions ? e.extensions.validation : '',
-      });
-    }
+  if (token.roles === userRoles.SUPERADMIN || token.roles === userRoles.ADMIN) {
+    return UserUpdateRepository.updateUserBySuperAdmin(id, data);
   }
+  return UserUpdateRepository.updateUserByMembers(id, data);
 };

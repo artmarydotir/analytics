@@ -27,7 +27,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -48,7 +48,8 @@ export const actions = {
           {
             show: true,
             color: 'green',
-            message: 'successfully changed',
+            message: 'UPDATED',
+            status: 'success',
           },
           { root: true },
         );

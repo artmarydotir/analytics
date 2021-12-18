@@ -48,7 +48,7 @@
                       innerDomain.domain && innerDomain.domain.length < 0,
                     isDomain: { wild: true },
                   }"
-                  :name="$t('wildCardDomain')"
+                  :name="$t('wildcardDomain')"
                 >
                   <v-text-field
                     v-model.trim="innerDomain.wildcardDomain"

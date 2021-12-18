@@ -32,19 +32,17 @@ export const actions = {
 
       const result = data.data.ProjectProfile;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
     } catch (error) {
+      const { data } = error.response;
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: `${error}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -75,19 +73,18 @@ export const actions = {
 
       const result = data.data.ProjectShowPrivateToken;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
     } catch (error) {
+      const { data } = error.response;
+
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: `${error}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -104,7 +101,7 @@ export const actions = {
             $title: String!
             $description: String
             $userAndRules: [JSONObject]!
-            $options: [Int]
+            $options: [Int]!
             $primaryOwner: Int!
               ) {
               ProjectCreate(
@@ -122,16 +119,15 @@ export const actions = {
       );
 
       const result = data.data.ProjectCreate;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Created project.',
+            message: 'CREATED',
+            status: 'success',
           },
           { root: true },
         );
@@ -145,12 +141,11 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: data.errors['0']
-            ? `${data.errors['0'].message}`
-            : `Error Accrued`,
+          message: data.errors,
         },
         { root: true },
       );
+
       throw new Error('error');
     }
   },
@@ -175,16 +170,14 @@ export const actions = {
 
       const result = data.data.ProjectUpdate;
 
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Edited Project.',
+            message: 'EDITED',
+            status: 'success',
           },
           { root: true },
         );
@@ -197,7 +190,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -224,16 +217,15 @@ export const actions = {
       );
 
       const result = data.data.ProjectDelete;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Deleted project.',
+            message: 'DELETED',
+            status: 'success',
           },
           { root: true },
         );
@@ -246,7 +238,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -273,16 +265,15 @@ export const actions = {
       );
 
       const result = data.data.PrivateTokenRegenerate;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Generate private token.',
+            message: 'GENERATED_PRIVATE_TOKEN',
+            status: 'success',
           },
           { root: true },
         );
@@ -295,7 +286,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -325,16 +316,15 @@ export const actions = {
       );
 
       const result = data.data.ProjectUpdateUserRules;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully updated project.',
+            message: 'EDITED',
+            status: 'success',
           },
           { root: true },
         );
@@ -348,9 +338,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: data.errors['0']
-            ? `${data.errors['0'].message}`
-            : `Error Accrued`,
+          message: data.errors,
         },
         { root: true },
       );

@@ -68,8 +68,14 @@ class UserProcess {
     });
   }
 
-  setMobile(no, code) {
-    const phoneNumber = parsePhoneNumber(no, code);
+  /**
+   *
+   * @param {*} number
+   * @param {*} code
+   * @returns
+   */
+  setMobile(number, code) {
+    const phoneNumber = parsePhoneNumber(number, code);
     if (phoneNumber.isValid() && phoneNumber.getType() === 'MOBILE') {
       return phoneNumber.number;
     }
@@ -301,8 +307,8 @@ class UserProcess {
       return { id: userId };
     }
 
-    throw new ErrorWithProps('User not found.', {
-      statusCode: 400,
+    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
+      statusCode: 404,
     });
   }
 }

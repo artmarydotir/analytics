@@ -1,19 +1,11 @@
-const { ErrorWithProps } = require('mercurius').default;
 const { constants: userRoles } = require('../../../Schema/UserRoles');
-
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const checkToken = require('../../../Utils/CheckToken');
 
 module.exports = async (_, { data }, { container, token }) => {
   const { UserUpdateRepository } = container;
   const { id } = data;
 
-  if (!token || token.roles !== userRoles.SUPERADMIN) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  checkToken(token, _, [userRoles.ADMIN, userRoles.SUPERADMIN]);
 
   const removingData = {
     ACTIVE: false,

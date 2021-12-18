@@ -1,18 +1,16 @@
-const { ErrorWithProps } = require('mercurius').default;
+const { constants: userRoles } = require('../../../Schema/UserRoles');
 
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
+const checkToken = require('../../../Utils/CheckToken');
 
 module.exports = async (_, { data }, { container, token }) => {
   const { GravatarRepository } = container;
   const { email } = data;
 
-  if (!token) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
+  checkToken(token, _, [
+    userRoles.ADMIN,
+    userRoles.SUPERADMIN,
+    userRoles.CLIENT,
+  ]);
 
   return GravatarRepository.createEmailHash(email);
 };

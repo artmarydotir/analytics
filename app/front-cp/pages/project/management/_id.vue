@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  permissions: ['AD', 'SA', 'CL'],
   data() {
     return {
       project: {},

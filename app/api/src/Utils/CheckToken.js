@@ -9,9 +9,6 @@ const { constantsMerge: errorConstMerge } = require('../Schema/ErrorMessage');
  * @param {String[]} orRoles
  */
 module.exports = (token, andRoles = [], orRoles = []) => {
-  console.log(andRoles, 'andd');
-  console.log(orRoles, 'orRoles');
-
   if (!token) {
     throw new ErrorWithProps(errorConstMerge.NOT_ALLOWED, {
       statusCode: 405,

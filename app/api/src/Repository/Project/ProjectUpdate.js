@@ -47,7 +47,7 @@ class ProjectUpdate {
         });
       });
 
-      throw new ErrorWithProps('UnProcessable Entity', {
+      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,
       });
@@ -88,7 +88,7 @@ class ProjectUpdate {
     if (description) {
       initialValues.description = description;
     }
-    // TODO: if exist user
+
     if (primaryOwner) {
       initialValues.primaryOwner = primaryOwner;
     }

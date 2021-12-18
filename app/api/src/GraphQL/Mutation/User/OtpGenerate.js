@@ -1,24 +1,15 @@
-const { ErrorWithProps } = require('mercurius').default;
+const checkToken = require('../../../Utils/CheckToken');
 const { constants: userRoles } = require('../../../Schema/UserRoles');
-const {
-  constantsMerge: errorConstMerge,
-} = require('../../../Schema/ErrorMessage');
 
 module.exports = async (_, { data }, { container, token }) => {
   const { OtpGeneratorRepository } = container;
   const { id, currentPassword } = data;
 
-  if (!token) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
-  }
-
-  if (token.roles !== userRoles.SUPERADMIN) {
-    throw new ErrorWithProps(errorConstMerge.ISREQUIRE_PASSWORD, {
-      statusCode: 400,
-    });
-  }
+  checkToken(token, _, [
+    userRoles.ADMIN,
+    userRoles.SUPERADMIN,
+    userRoles.CLIENT,
+  ]);
 
   return OtpGeneratorRepository.generateNewOtp(id, currentPassword);
 };

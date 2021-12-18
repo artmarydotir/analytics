@@ -94,7 +94,7 @@ class AuthREST {
         return {
           id: user.id,
           roles: user.role,
-          expire: tokenTime,
+          expires: tokenTime,
         };
       },
     });

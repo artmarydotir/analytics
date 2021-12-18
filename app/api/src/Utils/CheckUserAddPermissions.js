@@ -14,7 +14,7 @@ module.exports = (role) => {
   }
 
   if (role === userRoles.ADMIN || role === userRoles.SUPERADMIN) {
-    throw new ErrorWithProps(errorConstMerge.NOT_ALLOWED, {
+    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
       statusCode: 403,
     });
   }

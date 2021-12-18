@@ -125,7 +125,6 @@ type OutputUserListDocs {
   country: String
   mobile: String
   options: [Int]
-  additional: [JSONObject]
   createdAt: Date
   updatedAt: Date
 }
@@ -149,7 +148,7 @@ input InputProjectCreate {
   title: String!
   description: String
   userAndRules: [JSONObject]!
-  options: [Int]
+  options: [Int]!
   primaryOwner: Int!
 }
 
@@ -177,7 +176,6 @@ type OutputProjectListDocs {
   publicToken: String
   owner: [JSONObject]
   options: [Int]
-  additional: [JSONObject]
   createdAt: Date
   primaryOwner: Int
 }
@@ -213,7 +211,6 @@ input InputDomainCreate {
   projectId: Int!
   description: String
   options: [Int]!
-  additional: [JSONObject]
 }
 
 input InputDomainList {
@@ -230,7 +227,6 @@ type OutputDomainListDocs {
   projectName: JSONObject
   description: String
   options: [Int]
-  additional: [JSONObject]
 }
 
 type OutputDomainList {
@@ -252,7 +248,6 @@ input InputDomainUpdate {
   projectId: Int
   description: String
   options: JSON
-  additional: [JSONObject]
 }
 
 input InputGravatar {

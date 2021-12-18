@@ -38,20 +38,18 @@ export const actions = {
 
       const result = data.data.UserProfile;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         commit('SET_USER_DATA', result);
         return result;
       }
     } catch (error) {
+      const { data } = error.response;
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: `${error}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -92,16 +90,15 @@ export const actions = {
       );
 
       const result = data.data.UserCreate;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result.id) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Created user.',
+            message: 'CREATED',
+            status: 'success',
           },
           { root: true },
         );
@@ -115,12 +112,11 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: data.errors['0']
-            ? `${data.errors['0'].message}`
-            : `Error Accrued`,
+          message: data.errors,
         },
         { root: true },
       );
+
       throw new Error('error');
     }
   },
@@ -145,16 +141,14 @@ export const actions = {
 
       const result = data.data.UserUpdate;
 
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Edited user.',
+            message: 'EDITED',
+            status: 'success',
           },
           { root: true },
         );
@@ -167,7 +161,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -199,16 +193,14 @@ export const actions = {
 
       const result = data.data.UserUpdatePassword;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully updated password.',
+            message: 'UPDATED',
+            status: 'success',
           },
           { root: true },
         );
@@ -221,7 +213,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -249,17 +241,15 @@ export const actions = {
       );
 
       const result = data.data.UserDelete;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
-      console.log('oooooo', data);
+
       if (result.id) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Deleted user.',
+            message: 'DELETED',
+            status: 'success',
           },
           { root: true },
         );
@@ -272,7 +262,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );

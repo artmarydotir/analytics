@@ -168,7 +168,6 @@ export default {
         password: '',
         role: '',
         lang: '',
-        options: [],
       },
     };
   },
@@ -181,6 +180,7 @@ export default {
       if (!validity) {
         return;
       }
+      console.log(this.user, '----addd');
       const [err, data] = await to(
         this.$store.dispatch('user/addUser', this.user),
       );
@@ -188,7 +188,7 @@ export default {
         this.isDisabled = false;
         setTimeout(() => {
           this.$store.commit('CLOSE_NOTIFICATION', false);
-        }, 1000);
+        }, 6000);
       }
 
       if (data) {
@@ -200,7 +200,7 @@ export default {
               name: 'user-list',
             }),
           );
-        }, 1500);
+        }, 2000);
         this.clearForm();
       }
     },

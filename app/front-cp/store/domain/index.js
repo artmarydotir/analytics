@@ -22,19 +22,17 @@ export const actions = {
 
       const result = data.data.DomainProfile;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
     } catch (error) {
+      const { data } = error.response;
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: `${error}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -53,7 +51,6 @@ export const actions = {
             $projectId: Int!
             $description: String
             $options: [Int]!
-            $additional: [JSONObject]
               ) {
               DomainCreate(
                 data: {
@@ -62,7 +59,6 @@ export const actions = {
                   projectId: $projectId
                   description: $description
                   options: $options
-                  additional: $additional
                 }
               )
           }`,
@@ -71,16 +67,15 @@ export const actions = {
       );
 
       const result = data.data.DomainCreate;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Created project.',
+            message: 'CREATED',
+            status: 'success',
           },
           { root: true },
         );
@@ -94,9 +89,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: data.errors['0']
-            ? `${data.errors['0'].message}`
-            : `Error Accrued`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -124,16 +117,14 @@ export const actions = {
 
       const result = data.data.DomainUpdate;
 
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Edited domain.',
+            message: 'EDITED',
+            status: 'success',
           },
           { root: true },
         );
@@ -146,7 +137,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -173,16 +164,15 @@ export const actions = {
       );
 
       const result = data.data.DomainDelete;
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
+
       if (result) {
         commit(
           'SET_NOTIFICATION',
           {
             show: true,
             color: 'green',
-            message: 'Successfully Deleted domain.',
+            message: 'DELETED',
+            status: 'success',
           },
           { root: true },
         );
@@ -195,7 +185,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );

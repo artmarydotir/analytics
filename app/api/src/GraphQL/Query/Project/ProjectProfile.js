@@ -12,7 +12,6 @@ module.exports = async (_, { data }, { container, token }) => {
     userRoles.CLIENT,
   ]);
 
-  // bug detected-> add isClientWithAdminAccess
   if (token.roles === userRoles.CLIENT) {
     return ProjectProfileRepository.returnProjectData(id, true);
   }

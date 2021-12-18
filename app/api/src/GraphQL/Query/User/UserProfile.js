@@ -10,8 +10,8 @@ module.exports = async (_, { data }, { container, token }) => {
   const { id } = data;
 
   if (!token) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
+    throw new ErrorWithProps(errorConstMerge.NOT_ALLOWED, {
+      statusCode: 405,
     });
   }
 
@@ -24,13 +24,5 @@ module.exports = async (_, { data }, { container, token }) => {
     });
   }
 
-  const user = UserProfileRepository.returnUserData(id);
-
-  if (!user) {
-    throw new ErrorWithProps(errorConstMerge.NOT_EXIST, {
-      statusCode: 404,
-    });
-  }
-
-  return user;
+  return UserProfileRepository.returnUserData(id);
 };

@@ -16,6 +16,12 @@ class UserForgotPassword {
   }
 
   async sendForgotPasswordCode(email) {
+    if (!email) {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+        statusCode: 400,
+      });
+    }
+
     const smtpUri = this.Config.ASM_SMTP_URI;
     const sender = this.Config.ASM_SMTP_SENDER;
 

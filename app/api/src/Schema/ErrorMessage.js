@@ -1,5 +1,6 @@
 const constants = {
   ISREQUIRE_FIELD: '',
+  UNAUTHORIZED: '',
   ISREQUIRE_ID: '',
   ISREQUIRE_PASSWORD: '',
   MIN_LENGTH: '',
@@ -21,6 +22,7 @@ const constants = {
   DUPLICATE_ENTRY: '',
   NOT_ALLOWED: '',
   INVALID_PROJECT_RULE: '',
+  UNPROCESSABLE_ENTITY: '',
 };
 
 const list = Object.values(constants);
