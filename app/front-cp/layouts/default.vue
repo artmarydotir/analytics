@@ -15,9 +15,10 @@
 <script>
 const rtlLanguages = ['ar', 'dv', 'fa', 'he', 'ps', 'ur', 'yi'];
 export default {
+  middleware: ['acl', 'check-token'],
   data() {
     return {
-      polling: null,
+      timer: null,
     };
   },
   head() {
@@ -38,6 +39,20 @@ export default {
   },
   mounted() {
     this.$vuetify.theme.dark = this.$store.state.helper.darkMode;
+  },
+  created() {
+    this.runTimer();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
+  methods: {
+    runTimer() {
+      this.timer = setInterval(() => {
+        console.log('timer');
+        this.$store.dispatch('user/auth/refreshToken');
+      }, 5 * 60 * 1000);
+    },
   },
 };
 </script>

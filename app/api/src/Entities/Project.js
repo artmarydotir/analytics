@@ -29,6 +29,7 @@ module.exports = (sequelize) =>
       },
       title: {
         type: DataTypes.STRING,
+        unique: true,
         allowNull: false,
       },
       description: {
@@ -37,7 +38,7 @@ module.exports = (sequelize) =>
       },
       options: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true,
+        allowNull: false,
       },
       additional: {
         type: DataTypes.JSON,

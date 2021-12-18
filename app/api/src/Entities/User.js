@@ -37,7 +37,7 @@ module.exports = (sequelize) =>
       },
       lang: {
         type: DataTypes.CHAR(2),
-        allowNull: false,
+        allowNull: true,
       },
       country: {
         type: DataTypes.CHAR(2),
@@ -49,7 +49,7 @@ module.exports = (sequelize) =>
       },
       options: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true,
+        allowNull: false,
       },
       additional: {
         type: DataTypes.JSON,

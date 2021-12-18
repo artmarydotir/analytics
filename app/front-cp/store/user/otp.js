@@ -19,9 +19,6 @@ export const actions = {
 
       const result = data.data.OtpGenerate;
 
-      if (data.errors) {
-        throw new Error(data.errors['0'].message);
-      }
       if (result !== null) {
         return result;
       }
@@ -33,9 +30,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: data.errors['0']
-            ? `${data.errors['0'].message}`
-            : `Error Accrued`,
+          message: data.errors,
         },
         { root: true },
       );

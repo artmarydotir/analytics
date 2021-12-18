@@ -12,6 +12,7 @@
 import listInfo from '@/mixin/domainListInfo';
 
 export default {
+  permissions: ['AD', 'SA'],
   mixins: [listInfo],
   data() {
     return {

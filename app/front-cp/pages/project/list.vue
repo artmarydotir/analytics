@@ -22,6 +22,7 @@
 import listInfo from '@/mixin/projectListInfo';
 
 export default {
+  permissions: ['AD', 'SA', 'CL'],
   mixins: [listInfo],
 
   data() {

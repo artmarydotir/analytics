@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  permissions: ['AD', 'SA', 'CL'],
   head() {
     return {
       title: this.$t('dashboard'),

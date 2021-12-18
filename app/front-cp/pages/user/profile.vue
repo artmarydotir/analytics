@@ -9,6 +9,7 @@
 const { to } = require('await-to-js');
 
 export default {
+  permissions: ['AD', 'SA', 'CL'],
   data() {
     return {
       profileData: {},

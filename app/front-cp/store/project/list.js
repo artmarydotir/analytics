@@ -32,9 +32,6 @@ export const actions = {
 
       const result = data.data.ProjectList;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
@@ -45,7 +42,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -79,9 +76,6 @@ export const actions = {
 
       const result = data.data.ProjectSimpleList;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
@@ -92,7 +86,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );
@@ -124,12 +118,8 @@ export const actions = {
         },
       );
 
-      console.log(data);
       const result = data.data.ClientProjectList;
 
-      if (data.errors) {
-        throw data.errors;
-      }
       if (result) {
         return result;
       }
@@ -140,7 +130,7 @@ export const actions = {
         {
           show: true,
           color: 'red',
-          message: `Error ${data.errors['0'].extensions.statusCode} : ${data.errors['0'].message}`,
+          message: data.errors,
         },
         { root: true },
       );

@@ -5,6 +5,7 @@
 </template>
 <script>
 export default {
+  permissions: ['AD', 'SA'],
   data() {
     return {};
   },

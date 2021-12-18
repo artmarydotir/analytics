@@ -104,7 +104,7 @@ export default {
         this.isDisabled = false;
         setTimeout(() => {
           this.$store.commit('CLOSE_NOTIFICATION', false);
-        }, 2000);
+        }, 3000);
       }
 
       if (data) {

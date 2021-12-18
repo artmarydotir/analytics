@@ -10,6 +10,7 @@ const {
 
 const { constants: projectOption } = require('../../Schema/ProjectOption');
 const { list: projectRule } = require('../../Schema/ProjectRules');
+const SequelizeErrorHandler = require('../../Utils/SequelizeErrorHandler');
 
 class ProjectCreate {
   constructor({ sequelize }) {
@@ -126,7 +127,8 @@ class ProjectCreate {
       return project.dataValues;
     } catch (error) {
       await t.rollback();
-      throw error;
+      SequelizeErrorHandler(error);
+      // throw error;
     }
   }
 

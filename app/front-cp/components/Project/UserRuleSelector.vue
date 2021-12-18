@@ -130,15 +130,16 @@ export default {
   },
   methods: {
     makeAlist(input) {
-      if (this.loopingList.includes(input)) {
+      if (this.loopingListO.filter((e) => e.UserId === input.id).length > 0) {
         this.$store.commit('SET_NOTIFICATION', {
           show: true,
           color: 'warning',
-          message: 'User already added to list',
+          message: 'DUPLICATE_ENTRY',
+          status: 'hint',
         });
-
         return;
       }
+
       if (input) {
         this.loopingList.push(input);
       }

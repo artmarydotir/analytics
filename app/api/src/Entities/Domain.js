@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
       },
       options: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true,
+        allowNull: false,
       },
       description: {
         type: DataTypes.STRING,

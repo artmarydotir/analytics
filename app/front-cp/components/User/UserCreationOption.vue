@@ -1,11 +1,18 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <v-checkbox
-        v-model="options.active"
-        :label="$t('active')"
-        :value="1"
-      ></v-checkbox>
+      <validation-provider
+        v-slot:default="{ errors }"
+        rules="required"
+        :name="$t('active')"
+      >
+        <v-checkbox
+          v-model="options.active"
+          :label="$t('active')"
+          :value="1"
+          :error-messages="errors"
+        ></v-checkbox>
+      </validation-provider>
     </v-col>
     <v-col cols="12" md="6">
       <v-checkbox

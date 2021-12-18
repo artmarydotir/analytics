@@ -7,6 +7,7 @@ const { constants: userRoleObject } = require('../../Schema/UserRoles');
 const { constants: userOption } = require('../../Schema/UserOption');
 
 const { CreateUserSchema: userJoiSchema } = require('../../JoySchema/User');
+const SequelizeErrorHandler = require('../../Utils/SequelizeErrorHandler');
 
 class UserCreate {
   constructor({ sequelize, UserProcessRepository }) {
@@ -115,7 +116,14 @@ class UserCreate {
      ***
      */
     const { User } = this.sequelize.models;
-    return User.create(initialValues);
+
+    try {
+      return await User.create(initialValues);
+    } catch (e) {
+      if (e.errors) {
+        SequelizeErrorHandler(e);
+      }
+    }
   }
 }
 

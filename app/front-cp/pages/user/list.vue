@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-  // permissions: ['SA', 'AD', 'VI'],
+  permissions: ['AD', 'SA'],
   data() {
     return {
       moduleData: {

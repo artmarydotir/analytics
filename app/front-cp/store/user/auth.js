@@ -44,7 +44,8 @@ export const actions = {
           {
             show: true,
             color: 'green',
-            message: 'Welcome',
+            message: 'WELCOME',
+            status: 'success',
           },
           { root: true },
         );
@@ -52,18 +53,47 @@ export const actions = {
       return data;
     } catch (error) {
       const { data } = error.response;
+      console.log(data);
       commit(
         'SET_NOTIFICATION',
         {
           show: true,
           color: 'red',
-          message: error.response.status
-            ? `Error ${error.response.status} - ${error.response.statusText}`
-            : `${data.message}`,
+          message: data.message,
         },
         { root: true },
       );
       throw new Error('error');
+    }
+  },
+  // ******
+  async refreshToken({ commit, getters, state }) {
+    let tryCallRefreshToken = true;
+    const tokenExpireDate = localStorage.getItem('tokenExpireDate');
+
+    if (tokenExpireDate !== null) {
+      const expirationTime = new Date(tokenExpireDate);
+      const recent = new Date();
+      // console.log(expirationTime, '1111');
+      // console.log(recent, '2222');
+      // console.log(expirationTime > recent);
+      if (expirationTime > recent) {
+        tryCallRefreshToken = false;
+      }
+    }
+
+    if (tryCallRefreshToken) {
+      console.log('refresh token call');
+      try {
+        const response = await this.$axios.get(
+          `${window.applicationBaseURL}api/open-api/user/auth/refresh`,
+        );
+        const { data } = response;
+        commit('SET_USER_DATA', data);
+      } catch (error) {
+        commit('CLEAR_USER_DATA');
+        this.app.router.push('/');
+      }
     }
   },
 };
