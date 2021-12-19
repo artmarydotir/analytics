@@ -266,9 +266,9 @@ export default {
 
     errorCallback() {
       this.isDisabled = false;
-      setTimeout(() => {
-        this.$store.commit('CLOSE_NOTIFICATION', false);
-      }, 1000);
+      // setTimeout(() => {
+      //   this.$store.commit('CLOSE_NOTIFICATION', false);
+      // }, 3000);
     },
   },
 };

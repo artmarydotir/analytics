@@ -42,10 +42,9 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
+
+    await expect(forgetPass.sendForgotPasswordCode()).rejects.toThrowError();
 
     expect(
       await forgetPass.sendForgotPasswordCode('heymary@gmail.com'),

@@ -28,21 +28,11 @@ class UserUpdate {
    * @param {Object.<string, boolean>} data.options
    * @param {String} data.country
    * @param {String} data.mobile
-   * @param {Object} data.additional
    */
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   async updateUserBySuperAdmin(id, data) {
-    const {
-      username,
-      email,
-      role,
-      lang,
-      options,
-      country,
-      mobile,
-      additional,
-    } = data;
+    const { username, email, role, lang, options, country, mobile } = data;
 
     const schema = updateJoiSchemaSA();
 
@@ -102,10 +92,6 @@ class UserUpdate {
     let owners = [];
     if (inabilityStatus === false) {
       owners = await this.findPrimaryOwnerOfProject(id);
-    }
-
-    if (additional && typeof additional === 'object') {
-      initialValues.additional = additional;
     }
 
     /**
@@ -179,10 +165,9 @@ class UserUpdate {
    * @param {String} data.lang
    * @param {String} data.country
    * @param {String} data.mobile
-   * @param {Object} data.additional
    */
   async updateUserByMembers(id, data) {
-    const { username, email, lang, country, mobile, additional } = data;
+    const { username, email, lang, country, mobile } = data;
 
     const schema = updateJoiSchemaME();
 
@@ -223,10 +208,6 @@ class UserUpdate {
           statusCode: 400,
         });
       }
-    }
-
-    if (additional && typeof additional === 'object') {
-      initialValues.additional = additional;
     }
 
     /**
@@ -311,6 +292,7 @@ class UserUpdate {
           transaction: t,
         },
       );
+      // Remove user from project if user is primary owner
       if (owners.length > 0) {
         await Project.update(
           { enabled: inabilityStatus },
@@ -340,7 +322,7 @@ class UserUpdate {
           transaction: t,
         });
       }
-      // Remove this user from user projects rules.
+      // Only Remove relation of this user from user-projects rules.
       if (inabilityStatus === false) {
         await UserProject.destroy({
           where: { UserId: id },

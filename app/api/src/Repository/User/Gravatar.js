@@ -12,7 +12,7 @@ class Gravatar {
    */
   async createEmailHash(email) {
     if (!email) {
-      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_EMAIL, {
         statusCode: 400,
       });
     }

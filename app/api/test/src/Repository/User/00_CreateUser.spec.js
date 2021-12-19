@@ -43,9 +43,6 @@ describe(__filename.replace(__dirname, ''), () => {
         options: [1],
         country: 'IR',
         mobile: '09017744145',
-        additional: {
-          gender: 'female',
-        },
       }),
     ).toBeTruthy();
 
@@ -81,6 +78,19 @@ describe(__filename.replace(__dirname, ''), () => {
         country: 'AF',
         mobile: '09017744145',
         options: [1],
+      }),
+    ).rejects.toThrowError();
+
+    await expect(
+      createUser.addUser({
+        username: 'heymary',
+        email: 'heymary@gmail.com',
+        password: 'a1asQW12!@AS*&',
+        role: 'AD',
+        lang: 'fa',
+        options: [1],
+        country: 'IR',
+        mobile: '09017744145',
       }),
     ).rejects.toThrowError();
   });

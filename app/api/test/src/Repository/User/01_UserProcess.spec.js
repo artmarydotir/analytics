@@ -30,33 +30,38 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('create user and check exigency', async () => {
+  it('create user and check existence', async () => {
     const createUser = container.resolve('UserCreateRepository');
     const process = container.resolve('UserProcessRepository');
 
     // const b = await process.generatePassword();
 
+    // Add User
     const user = await createUser.addUser({
-      username: 'heychecker',
-      email: 'heychecker@gmail.com',
+      username: 'user1',
+      email: 'user1@gmail.com',
       password: 'a1asQW12!@AS',
       role: 'AD',
       lang: 'fa',
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
 
+    // Check UserExistAndActive
     expect(
       await process.isUserExistAndActive({
         username: user.dataValues.username,
         email: user.dataValues.email,
       }),
     ).toBe(true);
+    expect(
+      await process.isUserExistAndActive({
+        username: '1',
+      }),
+    ).toBe(false);
 
+    // Retrieve User ID
     expect(
       await process.returnActiveUserID({
         username: user.dataValues.username,
@@ -69,21 +74,40 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).rejects.toThrowError();
 
-    expect(
-      await process.isUserExistAndActive({
-        username: '1',
-      }),
-    ).toBe(false);
+    // Retrieve ActiveUserDataByID
+    expect(await process.returnActiveUserDataByID(user.id)).toBeTruthy();
+    await expect(process.returnActiveUserDataByID(2500)).rejects.toThrowError();
 
-    // update password
+    // Retrieve ActiveUserDataByUsername || Email
+    expect(
+      await process.returnActiveUserData({
+        username: user.dataValues.username,
+      }),
+    ).toBeTruthy();
+    await expect(
+      process.returnActiveUserData({
+        username: 'imnotexist',
+      }),
+    ).rejects.toThrowError();
+
+    // Check User ExistNotOptionCheck
+    expect(await process.userExistNotOptionCheck(user.id)).toBeTruthy();
+    await expect(process.userExistNotOptionCheck(2500)).rejects.toThrowError();
+
+    // Check User ExistByID
+    expect(await process.isUserExistByID(user.id)).toBeTruthy();
+    await expect(process.isUserExistByID(2500)).rejects.toThrowError();
+
+    // Update password
     const { found, generatedPassword } = await process.setGeneratedPassword({
-      username: 'qqqqqqqqqqq',
+      username: user.dataValues.username,
     });
-    console.log(found);
-    console.log(generatedPassword);
+
+    expect(found).toBeTruthy();
+    expect(generatedPassword).toBeTruthy();
   });
 
-  it('password functionality check', async () => {
+  it('Generating Password Check', async () => {
     const process = container.resolve('UserProcessRepository');
 
     expect(await process.generatePassword()).toBeTruthy();

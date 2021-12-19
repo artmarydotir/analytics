@@ -28,17 +28,8 @@ class UserCreate {
    * @param {Object} data.additional
    */
   async addUser(data) {
-    const {
-      username,
-      email,
-      password,
-      role,
-      lang,
-      options,
-      country,
-      mobile,
-      additional = {},
-    } = data;
+    const { username, email, password, role, lang, options, country, mobile } =
+      data;
 
     const schema = userJoiSchema();
 
@@ -104,10 +95,6 @@ class UserCreate {
 
     if (options.length > 0) {
       initialValues.options = options;
-    }
-
-    if (additional && typeof additional === 'object') {
-      initialValues.additional = additional;
     }
 
     /**

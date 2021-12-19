@@ -6,6 +6,7 @@ require('../../../../globals');
 const { initContainer } = require('../../../../src/Container');
 const { Config } = require('../../../../src/Config');
 const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const { list: projectRule } = require('../../../../src/Schema/ProjectRules');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
@@ -57,17 +58,14 @@ describe(__filename.replace(__dirname, ''), () => {
     const createDomain = container.resolve('DomainCreateRepository');
 
     const user1 = await createUser.addUser({
-      username: 'heytester',
-      email: 'heytester@gmail.com',
+      username: 'updatetest1',
+      email: 'updatetest@gmail.com',
       password: 'a1asQW12!@AS*&',
       role: 'AD',
       lang: 'fa',
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const user2 = await createUser.addUser({
@@ -77,52 +75,42 @@ describe(__filename.replace(__dirname, ''), () => {
       role: 'CL',
       lang: 'en',
       options: [1],
-      additional: {
-        gender: 'female',
-      },
+    });
+
+    const user3 = await createUser.addUser({
+      username: 'formembers',
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      email: 'formembers@gmail.com',
+      password: 'a8asQW12!@AS*&',
+      role: 'CL',
+      lang: 'en',
+      options: [1],
     });
 
     const project1 = await createProject.addProject({
-      title: 'its test for enable mood',
+      title: 'my primaryowner is user1',
       publicToken: '1236s5721',
       options: [1],
-      userAndRules: [
-        {
-          UserId: user1.dataValues.id,
-          rules: ['ALL', 'VIEW_A'],
-        },
-      ],
-      additional: {},
-    });
-
-    await createProject.addProject({
-      title: 'its test',
-      publicToken: '1236s5730',
-      options: [2],
+      primaryOwner: user1.id,
       userAndRules: [
         {
           UserId: user2.dataValues.id,
-          rules: ['ALL'],
-        },
-        {
-          UserId: user1.dataValues.id,
-          rules: ['ALL'],
+          rules: projectRule,
         },
       ],
-      additional: {},
     });
 
-    const project3 = await createProject.addProject({
-      title: 'its test hey',
-      publicToken: '1236s5asd',
+    const project2 = await createProject.addProject({
+      title: 'its test',
+      publicToken: '1236s5730',
+      primaryOwner: user2.id,
       options: [1],
       userAndRules: [
         {
-          UserId: user2.dataValues.id,
-          rules: ['ALL'],
+          UserId: user1.dataValues.id,
+          rules: [projectRule[1]],
         },
       ],
-      additional: {},
     });
 
     expect(
@@ -132,9 +120,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'for update',
         options: [1],
         projectId: project1.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).toBeTruthy();
 
@@ -144,13 +129,11 @@ describe(__filename.replace(__dirname, ''), () => {
         wildcardDomain: '',
         description: 'for dontbe update',
         options: [1],
-        projectId: project3.id,
-        additional: {
-          alexaRank: '40',
-        },
+        projectId: project2.id,
       }),
     ).toBeTruthy();
 
+    // Update user by admins
     expect(
       await user.updateUserBySuperAdmin(user1.dataValues.id, {
         username: 'heymary',
@@ -163,78 +146,71 @@ describe(__filename.replace(__dirname, ''), () => {
         },
         country: 'IR',
         mobile: '09017744145',
-        additional: {
-          gender: 'other',
-        },
       }),
     ).toBeTruthy();
 
     expect(
       await user.updateUserBySuperAdmin(user2.dataValues.id, {
-        username: 'noupdatefield',
-        email: 'noupdate@gmail.com',
-        role: 'SA',
-        lang: 'en',
+        username: 'heytester2',
+        email: 'heyteste2@gmail.com',
+        role: 'CL',
+        lang: 'fa',
         options: {
           ACTIVE: true,
           DELETED: false,
         },
         country: 'IR',
-        mobile: '09336314586',
-        additional: {
-          gender: 'robots',
-        },
+        mobile: '09017744145',
       }),
     ).toBeTruthy();
 
+    // Get Project Belonging to User
     expect(
-      await user.updateUserByMembers(user2.dataValues.id, {
-        username: 'register',
-        email: 'heytestr2@gmail.com',
+      await user.getProjectListBelongsUser(user2.dataValues.id),
+    ).toBeTruthy();
+
+    // Patch user options
+    expect(
+      await user.patchUserOptions(user3.dataValues.id, {
+        ACTIVE: true,
+        DELETED: false,
+      }),
+    ).toBeTruthy();
+
+    // Update user by member(Profile update)
+    expect(
+      await user.updateUserByMembers(user3.dataValues.id, {
+        username: 'formembersedit',
+        email: 'formembers@gmail.com',
         lang: 'en',
         country: 'IR',
         mobile: '09017744178',
-        additional: {
-          gender: 'male',
-        },
       }),
     ).toBeTruthy();
 
     await expect(
-      user.updateUserByMembers(user2.dataValues.id, {
+      user.updateUserByMembers(user3.dataValues.id, {
         username: '+',
-        email: 'heytester2@gmail.com',
+        email: 'formembers@gmail.com',
         lang: 'en',
         country: 'IR',
         mobile: '09017744178',
-        additional: {
-          gender: 'male',
-        },
       }),
     ).rejects.toThrowError();
 
     await expect(
-      user.updateUserByMembers(user2.dataValues.id, {
-        username: 'register',
-        email: 'heytester2@gmail.com',
+      user.updateUserByMembers(user3.dataValues.id, {
+        username: 'formembers',
+        email: 'formembers@gmail.com',
         lang: 'en',
         country: 'IR',
         mobile: '98',
-        additional: {
-          gender: 'male',
-        },
       }),
     ).rejects.toThrowError();
 
+    // Retrieve user options
     expect(
-      await user.patchUserOptions(user2.dataValues.id, {
-        ACTIVE: false,
-        DELETED: true,
-      }),
-    ).toBeTruthy();
-
-    expect(
-      await user.retrieveUserOptions(user2.dataValues.id, {
+      await user.retrieveUserOptions(user3.dataValues.id, {
         ACTIVE: false,
         DELETED: false,
       }),

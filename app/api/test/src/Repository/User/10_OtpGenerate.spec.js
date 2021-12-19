@@ -28,48 +28,25 @@ describe(__filename.replace(__dirname, ''), () => {
   afterAll(async () => {
     await new Promise((r) => setTimeout(r, 100));
     await container.dispose();
-    await container.resolve('Redis').quit();
   });
 
   it('add user', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    const authUser = container.resolve('UserAuthRepository');
-    const captcha = container.resolve('CaptchaRepository');
-    const capResult = await captcha.generateCaptcha();
-    const redis = await container.resolve('Redis');
-    const red = await redis.getRedis();
+    const otp = container.resolve('OtpGeneratorRepository');
 
-    await createUser.addUser({
+    const user = await createUser.addUser({
       username: 'heymary',
       email: 'heymary@gmail.com',
       password: 'a1asQW12!@AS*&',
       role: 'AD',
       lang: 'fa',
       options: [1],
-      country: 'IR',
-      mobile: '09017744145',
     });
 
+    await expect(otp.generateNewOtp()).rejects.toThrowError();
     await expect(
-      authUser.signIn('AP', {
-        email: 'mary@gmail.com',
-        password: 'a',
-        captcha: {
-          id: capResult.id,
-          value: await red.get(`captcha:${capResult.id}`),
-        },
-      }),
+      otp.generateNewOtp(user.id, 'imsowrong!@AS'),
     ).rejects.toThrowError();
-
-    const b = await authUser.signIn('AP', {
-      email: 'heymary@gmail.com',
-      password: 'a1asQW12!@AS*&',
-      captcha: {
-        id: capResult.id,
-        value: await red.get(`captcha:${capResult.id}`),
-      },
-    });
-
-    expect(b).toBeTruthy();
+    expect(await otp.generateNewOtp(user.id, 'a1asQW12!@AS*&')).toBeTruthy();
   });
 });
