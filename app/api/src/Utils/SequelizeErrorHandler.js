@@ -25,5 +25,10 @@ module.exports = (e) => {
         statusCode: duplicateEntry ? status : 500,
       },
     );
+  } else {
+    throw new ErrorWithProps(errorConstMerge.OTHER_ERROR, {
+      validation: [{ message: e.message }],
+      statusCode: 500,
+    });
   }
 };

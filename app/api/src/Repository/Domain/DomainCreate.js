@@ -127,9 +127,7 @@ class DomainCreate {
       const result = await Domain.create(initialValues);
       return result.dataValues;
     } catch (e) {
-      if (e.errors) {
-        SequelizeErrorHandler(e);
-      }
+      SequelizeErrorHandler(e);
     }
   }
 

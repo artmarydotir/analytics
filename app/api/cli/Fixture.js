@@ -3,6 +3,8 @@ const { waterfall } = require('async');
 const chalk = require('chalk');
 const _ = require('lodash');
 
+const faker = require('faker/locale/en');
+
 const { log } = console;
 const { list: userRoles } = require('../src/Schema/UserRoles');
 
@@ -31,8 +33,9 @@ module.exports = {
     const createUser = container.resolve('UserCreateRepository');
     const createProject = container.resolve('ProjectCreateRepository');
     const createDomain = container.resolve('DomainCreateRepository');
+    const createUptime = container.resolve('UptimeCreateRepository');
 
-    const { User, Project, UserProject, Domain } = seq.models;
+    const { User, Project, UserProject, Domain, Uptime } = seq.models;
     await UserProject.destroy({
       where: {},
       truncate: true,
@@ -55,6 +58,13 @@ module.exports = {
     });
 
     await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Uptime.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -113,7 +123,6 @@ module.exports = {
               },
             ],
             primaryOwner: Math.floor(Math.random() * 10) + 1,
-            additional: {},
           })
           .then(() => cb())
           .catch((e) => cb(e));
@@ -142,9 +151,6 @@ module.exports = {
             description: `there you go domain number ${index}`,
             options: [Math.floor(Math.random() * 2) + 1],
             projectId: Math.floor(Math.random() * 30) + 1,
-            additional: {
-              alexaRank: `${index}`,
-            },
           })
           .then(() => cb())
           .catch((e) => cb(e));
@@ -161,9 +167,43 @@ module.exports = {
       });
     });
 
+    // uptime
+    const numBetween = (min, max) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const randomBoolean = () => Math.random() < 0.5;
+    const uptimeCallbacks = [];
+
+    for (let index = 1; index < 30; index += 1) {
+      uptimeCallbacks.push((cb) => {
+        createUptime
+          .addUptime({
+            name: `uptime${index}`,
+            url: `${faker.internet.url()}`,
+            description: 'uptime dear uptime',
+            options: [1],
+            interval: Number(numBetween(5, 120)),
+            ping: randomBoolean(),
+          })
+          .then(() => cb())
+          .catch((e) => cb(e));
+      });
+    }
+
+    await new Promise((resolve, reject) => {
+      waterfall(uptimeCallbacks, (e) => {
+        if (e) {
+          reject(e);
+        } else {
+          resolve();
+        }
+      });
+    });
+
     log(`${chalk.green('✔ Truncate data tables')}`);
     log(`${chalk.green('✔ Create 120 Users')}`);
     log(`${chalk.green('✔ Create 60 Projects')}`);
     log(`${chalk.green('✔ Create 40 Domains')}`);
+    log(`${chalk.green('✔ Create 30 Uptimes')}`);
   },
 };
