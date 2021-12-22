@@ -28,17 +28,8 @@ class UserCreate {
    * @param {Object} data.additional
    */
   async addUser(data) {
-    const {
-      username,
-      email,
-      password,
-      role,
-      lang,
-      options,
-      country,
-      mobile,
-      additional = {},
-    } = data;
+    const { username, email, password, role, lang, options, country, mobile } =
+      data;
 
     const schema = userJoiSchema();
 
@@ -60,19 +51,17 @@ class UserCreate {
     }
 
     const initialValues = {
-      username: null,
+      username: username.toLowerCase(),
       email: null,
       password: null,
-      role: userRoleObject.CLIENT,
+      role: role || userRoleObject.CLIENT,
       otpSecret: null,
-      lang: null,
+      lang: lang || null,
       options: [userOption.ACTIVE],
-      country: 'IR',
+      country: country || 'IR',
       mobile: null,
       additional: null,
     };
-
-    initialValues.username = username.toLowerCase();
 
     if (email && validator.isEmail(email)) {
       initialValues.email = validator.normalizeEmail(email);
@@ -83,13 +72,7 @@ class UserCreate {
       initialValues.password = passwordHash;
     }
 
-    initialValues.role = role;
-
-    initialValues.lang = lang;
-
     initialValues.otpSecret = this.process.generateNewOtpSecret();
-
-    initialValues.country = country;
 
     if (mobile) {
       const validMobile = this.process.setMobile(mobile, country);
@@ -106,10 +89,6 @@ class UserCreate {
       initialValues.options = options;
     }
 
-    if (additional && typeof additional === 'object') {
-      initialValues.additional = additional;
-    }
-
     /**
      ***
      *** INSERT ***
@@ -117,13 +96,15 @@ class UserCreate {
      */
     const { User } = this.sequelize.models;
 
+    let result;
     try {
-      return await User.create(initialValues);
+      result = await User.create(initialValues);
     } catch (e) {
       if (e.errors) {
         SequelizeErrorHandler(e);
       }
     }
+    return result;
   }
 }
 

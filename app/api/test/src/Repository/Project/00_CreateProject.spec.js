@@ -51,43 +51,35 @@ describe(__filename.replace(__dirname, ''), () => {
     const user = await createUser.addUser({
       username: 'addproject',
       email: 'addproject@gmail.com',
-      password: 'a1asQW12!@AS',
+      password: 'a1asQW12!@ASd',
       role: 'AD',
       lang: 'fa',
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
-    });
-
-    const user3 = await createUser.addUser({
-      username: 'addprimary',
-      email: 'addprimary@gmail.com',
-      password: 'a1asQW12!@AS',
-      role: 'SA',
-      lang: 'fa',
-      options: [1],
-      additional: {
-        gender: 'female',
-      },
     });
 
     const user2 = await createUser.addUser({
       username: 'addproject2',
       email: 'addproject2@gmail.com',
-      password: 'a1asQW12!@AS',
+      password: 'a1asQW12!@ASq',
       role: 'SA',
       lang: 'fa',
       options: [1],
       country: 'IR',
       mobile: '09017744148',
-      additional: {
-        gender: 'female',
-      },
     });
 
+    const user3 = await createUser.addUser({
+      username: 'addprimary',
+      email: 'addprimary@gmail.com',
+      password: 'l1asQW12!@AS',
+      role: 'SA',
+      lang: 'fa',
+      options: [1],
+    });
+
+    // Create project
     const pData = await createProject.addProject({
       title: 'for profile test',
       description: 'hey hello',
@@ -103,7 +95,6 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       ],
       primaryOwner: user3.dataValues.id,
-      additional: {},
     });
 
     expect(
@@ -118,20 +109,15 @@ describe(__filename.replace(__dirname, ''), () => {
           },
         ],
         primaryOwner: user3.dataValues.id,
-        additional: {},
       }),
     ).toBeTruthy();
-
-    await profile.returnProjectData(pData.id);
-
-    // check later
-    expect(await createProject.regeneratePrivateToken(pData.id)).toBeTruthy();
 
     expect(
       await createProject.addProject({
         title: 'test2',
         publicToken: '123654a1s2',
         description: 'hey hello',
+        options: [1],
         userAndRules: [
           {
             UserId: user.dataValues.id,
@@ -143,7 +129,6 @@ describe(__filename.replace(__dirname, ''), () => {
           },
         ],
         primaryOwner: user.dataValues.id,
-        additional: {},
       }),
     ).toBeTruthy();
 
@@ -157,7 +142,6 @@ describe(__filename.replace(__dirname, ''), () => {
             rules: ['VIEWALL', 'PROJECTADMIN'],
           },
         ],
-        additional: {},
         primaryOwner: user.dataValues.id,
       }),
     ).toBeTruthy();
@@ -166,9 +150,37 @@ describe(__filename.replace(__dirname, ''), () => {
       createProject.addProject({
         title: 'donyayeEf',
         description: 'hey hello there',
-        additional: {},
       }),
     ).rejects.toThrowError();
+
+    await expect(
+      createProject.addProject({
+        title: 'notvalid',
+        userAndRules: [
+          {
+            UserId: user.dataValues.id,
+            rules: ['IMNOTVALID'],
+          },
+        ],
+        primaryOwner: user.dataValues.id,
+      }),
+    ).rejects.toThrowError();
+
+    // Error for Duplicate name
+    // await expect(
+    //   createProject.addProject({
+    //     title: 'for profile test',
+    //     description: 'hey hello',
+    //     options: [1],
+    //     userAndRules: [
+    //       {
+    //         UserId: user.dataValues.id,
+    //         rules: ['VIEWALL'],
+    //       },
+    //     ],
+    //     primaryOwner: user3.dataValues.id,
+    //   }),
+    // ).rejects.toThrowError();
 
     await expect(
       createProject.addProject({
@@ -182,5 +194,12 @@ describe(__filename.replace(__dirname, ''), () => {
         primaryOwner: user.dataValues.id,
       }),
     ).rejects.toThrowError();
+
+    // Retrieve project Data
+    await profile.returnProjectData(pData.id);
+
+    // Generate Private Token
+    expect(await createProject.regeneratePrivateToken(pData.id)).toBeTruthy();
+    await expect(createProject.regeneratePrivateToken()).rejects.toThrowError();
   });
 });

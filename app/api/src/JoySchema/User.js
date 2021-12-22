@@ -79,7 +79,7 @@ const UpdateUserSchemaSA = () =>
         'string.max': errorConstMerge.MAX_LENGTH,
         'string.pattern.base': errorConstMerge.INVALID_REGEX,
       }),
-    email: Joi.string().required().messages({
+    email: Joi.string().email().required().messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),
     role: Joi.string()

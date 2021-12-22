@@ -17,7 +17,7 @@ class UserForgotPassword {
 
   async sendForgotPasswordCode(email) {
     if (!email) {
-      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
+      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_EMAIL, {
         statusCode: 400,
       });
     }

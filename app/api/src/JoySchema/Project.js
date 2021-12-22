@@ -21,7 +21,7 @@ const CreateProjectSchema = () =>
       'string.max': errorConstMerge.MAX_LENGTH,
     }),
     userAndRules: Joi.array().allow(null).optional(),
-    options: Joi.any().allow(null).optional(),
+    options: Joi.any().allow(null),
     primaryOwner: Joi.number().required().messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
     }),

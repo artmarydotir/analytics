@@ -1,4 +1,5 @@
 /* eslint-env jest */
+
 // @ts-ignore
 require('../../../../globals');
 
@@ -15,8 +16,8 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
-    await User.destroy({
+    const { Uptime } = seq.models;
+    await Uptime.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -29,25 +30,36 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add user and forget password check', async () => {
-    const createUser = container.resolve('UserCreateRepository');
-    const forgetPass = container.resolve('UserForgotPasswordRepository');
-
-    await createUser.addUser({
-      username: 'heymary',
-      email: 'heymary@gmail.com',
-      password: 'a1asQW12!@AS*&',
-      role: 'AD',
-      lang: 'fa',
-      options: [1],
-      country: 'IR',
-      mobile: '09017744145',
-    });
-
-    await expect(forgetPass.sendForgotPasswordCode()).rejects.toThrowError();
+  it('add Uptime', async () => {
+    const createUptime = container.resolve('UptimeCreateRepository');
 
     expect(
-      await forgetPass.sendForgotPasswordCode('heymary@gmail.com'),
+      await createUptime.addUptime({
+        name: 'heyuptime',
+        url: 'https://jacynthe.biz',
+        description: 'i can be a description',
+        ping: false,
+        interval: 6,
+        options: [1],
+      }),
     ).toBeTruthy();
+
+    await expect(
+      createUptime.addUptime({
+        name: 'heyuptimes',
+        options: [1],
+        ping: true,
+      }),
+    ).rejects.toThrowError();
+
+    await expect(
+      createUptime.addUptime({
+        name: 'heyuptime',
+        url: 'https://jacynsthe.bi',
+        ping: true,
+        interval: 8,
+        options: [1],
+      }),
+    ).rejects.toThrowError();
   });
 });

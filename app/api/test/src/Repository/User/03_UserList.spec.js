@@ -43,9 +43,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
 
     await createUser.addUser({
@@ -54,10 +51,7 @@ describe(__filename.replace(__dirname, ''), () => {
       password: 'a1asQW12!@AS*&',
       role: 'CL',
       lang: 'en',
-      options: [1, 2],
-      additional: {
-        gender: 'female',
-      },
+      options: [1],
     });
 
     await createUser.addUser({
@@ -69,26 +63,21 @@ describe(__filename.replace(__dirname, ''), () => {
       country: 'IR',
       mobile: '09127052565',
       options: [2],
-      additional: {
-        gender: 'other',
-      },
     });
 
     //  dts_createdAt: '2021-06-27 12:00:00',
     //  dte_createdAt: '2022-04-27 12:00:00',
     const result1 = await userList.fetchUserList({
-      lastSeen: 1,
+      lastSeen: undefined,
       limit: 40,
       filter: {
         like_mobile: '912',
         like_email: 'hey',
         eq_role: 'SA',
         arrIn_options: [2],
-        dte_createdAt: '2090-04-27 12:00:00',
       },
     });
-    console.log('----------------------add docs', result1);
     expect(result1).toBeTruthy();
-    expect(result1[0].dataValues.username).toBe('maryyq');
+    expect(result1.docs[0].dataValues.username).toBe('maryyq');
   });
 });

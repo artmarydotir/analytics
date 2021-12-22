@@ -32,7 +32,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('add user', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    const profile = container.resolve('UserProfileRepository');
+    const updatePAss = container.resolve('UserUpdateMemberPasswordRepository');
 
     const user = await createUser.addUser({
       username: 'heymary',
@@ -41,16 +41,16 @@ describe(__filename.replace(__dirname, ''), () => {
       role: 'AD',
       lang: 'fa',
       options: [1],
-      country: 'IR',
-      mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
 
-    await expect(profile.returnUserData()).rejects.toThrowError();
+    await expect(updatePAss.setMemberPassword()).rejects.toThrowError();
 
-    expect(await profile.returnUserData(user.id)).toBeTruthy();
-    await expect(profile.returnUserData(123654789)).rejects.toThrowError();
+    expect(
+      await updatePAss.setMemberPassword(
+        user.id,
+        'a1asQW12!@AS*&',
+        'imnewPass12#$%D',
+      ),
+    ).toBeTruthy();
   });
 });

@@ -26,7 +26,6 @@ class ProjectCreate {
    * @param {object[]} data.userAndRules
    * @param {Number[]} data.options
    * @param {Number} data.primaryOwner
-   * @param {Object} data.additional
    */
   async addProject(data) {
     const {
@@ -35,7 +34,6 @@ class ProjectCreate {
       description,
       userAndRules,
       options,
-      additional = {},
       primaryOwner,
     } = data;
 
@@ -59,8 +57,8 @@ class ProjectCreate {
     }
 
     const initialValues = {
-      title: null,
-      description: null,
+      title,
+      description: description || null,
       options: [projectOption.ACTIVE],
       privateToken: null,
       publicToken: null,
@@ -72,16 +70,10 @@ class ProjectCreate {
       userAndRules: null,
     };
 
-    initialValues.title = title;
-    if (description) {
-      initialValues.description = description;
-    }
-    if (options.length > 0) {
+    if (options && options.length > 0) {
       initialValues.options = options;
     }
-    if (additional) {
-      initialValues.additional = additional;
-    }
+
     if (publicToken) {
       initialValues.publicToken = publicToken;
     } else {
@@ -110,6 +102,8 @@ class ProjectCreate {
      */
     const t = await this.sequelize.transaction();
     const { Project, UserProject } = this.sequelize.models;
+    let result;
+
     try {
       const project = await Project.create(initialValues, { transaction: t });
 
@@ -124,12 +118,13 @@ class ProjectCreate {
 
       await t.commit();
 
-      return project.dataValues;
+      result = project.dataValues;
+      // return project.dataValues;
     } catch (error) {
       await t.rollback();
       SequelizeErrorHandler(error);
-      // throw error;
     }
+    return result;
   }
 
   // eslint-disable-next-line class-methods-use-this

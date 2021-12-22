@@ -227,9 +227,7 @@ class DomainUpdate {
       );
       return { affectedRow, id };
     } catch (e) {
-      if (e.errors) {
-        SequelizeErrorHandler(e);
-      }
+      SequelizeErrorHandler(e);
     }
   }
 }

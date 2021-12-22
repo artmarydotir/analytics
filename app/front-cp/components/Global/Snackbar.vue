@@ -14,13 +14,7 @@
       {{ $t(`errors.${snackbar.message}`) }}
     </template>
 
-    <div
-      v-else-if="
-        snackbar.message &&
-        typeof snackbar.message === 'array' &&
-        snackbar.message.length > 0
-      "
-    >
+    <div v-else-if="snackbar.message">
       <p class="font-weight-bold text-center">
         <span v-if="snackbar.message[0].message === 'UNPROCESSABLE_ENTITY'">
           {{ $t('errors.UNPROCESSABLE_ENTITY') }}
@@ -59,7 +53,7 @@
         </v-list-item>
       </template>
     </div>
-    <template v-else> {{ $t(`errors.${snackbar.message}`) }} </template>
+    <template v-else> other:{{ $t(`errors.${snackbar.message}`) }} </template>
 
     <template v-slot:action="{ attrs }">
       <v-btn

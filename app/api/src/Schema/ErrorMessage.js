@@ -2,6 +2,7 @@ const constants = {
   ISREQUIRE_FIELD: '',
   UNAUTHORIZED: '',
   ISREQUIRE_ID: '',
+  ISREQUIRE_EMAIL: '',
   ISREQUIRE_PASSWORD: '',
   MIN_LENGTH: '',
   MAX_LENGTH: '',
