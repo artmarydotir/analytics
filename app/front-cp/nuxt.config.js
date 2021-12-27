@@ -61,7 +61,11 @@ export default {
 
   css: ['@aasaam/noto-font/dist/font-face.css', '~/assets/main.scss'],
 
-  plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
+  plugins: [
+    { src: '~/plugins/vuex-persist.js' },
+    '~/plugins/vee-validate.js',
+    // { src: '~/plugins/axios.js', ssr: false },
+  ],
   components: {
     dirs: [
       '~/components',
@@ -72,6 +76,7 @@ export default {
       '~/components/User/Update',
       '~/components/Project',
       '~/components/Domain',
+      '~/components/Uptime',
     ],
   },
 

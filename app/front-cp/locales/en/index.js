@@ -94,6 +94,7 @@ module.exports = {
   projectNotFound: 'Project Not Found',
   deleteProjectWarning:
     'By deleting this project, all domain that belongs to this will be deactivate too.',
+
   // ## USERS
   username: 'Username',
   chooseRole: 'Choose Role',
@@ -116,9 +117,20 @@ module.exports = {
     DELETED: 'Successfully Deleted.',
     GENERATED_PRIVATE_TOKEN: 'Successfully generated private token.',
   },
+  // ## UPTIME
+  uptimeManagement: 'Uptime Monitoring',
+  uptimeAdd: 'Add Uptime',
+  uptimeList: 'Uptime List',
+  name: 'Name',
+  url: 'URL',
+  ping: 'Ping',
+  interval: 'Interval (Minute)',
+  OTHER_ERROR: 'Other Error Occurred. Please Try Again.',
+  noStatus: 'No Status',
   errors: {
     UNPROCESSABLE_ENTITY: 'Unprocessable Entity',
     DUPLICATE_ENTRY: 'Duplicate Entry',
+    NULL_ENTRY: 'Null Entry',
     NOT_ALLOWED: 'Expired.',
     MIN_LENGTH: 'min length is not valid.',
     MAX_LENGTH: 'min length is not valid.',
@@ -141,6 +153,7 @@ module.exports = {
   },
   // ## validations
   validations: {
+    objectRequired: '{item} is required',
     alpha: 'The {_field_} field may only contain alphabetic characters',
     alpha_num: 'The {_field_} field may only contain alpha-numeric characters',
     alpha_dash:
@@ -151,8 +164,7 @@ module.exports = {
     confirmed: 'The {_field_} field confirmation does not match',
     digits:
       'The {_field_} field must be numeric and exactly contain {length} digits',
-    dimensions:
-      'The {_field_} field must be 0:{width} pixels by 1:{height} pixels',
+
     email: 'The {_field_} field must be a valid email',
     excluded: 'The {_field_} field is not a valid value',
     ext: 'The {_field_} field is not a valid file',
@@ -169,7 +181,6 @@ module.exports = {
     regex: 'The {_field_} field format is invalid',
     required_if: 'The {_field_} field is required',
     required: 'The {_field_} field is required',
-    size: 'The {_field_} field size must be less than 0:{size}KB',
     url: 'The {_field_} field is not a valid URL',
     passmeter:
       'The password must contain at least 8 characters, contain a-z/A-Z , number , special chars like (=[];/~!@#$%^&*()_+{}|:<>?)',

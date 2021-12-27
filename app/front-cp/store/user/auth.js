@@ -68,22 +68,26 @@ export const actions = {
   },
   // ******
   async refreshToken({ commit, getters, state }) {
+    console.log('refreshToken function');
     let tryCallRefreshToken = true;
     const tokenExpireDate = localStorage.getItem('tokenExpireDate');
 
     if (tokenExpireDate !== null) {
+      console.log('iff, #tokenExpireDate', tokenExpireDate);
       const expirationTime = new Date(tokenExpireDate);
+
       const recent = new Date();
       // console.log(expirationTime, '1111');
       // console.log(recent, '2222');
       // console.log(expirationTime > recent);
       if (expirationTime > recent) {
+        console.log(expirationTime, recent);
         tryCallRefreshToken = false;
       }
     }
 
     if (tryCallRefreshToken) {
-      console.log('refresh token call');
+      console.log('refresh token called');
       try {
         const response = await this.$axios.get(
           `${window.applicationBaseURL}api/open-api/user/auth/refresh`,

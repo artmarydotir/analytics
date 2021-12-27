@@ -11,6 +11,8 @@ const PrivateTokenRegenerate = require('./Project/PrivateTokenRegenerate');
 const DomainCreate = require('./Domain/DomainCreate');
 const DomainUpdate = require('./Domain/DomainUpdate');
 const DomainDelete = require('./Domain/DomainDelete');
+const UptimeCreate = require('./Uptime/UptimeCreate');
+const UptimeDelete = require('./Uptime/UptimeDelete');
 
 module.exports = {
   UserCreate,
@@ -26,4 +28,6 @@ module.exports = {
   DomainCreate,
   DomainUpdate,
   DomainDelete,
+  UptimeCreate,
+  UptimeDelete,
 };

@@ -182,7 +182,7 @@ module.exports = {
             url: `${faker.internet.url()}`,
             description: 'uptime dear uptime',
             options: [1],
-            interval: Number(numBetween(5, 120)),
+            interval: Number(numBetween(2, 60)),
             ping: randomBoolean(),
           })
           .then(() => cb())

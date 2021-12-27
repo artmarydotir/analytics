@@ -18,7 +18,7 @@
         class="pt-2 pb-2"
         hide-default-footer
         :headers="headers"
-        :items="projectDocs"
+        :items="uptimeDocs"
         fixed-header
         :server-items-length="totalServerItem"
         @click:row="rowClick"
@@ -26,24 +26,19 @@
         <template v-if="generalAction.deletable" v-slot:top>
           <ListDialog
             :dialog.sync="dialog"
-            :title="$t('deleteProject')"
-            :okbtn="$t('deleteProject')"
+            :title="$t('deleteUptime')"
+            :okbtn="$t('deleteUptime')"
             :closebtn="$t('nope')"
-            :done-event="deleteProject"
+            :done-event="deleteUptime"
           >
             <template slot="dialogbody">
-              <v-alert dense type="error" class="mt-5">
-                <span>
-                  {{ $t('deleteProjectWarning') }}
-                </span>
-              </v-alert>
               <h3 class="headline mx-auto text-center pt-3">
                 {{ $t('areYouSureDelete') }}
               </h3>
 
               <div class="text-center mx-auto pt-5 pb-5">
                 <span class="text-h5 primary--text">
-                  {{ $t('projectName') }} : {{ modalData.title }}
+                  {{ $t('url') }} : {{ modalData.url }}
                 </span>
               </div>
             </template>
@@ -54,52 +49,47 @@
           <TableFilter :filtertype="headers" @sendReadyFilter="readyFilters" />
         </template>
 
-        <template v-slot:[`item.owner`]="{ item }">
-          <v-chip
-            v-for="o in item.owner"
-            :key="o.username"
-            dark
-            small
-            label
-            outlined
-            class="ma-1"
-            color="blue"
-          >
-            {{ o.username }}
-          </v-chip>
+        <template v-slot:[`item.url`]="{ item }">
+          <span dir="ltr">
+            {{ item.url }}
+          </span>
         </template>
-
-        <template v-slot:[`item.options`]="{ item }">
-          <v-chip
-            v-if="item.options.includes(1)"
-            dark
-            small
-            label
-            outlined
-            class="ma-1"
-            color="green"
-          >
-            {{ $t('active') }}
-          </v-chip>
-          <v-chip
-            v-if="item.options.includes(2)"
-            dark
-            label
-            small
-            outlined
-            class="ma-1"
-            color="orange"
-          >
-            {{ $t('deleted') }}
-          </v-chip>
-        </template>
-
         <template v-slot:[`item.createdAt`]="{ item }">
           {{
             formatDateTime({
               value: item.createdAt,
             })
           }}
+        </template>
+
+        <template v-slot:[`item.options`]="{ item }">
+          <div v-if="item.options && item.options.length > 0">
+            <v-chip
+              v-if="item.options.includes(1)"
+              dark
+              small
+              label
+              outlined
+              class="ma-1"
+              color="green"
+            >
+              {{ $t('active') }}
+            </v-chip>
+            <v-chip
+              v-if="item.options.includes(2)"
+              dark
+              label
+              small
+              outlined
+              class="ma-1"
+              color="orange"
+            >
+              {{ $t('deleted') }}
+            </v-chip>
+          </div>
+
+          <v-chip v-else dark label small outlined class="ma-1" color="grey">
+          </v-chip>
         </template>
 
         <!-- Action  -->
@@ -112,6 +102,11 @@
           </nuxt-link>
 
           <v-icon
+            :disabled="
+              item.options &&
+              item.options.length > 0 &&
+              item.options.includes(2)
+            "
             tag="button"
             class="mr-1 ml-1"
             color="error"
@@ -154,7 +149,7 @@ import dateFormatter from '@/mixin/dateFormatter';
 const { to } = require('await-to-js');
 
 export default {
-  name: 'ProjectTable',
+  name: 'UptimeTable',
   mixins: [tableFunctions, dateFormatter],
   props: {
     generalAction: {
@@ -172,7 +167,7 @@ export default {
   },
   data() {
     return {
-      projectDocs: [],
+      uptimeDocs: [],
       limit: 10,
       modalData: {},
       loading: false,
@@ -183,11 +178,11 @@ export default {
   },
   computed: {
     lastSeen() {
-      const lastItem = this.projectDocs[this.projectDocs.length - 1];
+      const lastItem = this.uptimeDocs[this.uptimeDocs.length - 1];
       return lastItem ? lastItem.id : undefined;
     },
     totalServerItem() {
-      return this.projectDocs.length;
+      return this.uptimeDocs.length;
     },
   },
   watch: {
@@ -202,7 +197,7 @@ export default {
           },
           this.moduleInfo.url,
         );
-        this.projectDocs = searchResult;
+        this.uptimeDocs = searchResult;
       }, 900),
     },
   },
@@ -216,7 +211,7 @@ export default {
       this.moduleInfo.url,
     );
     if (data) {
-      this.projectDocs = data;
+      this.uptimeDocs = data;
     }
   },
   methods: {
@@ -234,7 +229,7 @@ export default {
         this.isDisabledMore = true;
       }
 
-      this.projectDocs.push(...newDocs);
+      this.uptimeDocs.push(...newDocs);
     },
 
     readyFilters(value) {
@@ -246,7 +241,7 @@ export default {
       this.modalData = Object.assign({}, data);
     },
 
-    async deleteProject() {
+    async deleteUptime() {
       const { id } = this.modalData;
 
       const [err, data] = await to(
@@ -262,7 +257,7 @@ export default {
           },
           this.moduleInfo.url,
         );
-        this.projectDocs = result;
+        this.uptimeDocs = result;
       }
       if (err) {
         this.dialog = false;

@@ -36,20 +36,21 @@ class ProjectList {
             query[`${name}`] = {
               [Op.contains]: value,
             };
-          } else if (type === 'dts') {
-            query[`${name}`] = {
-              [Op.gte]: new Date(value),
-            };
-          } else if (type === 'dte') {
-            query[`${name}`] = {
-              [Op.lte]: new Date(value),
-            };
           }
+          const a = {};
+          if (type === 'dts') {
+            a[Op.gte] = new Date(value);
+          } else if (type === 'dte') {
+            a[Op.lte] = new Date(value);
+          }
+          query[`${name}`] = {
+            ...query[`${name}`],
+            ...a,
+          };
         }
       });
     }
 
-    console.log(query);
     if (limit && Number.isInteger(limit) && limit >= 1 && limit <= 80) {
       limiting = limit;
     }
