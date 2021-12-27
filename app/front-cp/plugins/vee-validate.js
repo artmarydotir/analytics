@@ -22,6 +22,7 @@ import {
   setInteractionMode,
   ValidationObserver,
   ValidationProvider,
+  configure,
 } from 'vee-validate';
 
 setInteractionMode('eager');
@@ -42,3 +43,10 @@ extend('regex', regex);
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+
+export default function VeeValidatePlugin({ app }) {
+  configure({
+    defaultMessage: (_, values) =>
+      app.i18n.t(`validations.${values._rule_}`, values),
+  });
+}

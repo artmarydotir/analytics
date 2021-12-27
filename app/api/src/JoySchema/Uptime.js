@@ -20,12 +20,13 @@ const base = Joi.object().keys({
   url: Joi.string().uri().required().messages({
     'any.required': errorConstMerge.ISREQUIRE_FIELD,
   }),
-  description: Joi.string().max(200).optional().messages({
+  description: Joi.string().max(200).optional().allow(null, '').messages({
     'string.max': errorConstMerge.MAX_LENGTH,
   }),
-  interval: Joi.number().min(4).required().messages({
+  interval: Joi.number().min(2).max(60).required().messages({
     'any.required': errorConstMerge.ISREQUIRE_FIELD,
     'number.min': errorConstMerge.MIN_LENGTH,
+    'number.max': errorConstMerge.MAX_LENGTH,
   }),
   ping: Joi.boolean().required().messages({
     'any.required': errorConstMerge.ISREQUIRE_FIELD,
@@ -35,9 +36,7 @@ const base = Joi.object().keys({
 // Create schema
 const CreateUptimeSchema = () =>
   base.keys({
-    options: Joi.array().items(Joi.number()).required().messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
+    options: Joi.array().items(Joi.number().optional()),
   });
 
 // Update schema

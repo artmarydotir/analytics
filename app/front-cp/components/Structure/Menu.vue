@@ -63,7 +63,7 @@ export default {
   name: 'Menu',
   data() {
     return {
-      // loginRole: this.$store.getters['user/auth/GET_ROLE'],
+      currentUserRole: this.$store.getters['user/auth/GET_ROLE'],
     };
   },
   computed: {
@@ -79,6 +79,23 @@ export default {
     groupItems() {
       return [
         {
+          action: 'mdi-arrow-up-bold-circle-outline',
+          title: this.$t('uptimeManagement'),
+          active: this.$route.path.includes('uptime'),
+          items: [
+            {
+              title: this.$t('uptimeAdd'),
+              link: '/uptime/add/',
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
+            },
+            {
+              title: this.$t('uptimeList'),
+              link: '/uptime/list/',
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
+            },
+          ],
+        },
+        {
           action: 'mdi-domain',
           title: this.$t('domainManagement'),
           active: this.$route.path.includes('domain'),
@@ -86,12 +103,12 @@ export default {
             {
               title: this.$t('domainAdd'),
               link: '/domain/add/',
-              canSee: true,
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
             {
               title: this.$t('domainList'),
               link: '/domain/list/',
-              canSee: true,
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
           ],
         },
@@ -103,12 +120,12 @@ export default {
             {
               title: this.$t('projectAdd'),
               link: '/project/add/',
-              canSee: true,
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
             {
               title: this.$t('projectList'),
               link: '/project/list/',
-              canSee: true,
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD', 'CL']),
             },
           ],
         },
@@ -120,18 +137,35 @@ export default {
             {
               title: this.$t('userAdd'),
               link: '/user/add/',
-              canSee: true,
-              // canSee:
-              //   !!this.$store.getters['user/auth/GET_ROLE'].includes('SA'),
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
             {
               title: this.$t('userList'),
               link: '/user/list/',
-              canSee: true,
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
           ],
         },
       ];
+    },
+  },
+  methods: {
+    canSeeItem(accessRole, orRoles = []) {
+      if (!accessRole) return false;
+
+      let access = false;
+
+      if (orRoles.length > 0) {
+        access = false;
+        for (let i = 0; i < orRoles.length; i += 1) {
+          const role = orRoles[`${i}`];
+          if (accessRole === role) {
+            access = true;
+            break;
+          }
+        }
+      }
+      return access;
     },
   },
 };

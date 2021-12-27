@@ -37,7 +37,7 @@ class DomainCreate {
       wildcardDomain,
       projectId,
       description,
-      options,
+      options = [domainOption.ACTIVE],
       additional = {},
     } = data;
 
@@ -64,7 +64,7 @@ class DomainCreate {
       domain: null,
       wildcardDomain: null,
       description: null,
-      options: [domainOption.ACTIVE],
+      options,
       additional: null,
       ProjectId: null,
       enabled: true,
@@ -108,9 +108,7 @@ class DomainCreate {
     if (description) {
       initialValues.description = description;
     }
-    if (options.length > 0) {
-      initialValues.options = options;
-    }
+
     if (additional) {
       initialValues.additional = additional;
     }
@@ -122,13 +120,16 @@ class DomainCreate {
      *** INSERT ***
      ***
      */
+    let result;
     const { Domain } = this.sequelize.models;
     try {
-      const result = await Domain.create(initialValues);
+      result = await Domain.create(initialValues);
       return result.dataValues;
     } catch (e) {
       SequelizeErrorHandler(e);
     }
+
+    return result;
   }
 
   /**

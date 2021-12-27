@@ -49,9 +49,10 @@ export default {
   methods: {
     runTimer() {
       this.timer = setInterval(() => {
-        console.log('timer');
+        console.log(['timer', new Date()]);
         this.$store.dispatch('user/auth/refreshToken');
-      }, 5 * 60 * 1000);
+      }, 1 * 60 * 1000);
+      // }, 5 * 60 * 1000);
     },
   },
 };

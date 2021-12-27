@@ -22,9 +22,6 @@ module.exports = (sequelize) =>
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
-        validate: {
-          isUrl: true,
-        },
       },
       options: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),

@@ -125,8 +125,8 @@ type OutputUserListDocs {
   country: String
   mobile: String
   options: [Int]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type OutputClientUserListDocs {
@@ -176,7 +176,7 @@ type OutputProjectListDocs {
   publicToken: String
   owner: [JSONObject]
   options: [Int]
-  createdAt: Date
+  createdAt: DateTime
   primaryOwner: Int
 }
 
@@ -267,6 +267,31 @@ type OutputProjectOwnerList {
   docs: [MemberListDocs]
 }
 
+# ********** UPTIME *************
+input InputUptimeCreate {
+  name: String!
+  url: String!
+  interval: Int!
+  ping: Boolean!
+  description: String
+  options: [Int]!
+}
+
+type UptimeListDocs {
+  id: Int
+  url: String
+  name: String
+  ping: Boolean
+  interval: Int
+  options: [Int]
+  description: String
+  createdAt: DateTime
+}
+
+type OutputUptimeList {
+  docs: [UptimeListDocs]
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -283,6 +308,8 @@ type Mutation {
   DomainCreate(data: InputDomainCreate): Int
   DomainUpdate(id: Int!, data: InputDomainUpdate): Int
   DomainDelete(data: InputGlobalID): Int
+  UptimeCreate(data: InputUptimeCreate): Int
+  UptimeDelete(data: InputGlobalID): Int
 }
 
 # Query list
@@ -303,4 +330,5 @@ type Query {
 
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
+  UptimeList(args: InputGlobalList): OutputUptimeList
 }

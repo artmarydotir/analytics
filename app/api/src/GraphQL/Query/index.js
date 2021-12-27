@@ -10,6 +10,7 @@ const ClientProjectList = require('./Project/ClientProjectList');
 const ProjectShowPrivateToken = require('./Project/ProjectShowPrivateToken');
 const DomainList = require('./Domain/DomainList');
 const DomainProfile = require('./Domain/DomainProfile');
+const UptimeList = require('./Uptime/UptimeList');
 
 module.exports = {
   UserList,
@@ -24,4 +25,5 @@ module.exports = {
   ProjectShowPrivateToken,
   DomainList,
   DomainProfile,
+  UptimeList,
 };

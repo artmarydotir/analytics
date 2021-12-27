@@ -56,11 +56,11 @@ class UptimeCreate {
       description: description || null,
       ping: typeof ping === 'boolean' ? ping : false,
       interval,
-      options: null,
+      options,
     };
 
-    if (options.length > 0) {
-      initialValues.options = options;
+    if (url.endsWith('/')) {
+      initialValues.url = url.slice(0, -1);
     }
 
     /**

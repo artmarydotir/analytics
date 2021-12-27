@@ -33,7 +33,7 @@ class ProjectCreate {
       publicToken,
       description,
       userAndRules,
-      options,
+      options = [projectOption.ACTIVE],
       primaryOwner,
     } = data;
 
@@ -59,7 +59,7 @@ class ProjectCreate {
     const initialValues = {
       title,
       description: description || null,
-      options: [projectOption.ACTIVE],
+      options,
       privateToken: null,
       publicToken: null,
       additional: null,
@@ -69,10 +69,6 @@ class ProjectCreate {
     const middleTable = {
       userAndRules: null,
     };
-
-    if (options && options.length > 0) {
-      initialValues.options = options;
-    }
 
     if (publicToken) {
       initialValues.publicToken = publicToken;
@@ -119,7 +115,6 @@ class ProjectCreate {
       await t.commit();
 
       result = project.dataValues;
-      // return project.dataValues;
     } catch (error) {
       await t.rollback();
       SequelizeErrorHandler(error);

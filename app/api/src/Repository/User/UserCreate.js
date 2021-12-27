@@ -28,8 +28,16 @@ class UserCreate {
    * @param {Object} data.additional
    */
   async addUser(data) {
-    const { username, email, password, role, lang, options, country, mobile } =
-      data;
+    const {
+      username,
+      email,
+      password,
+      role,
+      lang,
+      options = [userOption.ACTIVE],
+      country,
+      mobile,
+    } = data;
 
     const schema = userJoiSchema();
 
@@ -57,7 +65,7 @@ class UserCreate {
       role: role || userRoleObject.CLIENT,
       otpSecret: null,
       lang: lang || null,
-      options: [userOption.ACTIVE],
+      options,
       country: country || 'IR',
       mobile: null,
       additional: null,
@@ -83,10 +91,6 @@ class UserCreate {
           statusCode: 400,
         });
       }
-    }
-
-    if (options.length > 0) {
-      initialValues.options = options;
     }
 
     /**

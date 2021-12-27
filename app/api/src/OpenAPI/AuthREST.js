@@ -26,6 +26,7 @@ class AuthREST {
         const refreshToken = req.cookies[Config.ASM_AUTH_REFRESH_COOKIE];
 
         if (!refreshToken) {
+          console.log(['11111111', 'No refresh token', new Date()]);
           return e405.reply(reply);
         }
 
@@ -33,6 +34,7 @@ class AuthREST {
         const { payload } = refreshTokenData;
 
         if (err || !payload.expire || payload.expire < Date.now()) {
+          console.log(['2222', 'No date expire token', new Date()]);
           return e405.reply(reply);
         }
 
@@ -71,6 +73,7 @@ class AuthREST {
         lastHour.setTime(payload.expire - 3600000);
 
         if (lastHour < new Date()) {
+          console.log(['3333333333333', 'last hour iffff', new Date()]);
           const refreshTime = new Date();
           refreshTime.setTime(refreshTime.getTime() + refreshTokenTTL * 1000);
 

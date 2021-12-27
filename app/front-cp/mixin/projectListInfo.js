@@ -13,7 +13,7 @@ const listInfo = {
           sortable: false,
           value: 'title',
           type: 'text',
-          width: '18%',
+          width: '17%',
         },
         {
           text: this.$t('users'),
@@ -25,7 +25,7 @@ const listInfo = {
           text: this.$t('publicToken'),
           sortable: false,
           value: 'publicToken',
-          width: '15%',
+          width: '14%',
         },
         {
           text: this.$t('status'),
@@ -48,7 +48,8 @@ const listInfo = {
           text: this.$t('createdAt'),
           sortable: false,
           value: 'createdAt',
-          width: '12%',
+          type: 'daterange',
+          width: '19%',
         },
         {
           text: this.$t('action'),
