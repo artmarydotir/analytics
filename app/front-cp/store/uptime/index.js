@@ -1,6 +1,44 @@
 export const actions = {
   // ***************************************
+  async showUptimeProfile({ commit }, uptimeId) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `query ($id: Int!) {
+            UptimeProfile(
+              data: {
+                id: $id
+              }
+            ) {
+              id name description options url interval ping
+            }
+          }`,
+          variables: {
+            id: uptimeId,
+          },
+        },
+      );
 
+      const result = data.data.UptimeProfile;
+
+      if (result) {
+        return result;
+      }
+    } catch (error) {
+      const { data } = error.response;
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: data.errors,
+        },
+        { root: true },
+      );
+      throw error;
+    }
+  },
   // ***************************************
   async addUptime({ commit }, inputData) {
     try {
@@ -109,4 +147,51 @@ export const actions = {
     }
   },
   // ***************************************
+  async updateUptime({ commit }, inputData) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `mutation (
+              $id: Int!
+              $data: InputUptimeUpdate
+            ) {
+              UptimeUpdate(
+                id: $id
+                data: $data
+              )
+          }`,
+          variables: inputData,
+        },
+      );
+
+      const result = data.data.UptimeUpdate;
+
+      if (result) {
+        commit(
+          'SET_NOTIFICATION',
+          {
+            show: true,
+            color: 'green',
+            message: 'EDITED',
+            status: 'success',
+          },
+          { root: true },
+        );
+        return true;
+      }
+    } catch (error) {
+      const { data } = error.response;
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: data.errors,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };

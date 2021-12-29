@@ -2,7 +2,8 @@
   <v-dialog v-model="innerDialog" max-width="600px" @click:outside="close">
     <v-card :loading="loading">
       <v-card-title dark class="primary white--text pa-4">
-        <span class="headline">{{ title }}</span>
+        <v-icon dark> mdi-delete </v-icon>
+        <span>{{ title }}</span>
       </v-card-title>
 
       <v-card-text>
@@ -13,7 +14,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn dark color="blue darken-1" @click.native="doneEvent">
+        <v-btn dark color="primary" @click.native="doneEvent">
           {{ okbtn }}
         </v-btn>
         <v-btn dark color="warning" @click.native="close">

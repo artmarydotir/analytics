@@ -1,6 +1,10 @@
 <template>
   <v-container class="pt-6" fluid>
-    <ProjectForm :title="$t('projectAdd')" :adding-confirmation="true" />
+    <ProjectForm
+      :title="$t('projectAdd')"
+      :adding-confirmation="true"
+      main-icon="file-table-box"
+    />
   </v-container>
 </template>
 <script>

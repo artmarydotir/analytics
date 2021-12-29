@@ -5,30 +5,25 @@ const {
 } = require('../../Schema/ErrorMessage');
 
 const {
-  CreateProjectSchema: projectJoiSchema,
-} = require('../../JoySchema/Project');
-
-const { constants: projectOption } = require('../../Schema/ProjectOption');
+  UpdateUptimeSchema: uptimeJoiSchema,
+} = require('../../JoySchema/Uptime');
+const SequelizeErrorHandler = require('../../Utils/SequelizeErrorHandler');
+const { constants: uptimeOption } = require('../../Schema/UptimeOption');
 
 class UptimeUpdate {
   constructor({ sequelize }) {
     this.sequelize = sequelize;
   }
 
-  async updateProject(id, data) {
-    const {
-      title,
-      publicToken,
-      description,
-      userAndRules,
-      options,
-      additional,
-      primaryOwner,
-    } = data;
-
-    const schema = projectJoiSchema();
-
-    let changeDomainStatus = false;
+  /**
+   *
+   * @param {*} id
+   * @param {*} data
+   * @returns
+   */
+  async updateUptime(id, data) {
+    const schema = uptimeJoiSchema();
+    const { name, url, description, interval, options, ping } = data;
 
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
@@ -54,98 +49,39 @@ class UptimeUpdate {
     }
 
     const initialValues = {
-      title: null,
+      name,
+      url,
+      description,
+      interval,
+      options,
+      ping,
     };
-
-    const middleTable = {
-      userAndRules: null,
-    };
-
-    initialValues.title = title;
-
-    if (publicToken) {
-      initialValues.publicToken = publicToken;
-    }
 
     if (options) {
-      const newOption = await this.retrieveProjectOptions(id, options);
+      const newOption = await this.retrieveUptimeOptions(id, options);
       initialValues.options = newOption;
-
-      if (
-        newOption.includes(projectOption.DELETED) ||
-        !newOption.includes(projectOption.ACTIVE)
-      ) {
-        // systematic  enabled
-        changeDomainStatus = false;
-        initialValues.enabled = false;
-      } else {
-        // systematic  enabled
-        changeDomainStatus = true;
-        initialValues.enabled = true;
-      }
     }
-
-    if (description) {
-      initialValues.description = description;
-    }
-
-    if (primaryOwner) {
-      initialValues.primaryOwner = primaryOwner;
-    }
-
-    if (additional) {
-      initialValues.additional = additional;
-    }
-
-    if (userAndRules) {
-      middleTable.userAndRules = userAndRules;
-    }
+    const urlObject = new URL(url);
+    initialValues.url = urlObject.origin;
 
     /**
      ***
      *** UPDATE ***
      ***
      */
-    const t = await this.sequelize.transaction();
-    const { Project, UserProject, Domain } = this.sequelize.models;
+    const { Uptime } = this.sequelize.models;
+    let uptime;
     try {
-      const project = await Project.update(initialValues, {
+      uptime = await Uptime.update(initialValues, {
         where: {
           id,
         },
-        transaction: t,
       });
-
-      // demoralizing systematic enabled
-      await Domain.update(
-        { enabled: changeDomainStatus },
-        {
-          where: {
-            ProjectId: id,
-          },
-          transaction: t,
-        },
-      );
-
-      const readyData = middleTable.userAndRules.map((obj) => ({
-        ...obj,
-        ProjectId: id,
-      }));
-
-      await UserProject.destroy({ where: { ProjectId: id }, transaction: t });
-
-      await UserProject.bulkCreate(readyData, {
-        transaction: t,
-        updateOnDuplicate: ['UserId', 'rules'],
-      });
-
-      await t.commit();
-
-      return { affectedRow: project, projectId: id };
-    } catch (error) {
-      await t.rollback();
-      throw error;
+    } catch (e) {
+      SequelizeErrorHandler(e);
     }
+
+    return { affectedRow: uptime, uptimeId: id };
   }
 
   /**
@@ -170,10 +106,9 @@ class UptimeUpdate {
 
     let newOption = uptime.dataValues.options;
 
-    console.log(newOption);
     Object.keys(props).forEach((name) => {
       const booleanStatus = props[`${name}`];
-      const value = projectOption[`${name}`];
+      const value = uptimeOption[`${name}`];
       if (booleanStatus) {
         newOption.push(value);
       } else {
@@ -182,8 +117,6 @@ class UptimeUpdate {
     });
 
     newOption = uniq(newOption);
-
-    console.log(newOption, '--');
 
     const initialValues = {
       options: newOption,
@@ -229,7 +162,7 @@ class UptimeUpdate {
     // eslint-disable-next-line sonarjs/no-identical-functions
     Object.keys(props).forEach((name) => {
       const booleanStatus = props[`${name}`];
-      const value = projectOption[`${name}`];
+      const value = uptimeOption[`${name}`];
       if (booleanStatus) {
         newOption.push(value);
       } else {

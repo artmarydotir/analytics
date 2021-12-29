@@ -1,6 +1,10 @@
 <template>
   <v-container class="pt-6" fluid>
-    <DomainForm :title="$t('domainAdd')" :adding-confirmation="true" />
+    <DomainForm
+      :title="$t('domainAdd')"
+      :adding-confirmation="true"
+      main-icon="domain-plus"
+    />
   </v-container>
 </template>
 <script>

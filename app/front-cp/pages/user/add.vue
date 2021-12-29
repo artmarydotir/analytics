@@ -1,6 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
-    <UserForm :title="$t('userAdd')" />
+    <UserForm :title="$t('userAdd')" main-icon="account-plus" />
   </v-container>
 </template>
 <script>

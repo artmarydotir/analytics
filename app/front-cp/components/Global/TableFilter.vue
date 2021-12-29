@@ -10,8 +10,10 @@
       v-for="f in filtertype"
       :key="f.name"
       :class="
-        $vuetify.breakpoint.mdAndDown
-          ? 'd-block d-md-table-cell pt-1'
+        $vuetify.breakpoint.smAndDown
+          ? 'd-inline pt-1 no-border-bottom'
+          : $vuetify.breakpoint.mdAndUp
+          ? 'd-block d-md-table-cell pt-2 pb-2'
           : 'd-block d-md-table-cell pt-3 pb-3'
       "
     >
@@ -130,3 +132,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.no-border-bottom {
+  border-bottom: none;
+}
+</style>

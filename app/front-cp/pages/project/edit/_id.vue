@@ -6,6 +6,7 @@
         :title="$t('projectEdit')"
         :edit-mood="true"
         :project="project"
+        main-icon="file-edit"
       />
     </template>
     <template v-else>

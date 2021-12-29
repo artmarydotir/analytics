@@ -2,10 +2,14 @@
   <div class="mx-auto">
     <Snackbar />
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
-      <v-card-title class="secondary white--text pa-4">
-        {{ title }}
+      <v-card-title class="pa-4">
+        <v-icon> mdi-{{ mainIcon }} </v-icon>
+        <span class="pl-2 pr-2">
+          {{ title }}
+        </span>
         <v-spacer></v-spacer>
       </v-card-title>
+      <v-divider></v-divider>
       <!-- Form -->
       <div class="pa-6">
         <ValidationObserver ref="obs">
@@ -154,6 +158,11 @@ export default {
     title: {
       required: true,
       type: String,
+    },
+    mainIcon: {
+      required: true,
+      type: String,
+      default: 'mdi-account-circle',
     },
   },
   data() {

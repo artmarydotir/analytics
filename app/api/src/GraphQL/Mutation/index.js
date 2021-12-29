@@ -13,6 +13,7 @@ const DomainUpdate = require('./Domain/DomainUpdate');
 const DomainDelete = require('./Domain/DomainDelete');
 const UptimeCreate = require('./Uptime/UptimeCreate');
 const UptimeDelete = require('./Uptime/UptimeDelete');
+const UptimeUpdate = require('./Uptime/UptimeUpdate');
 
 module.exports = {
   UserCreate,
@@ -30,4 +31,5 @@ module.exports = {
   DomainDelete,
   UptimeCreate,
   UptimeDelete,
+  UptimeUpdate,
 };

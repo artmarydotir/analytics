@@ -1,10 +1,5 @@
 <template>
-  <v-footer
-    padless
-    absolute
-    color="grey lighten-3"
-    :fixed="$vuetify.breakpoint.lgAndUp ? true : false"
-  >
+  <v-footer padless color="grey lighten-3">
     <v-col class="text-center" cols="12">
       <span>
         {{ $t('projectDescription') }}

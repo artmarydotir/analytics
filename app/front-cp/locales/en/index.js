@@ -118,6 +118,7 @@ module.exports = {
     GENERATED_PRIVATE_TOKEN: 'Successfully generated private token.',
   },
   // ## UPTIME
+  uptime: 'Uptime Monitoring',
   uptimeManagement: 'Uptime Monitoring',
   uptimeAdd: 'Add Uptime',
   uptimeList: 'Uptime List',
@@ -127,6 +128,7 @@ module.exports = {
   interval: 'Interval (Minute)',
   OTHER_ERROR: 'Other Error Occurred. Please Try Again.',
   noStatus: 'No Status',
+  uptimeEdit: 'Edit Uptime',
   errors: {
     UNPROCESSABLE_ENTITY: 'Unprocessable Entity',
     DUPLICATE_ENTRY: 'Duplicate Entry',

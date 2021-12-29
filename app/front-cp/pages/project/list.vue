@@ -5,6 +5,7 @@
         :headers="headersClient"
         :general-action="ownerGeneralAction"
         :module-info="ownerModuleData"
+        main-icon="file-table-box-multiple"
       />
     </template>
     <!-- Admin  -->
@@ -13,6 +14,7 @@
         :headers="headersAdmin"
         :general-action="adminGeneralAction"
         :module-info="adminModuleData"
+        main-icon="file-table-box-multiple"
       >
       </ProjectList>
     </template>

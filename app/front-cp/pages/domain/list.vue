@@ -4,6 +4,7 @@
       :headers="headersAdmin"
       :general-action="adminGeneralAction"
       :module-info="adminModuleData"
+      main-icon="domain"
     />
   </v-container>
 </template>

@@ -1,13 +1,15 @@
 <template>
   <v-app-bar
-    fixed
     :clipped-left="$vuetify.breakpoint.lgAndUp"
     app
     dark
+    clipped
     flat
-    :color="$vuetify.theme.dark ? '' : 'primary darken-1'"
+    :color="$vuetify.theme.dark ? '' : 'primary'"
   >
-    <v-app-bar-nav-icon @click="drawerState = !drawerState" />
+    <v-app-bar-nav-icon
+      @click="drawerState = !drawerState"
+    ></v-app-bar-nav-icon>
     <v-toolbar-title class="ml-0 pl-4">
       <span class="hidden-sm-and-down"> {{ $t('projectName') }} </span>
     </v-toolbar-title>

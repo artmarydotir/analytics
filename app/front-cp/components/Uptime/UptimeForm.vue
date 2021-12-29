@@ -1,12 +1,15 @@
 <template>
   <div class="mx-auto">
     <Snackbar />
-    {{ innerUptime }}
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
-      <v-card-title class="secondary white--text pa-4">
-        {{ title }}
+      <v-card-title class="pa-4">
+        <v-icon> mdi-{{ mainIcon }} </v-icon>
+        <span class="pl-2 pr-2">
+          {{ title }}
+        </span>
         <v-spacer></v-spacer>
       </v-card-title>
+      <v-divider></v-divider>
       <!-- Form -->
       <div class="pa-6">
         <ValidationObserver ref="obs">
@@ -161,6 +164,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    mainIcon: {
+      required: true,
+      type: String,
+      default: 'mdi-account-circle',
+    },
   },
   data() {
     return {
@@ -209,30 +217,25 @@ export default {
       }
     },
 
-    // async editingMethod() {
-    //   const readyData = this.updatingFunction();
+    async editingMethod() {
+      const readyData = this.updatingFunction();
 
-    //   const [, data] = await to(
-    //     this.$store.dispatch('domain/updateDomain', readyData),
-    //   );
+      const [, data] = await to(
+        this.$store.dispatch('uptime/updateUptime', readyData),
+      );
 
-    //   if (data) {
-    //     this.redirecting();
-    //   } else {
-    //     this.errorCallback();
-    //   }
-    // },
+      if (data) {
+        this.redirecting();
+      } else {
+        this.errorCallback();
+      }
+    },
 
     updatingFunction() {
       const cloneData = { ...this.innerUptime };
 
+      console.log('cloneData', cloneData);
       cloneData.options = this.temporaryOptions;
-      if (cloneData.projectId) {
-        delete cloneData.ProjectId;
-      } else if (cloneData.ProjectId) {
-        cloneData.projectId = this.innerUptime.ProjectId;
-        delete cloneData.ProjectId;
-      }
       delete cloneData.id;
       return {
         id: this.innerUptime.id,

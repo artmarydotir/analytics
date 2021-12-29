@@ -1,5 +1,6 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
+    <v-system-bar height="30" color="primary darken-1"></v-system-bar>
     <IntroTemplate :title="$t('login')">
       <template v-slot:frame>
         <LoginForm />
