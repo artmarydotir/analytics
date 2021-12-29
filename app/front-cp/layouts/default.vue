@@ -1,5 +1,5 @@
 <template>
-  <v-app app>
+  <v-app app :style="{ background: $vuetify.theme.themes[theme].background }">
     <Nav />
     <AppBar />
 
@@ -49,7 +49,7 @@ export default {
   methods: {
     runTimer() {
       this.timer = setInterval(() => {
-        console.log(['timer', new Date()]);
+        // console.log(['timer', new Date()]);
         this.$store.dispatch('user/auth/refreshToken');
       }, 1 * 60 * 1000);
       // }, 5 * 60 * 1000);

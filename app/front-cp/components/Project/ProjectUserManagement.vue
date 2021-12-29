@@ -151,6 +151,11 @@ export default {
       required: false,
       default: () => [],
     },
+    mainIcon: {
+      required: true,
+      type: String,
+      default: 'mdi-account-circle',
+    },
   },
 
   data() {
@@ -186,9 +191,8 @@ export default {
 
   mounted() {
     this.getUsers();
-    // if (this.edit) {
+
     this.editMutating();
-    // }
   },
   methods: {
     makeAlist(input) {

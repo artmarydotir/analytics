@@ -4,6 +4,7 @@
       :headers="headers"
       :general-action="generalAction"
       :module-info="moduleData"
+      main-icon="clock"
     >
     </UptimeList>
   </v-container>

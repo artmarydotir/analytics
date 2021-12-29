@@ -3,10 +3,19 @@
     <Snackbar />
 
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
-      <v-card-title class="middle white--text pa-4">
-        {{ $t(generalAction.title) }}
+      <v-card-title class="pa-4">
+        <v-icon> mdi-{{ mainIcon }} </v-icon>
+        <span class="pl-2 pr-2">
+          {{ $t(generalAction.title) }}
+        </span>
+        <v-divider vertical class="mr-3 ml-3"></v-divider>
         <v-spacer />
-        <v-btn :to="localePath(`${generalAction.addLink}`)" nuxt color="">
+        <v-btn
+          :to="localePath(`${generalAction.addLink}`)"
+          nuxt
+          color="middle"
+          dark
+        >
           {{ $t(generalAction.linkTitle) }}
         </v-btn>
       </v-card-title>
@@ -142,6 +151,11 @@ export default {
     moduleInfo: {
       type: Object,
       required: true,
+    },
+    mainIcon: {
+      required: true,
+      type: String,
+      default: 'mdi-account-circle',
     },
   },
   data() {

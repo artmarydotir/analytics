@@ -16,7 +16,7 @@ export default function ({ app, store }) {
       },
       themes: {
         light: {
-          primary: colors.cyan,
+          primary: '#536dfe',
           secondary: colors.amber.darken3,
           middle: '#ff5992',
           accent: '#82B1FF',
@@ -24,6 +24,7 @@ export default function ({ app, store }) {
           info: '#2196F3',
           success: '#4CAF50',
           warning: '#FFC107',
+          background: colors.indigo.lighten5,
         },
         dark: {
           primary: colors.blue.darken2,
@@ -33,6 +34,7 @@ export default function ({ app, store }) {
           warning: colors.amber.base,
           error: colors.pink.accent3,
           success: colors.green.darken2,
+          background: '#121212',
         },
       },
     },

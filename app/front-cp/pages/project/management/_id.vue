@@ -6,6 +6,7 @@
       <ProjectUserManagement
         :project="project"
         :looping-list-o="project.userAndRules"
+        main-icon="file-edit"
       />
     </template>
     <template v-else>

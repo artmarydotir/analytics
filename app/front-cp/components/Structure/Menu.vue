@@ -79,9 +79,26 @@ export default {
     groupItems() {
       return [
         {
-          action: 'mdi-arrow-up-bold-circle-outline',
+          action: 'mdi-sort-clock-descending',
           title: this.$t('uptimeManagement'),
           active: this.$route.path.includes('uptime'),
+          items: [
+            {
+              title: this.$t('uptimeAdd'),
+              link: '/uptime/add/',
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
+            },
+            {
+              title: this.$t('uptimeList'),
+              link: '/uptime/list/',
+              canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
+            },
+          ],
+        },
+        {
+          action: 'mdi-finance',
+          title: this.$t('performanceManagement'),
+          active: this.$route.path.includes('performance'),
           items: [
             {
               title: this.$t('uptimeAdd'),

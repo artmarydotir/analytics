@@ -1,11 +1,13 @@
 <template>
   <v-container class="pt-6" fluid>
-    <UptimeForm :title="$t('uptimeAdd')" />
+    <Breadcrumb />
+    <UptimeForm :title="$t('uptimeAdd')" main-icon="sort-clock-descending" />
   </v-container>
 </template>
 <script>
 export default {
   permissions: ['AD', 'SA'],
+
   data() {
     return {};
   },

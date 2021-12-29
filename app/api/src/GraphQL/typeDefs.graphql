@@ -292,6 +292,25 @@ type OutputUptimeList {
   docs: [UptimeListDocs]
 }
 
+input InputUptimeUpdate {
+  name: String!
+  url: String!
+  interval: Int!
+  ping: Boolean
+  description: String
+  options: JSON!
+}
+
+type OutputUptimeProfile {
+  id: Int
+  url: String
+  name: String
+  ping: Boolean
+  interval: Int
+  options: [Int]
+  description: String
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -310,6 +329,7 @@ type Mutation {
   DomainDelete(data: InputGlobalID): Int
   UptimeCreate(data: InputUptimeCreate): Int
   UptimeDelete(data: InputGlobalID): Int
+  UptimeUpdate(id: Int!, data: InputUptimeUpdate): Int
 }
 
 # Query list
@@ -331,4 +351,5 @@ type Query {
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
   UptimeList(args: InputGlobalList): OutputUptimeList
+  UptimeProfile(data: InputGlobalID): OutputUptimeProfile
 }

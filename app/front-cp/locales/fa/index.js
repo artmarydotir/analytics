@@ -115,6 +115,7 @@ module.exports = {
   ping: 'پینگ',
   interval: 'فاصله زمانی (دقیقه)',
   noStatus: 'بدون وضعیت',
+  uptimeEdit: 'ویرایش آپتایم',
   success: {
     WELCOME: 'خوش آمدید',
     CREATED: 'با موفقیت ایجاد شد.',

@@ -3,8 +3,9 @@
     <Snackbar />
 
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
-      <v-card-title class="middle white--text pa-4">
+      <v-card-title class="pa-4">
         {{ $t(generalAction.title) }}
+        <v-divider vertical class="mr-3 ml-3"></v-divider>
         <v-spacer />
       </v-card-title>
       <v-data-table
@@ -93,6 +94,11 @@ export default {
     moduleInfo: {
       type: Object,
       required: true,
+    },
+    mainIcon: {
+      required: true,
+      type: String,
+      default: 'mdi-account-circle',
     },
   },
   data() {

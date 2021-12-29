@@ -3,8 +3,9 @@
     v-model="drawerState"
     :right="dirMode"
     app
-    temporary
-    width="340px"
+    clipped
+    fixed
+    width="330px"
   >
     <v-sheet class="pa-4">
       <v-list-item-avatar>
