@@ -1,7 +1,7 @@
 <template>
   <v-container class="pt-6" fluid>
-    <Breadcrumb />
-    <UptimeForm :title="$t('uptimeAdd')" main-icon="sort-clock-descending" />
+    <StaticBreadCrumb :crumbs="crumbs" />
+    <UptimeForm :title="$t('uptimeAdd')" main-icon="monitor-eye" />
   </v-container>
 </template>
 <script>

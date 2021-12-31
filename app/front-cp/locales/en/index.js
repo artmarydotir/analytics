@@ -129,11 +129,20 @@ module.exports = {
   OTHER_ERROR: 'Other Error Occurred. Please Try Again.',
   noStatus: 'No Status',
   uptimeEdit: 'Edit Uptime',
+  deleteUptime: 'Delete Uptime',
+
+  // ## Performance
+  performanceManagement: 'Performance Monitoring',
+  performanceAdd: 'Add Performance',
+  performanceList: 'Performance List',
+  deletePerformance: 'Delete Performance',
+  performanceEdit: 'Edit Performance',
   errors: {
     UNPROCESSABLE_ENTITY: 'Unprocessable Entity',
     DUPLICATE_ENTRY: 'Duplicate Entry',
     NULL_ENTRY: 'Null Entry',
     NOT_ALLOWED: 'Expired.',
+    INVALID_OPTION: 'Invalid Option',
     MIN_LENGTH: 'min length is not valid.',
     MAX_LENGTH: 'min length is not valid.',
     INVALID_REGEX: 'does not have valid regex.',

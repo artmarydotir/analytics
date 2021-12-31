@@ -8,6 +8,7 @@
         :title="$t('uptimeEdit')"
         :edit-mood="true"
         :uptime="uptime"
+        main-icon="monitor-edit"
       />
     </template>
     <template v-else>

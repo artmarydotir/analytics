@@ -15,6 +15,7 @@
 <script>
 export default {
   layout: 'empty',
+  middleware: ['check-token'],
   props: {
     error: {
       type: Object,
@@ -33,6 +34,16 @@ export default {
     return {
       title,
     };
+  },
+  mounted() {
+    if (!this.$store.getters['user/auth/GET_AUTHENTICATED']) {
+      console.log('will redirect to login page');
+      this.$router.push(
+        this.localeRoute({
+          name: 'login',
+        }),
+      );
+    }
   },
 };
 </script>

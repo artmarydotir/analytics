@@ -54,6 +54,29 @@ const listInfo = {
         },
       ];
     },
+    // Breadcrumb
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainAdd'),
+          to: '/domain/add',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainList'),
+          to: '/domain/list',
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
 };
 export default listInfo;

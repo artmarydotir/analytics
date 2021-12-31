@@ -1,5 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
+    <StaticBreadCrumb :crumbs="crumbs" />
     <UserForm :title="$t('userAdd')" main-icon="account-plus" />
   </v-container>
 </template>

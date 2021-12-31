@@ -116,6 +116,15 @@ module.exports = {
   interval: 'فاصله زمانی (دقیقه)',
   noStatus: 'بدون وضعیت',
   uptimeEdit: 'ویرایش آپتایم',
+  deleteUptime: 'حذف آپتایم',
+
+  // ## Performance
+  performanceManagement: 'مدیریت کارایی',
+  performanceAdd: 'افزودن کارایی',
+  performanceList: 'لیست کارایی',
+  deletePerformance: 'حذف کارایی',
+  performanceEdit: 'ویرایش کارایی',
+
   success: {
     WELCOME: 'خوش آمدید',
     CREATED: 'با موفقیت ایجاد شد.',
@@ -129,6 +138,7 @@ module.exports = {
     DUPLICATE_ENTRY: 'این مقدار قبلا ثبت شده است.',
     NULL_ENTRY: 'مقدار وارد شده نامعتبر است.',
     NOT_ALLOWED: 'شما مجوز این کار را ندارید.',
+    INVALID_OPTION: 'گزینه وارد شده نامعتبر است.',
     MIN_LENGTH: 'حداقل طول این فیلد صحیح نیست.',
     MAX_LENGTH: 'حداکثر طول این فیلد صحیح نیست.',
     INVALID_REGEX: 'فیلد صحیح نیست.',

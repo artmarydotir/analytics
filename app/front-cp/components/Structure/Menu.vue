@@ -79,7 +79,7 @@ export default {
     groupItems() {
       return [
         {
-          action: 'mdi-sort-clock-descending',
+          action: 'mdi-monitor-eye',
           title: this.$t('uptimeManagement'),
           active: this.$route.path.includes('uptime'),
           items: [
@@ -101,13 +101,13 @@ export default {
           active: this.$route.path.includes('performance'),
           items: [
             {
-              title: this.$t('uptimeAdd'),
-              link: '/uptime/add/',
+              title: this.$t('performanceAdd'),
+              link: '/performance/add/',
               canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
             {
-              title: this.$t('uptimeList'),
-              link: '/uptime/list/',
+              title: this.$t('performanceList'),
+              link: '/performance/list/',
               canSee: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
             },
           ],

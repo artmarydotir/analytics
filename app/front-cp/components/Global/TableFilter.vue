@@ -135,6 +135,6 @@ export default {
 
 <style lang="scss" scoped>
 .no-border-bottom {
-  border-bottom: none;
+  border-bottom: none !important;
 }
 </style>

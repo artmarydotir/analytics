@@ -1,5 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
+    <StaticBreadCrumb :crumbs="crumbs" />
     <DomainForm
       :title="$t('domainAdd')"
       :adding-confirmation="true"

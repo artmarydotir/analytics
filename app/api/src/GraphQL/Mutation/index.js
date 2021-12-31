@@ -14,6 +14,9 @@ const DomainDelete = require('./Domain/DomainDelete');
 const UptimeCreate = require('./Uptime/UptimeCreate');
 const UptimeDelete = require('./Uptime/UptimeDelete');
 const UptimeUpdate = require('./Uptime/UptimeUpdate');
+const PerformanceCreate = require('./Performance/PerformanceCreate');
+const PerformanceDelete = require('./Performance/PerformanceDelete');
+const PerformanceUpdate = require('./Performance/PerformanceUpdate');
 
 module.exports = {
   UserCreate,
@@ -32,4 +35,7 @@ module.exports = {
   UptimeCreate,
   UptimeDelete,
   UptimeUpdate,
+  PerformanceCreate,
+  PerformanceDelete,
+  PerformanceUpdate,
 };

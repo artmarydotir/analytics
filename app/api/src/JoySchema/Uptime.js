@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const { constantsMerge: errorConstMerge } = require('../Schema/ErrorMessage');
+const { list: uptimeOption } = require('../Schema/UptimeOption');
 
 /**
  * BASE uptime schema
@@ -36,7 +37,11 @@ const base = Joi.object().keys({
 // Create schema
 const CreateUptimeSchema = () =>
   base.keys({
-    options: Joi.array().items(Joi.number().optional()),
+    options: Joi.array()
+      .items(Joi.number().valid(...uptimeOption))
+      .messages({
+        'array.items': errorConstMerge.INVALID_OPTION,
+      }),
   });
 
 // Update schema

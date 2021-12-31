@@ -10,6 +10,7 @@
     </template>
     <!-- Admin  -->
     <template v-else>
+      <StaticBreadCrumb :crumbs="crumbs" />
       <ProjectList
         :headers="headersAdmin"
         :general-action="adminGeneralAction"

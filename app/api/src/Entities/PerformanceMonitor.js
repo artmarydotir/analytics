@@ -1,4 +1,3 @@
-// @ts-nocheck
 const { DataTypes } = require('sequelize');
 
 /**
@@ -7,7 +6,7 @@ const { DataTypes } = require('sequelize');
  */
 module.exports = (sequelize) =>
   sequelize.define(
-    'PerformanceMonitor',
+    'Performance',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -16,23 +15,18 @@ module.exports = (sequelize) =>
       },
       name: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: true,
       },
       url: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
-        validate: {
-          isUrl: true,
-        },
       },
       options: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false,
       },
       interval: {
-        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       description: {
@@ -40,7 +34,5 @@ module.exports = (sequelize) =>
         allowNull: true,
       },
     },
-    {
-      // Other model options go here
-    },
+    {},
   );

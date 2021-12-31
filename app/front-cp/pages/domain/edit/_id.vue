@@ -7,6 +7,7 @@
         :title="$t('domainEdit')"
         :edit-mood="true"
         :domain="domain"
+        main-icon="folder-edit"
       />
     </template>
     <template v-else>

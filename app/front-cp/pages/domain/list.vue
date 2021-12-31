@@ -1,5 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
+    <StaticBreadCrumb :crumbs="crumbs" />
     <DomainList
       :headers="headersAdmin"
       :general-action="adminGeneralAction"

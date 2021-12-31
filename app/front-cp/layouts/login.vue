@@ -1,7 +1,11 @@
 <template>
   <v-app class="bodybg">
-    <nuxt />
-    <IntroFooter />
+    <v-main>
+      <v-container fluid class="mt-0 ml-0 mr-0 pl-0 pt-0 pr-0">
+        <nuxt />
+        <IntroFooter />
+      </v-container>
+    </v-main>
   </v-app>
 </template>
 
@@ -20,6 +24,16 @@ export default {
       } else {
         this.$vuetify.theme.dark = false;
       }
+    }
+    console.log(this.$store.getters['user/auth/GET_AUTHENTICATED']);
+    // if has token, then redirect to dashboard
+    if (this.$store.getters['user/auth/GET_AUTHENTICATED']) {
+      console.log('has token');
+      this.$router.push(
+        this.localeRoute({
+          name: 'dashboard',
+        }),
+      );
     }
   },
 };
