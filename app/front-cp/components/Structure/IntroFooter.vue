@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless color="grey lighten-3">
+  <v-footer padless color="grey lighten-2" app>
     <v-col class="text-center" cols="12">
       <span>
         {{ $t('projectDescription') }}

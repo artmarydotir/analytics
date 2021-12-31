@@ -161,7 +161,7 @@ export default {
   data() {
     return {
       domainDocs: [],
-      limit: 10,
+      limit: 8,
       modalData: {},
       loading: false,
       filter: {},

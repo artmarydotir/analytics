@@ -171,7 +171,7 @@ export default {
   data() {
     return {
       userDocs: [],
-      limit: 10,
+      limit: 8,
       modalData: {},
       loading: false,
       filter: {},

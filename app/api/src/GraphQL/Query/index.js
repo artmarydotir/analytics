@@ -12,6 +12,8 @@ const DomainList = require('./Domain/DomainList');
 const DomainProfile = require('./Domain/DomainProfile');
 const UptimeList = require('./Uptime/UptimeList');
 const UptimeProfile = require('./Uptime/UptimeProfile');
+const PerformanceList = require('./Performance/PerformanceList');
+const PerformanceProfile = require('./Performance/PerformanceProfile');
 
 module.exports = {
   UserList,
@@ -28,4 +30,6 @@ module.exports = {
   DomainProfile,
   UptimeList,
   UptimeProfile,
+  PerformanceList,
+  PerformanceProfile,
 };

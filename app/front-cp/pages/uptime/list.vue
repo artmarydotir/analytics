@@ -1,10 +1,11 @@
 <template>
   <v-container class="pt-6" fluid>
+    <StaticBreadCrumb :crumbs="crumbs" />
     <UptimeList
       :headers="headers"
       :general-action="generalAction"
       :module-info="moduleData"
-      main-icon="clock"
+      main-icon="monitor-eye"
     >
     </UptimeList>
   </v-container>

@@ -1,5 +1,6 @@
 <template>
   <v-container class="pt-6" fluid>
+    <StaticBreadCrumb :crumbs="crumbs" />
     <UserList
       :headers="headers"
       :general-action="generalAction"
@@ -9,8 +10,11 @@
     </UserList>
   </v-container>
 </template>
+
 <script>
+import listInfo from '@/mixin/userListInfo';
 export default {
+  mixins: [listInfo],
   permissions: ['AD', 'SA'],
   data() {
     return {
@@ -33,78 +37,6 @@ export default {
     return {
       title: `${this.$t('userList')}`,
     };
-  },
-  computed: {
-    headers() {
-      return [
-        {
-          text: this.$t('id'),
-          sortable: false,
-          value: 'id',
-        },
-        {
-          text: this.$t('username'),
-          sortable: false,
-          value: 'username',
-          type: 'text',
-        },
-        {
-          text: this.$t('email'),
-          sortable: false,
-          value: 'email',
-          type: 'text',
-        },
-        {
-          text: this.$t('mobile'),
-          sortable: false,
-          value: 'mobile',
-          type: 'text',
-        },
-        {
-          text: this.$t('status'),
-          sortable: false,
-          value: 'options',
-          type: 'arrayInBox',
-          items: [
-            {
-              name: 'active',
-              value: 1,
-            },
-            {
-              name: 'deleted',
-              value: 2,
-            },
-          ],
-        },
-        {
-          text: this.$t('role'),
-          sortable: false,
-          value: 'role',
-          type: 'equalBox',
-          items: [
-            {
-              name: this.$t('superAdmin'),
-              value: 'SA',
-            },
-            {
-              name: this.$t('admin'),
-              value: 'AD',
-            },
-            {
-              name: this.$t('client'),
-              value: 'CL',
-            },
-          ],
-        },
-        {
-          text: this.$t('action'),
-          value: 'actions',
-          sortable: false,
-          width: '12%',
-          align: 'center',
-        },
-      ];
-    },
   },
 };
 </script>

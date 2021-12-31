@@ -5,6 +5,7 @@ const UserEntity = require('../Entities/User');
 const UserProjectEntity = require('../Entities/UserProject');
 const DomainEntity = require('../Entities/Domain');
 const UptimeEntity = require('../Entities/UptimeMonitor');
+const PerformanceEntity = require('../Entities/PerformanceMonitor');
 
 class EntityManager {
   constructor({ Config, Logger }) {
@@ -27,6 +28,7 @@ class EntityManager {
       UserProjectEntity(this.sequelize);
       DomainEntity(this.sequelize);
       UptimeEntity(this.sequelize);
+      PerformanceEntity(this.sequelize);
       await this.sequelize.authenticate();
 
       await this.sequelize.sync({

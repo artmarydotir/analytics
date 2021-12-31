@@ -182,7 +182,7 @@ export default {
   data() {
     return {
       uptimeDocs: [],
-      limit: 10,
+      limit: 8,
       modalData: {},
       loading: false,
       filter: {},

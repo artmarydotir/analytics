@@ -34,8 +34,10 @@ module.exports = {
     const createProject = container.resolve('ProjectCreateRepository');
     const createDomain = container.resolve('DomainCreateRepository');
     const createUptime = container.resolve('UptimeCreateRepository');
+    const createPerformance = container.resolve('PerformanceCreateRepository');
 
-    const { User, Project, UserProject, Domain, Uptime } = seq.models;
+    const { User, Project, UserProject, Domain, Uptime, Performance } =
+      seq.models;
     await UserProject.destroy({
       where: {},
       truncate: true,
@@ -65,6 +67,13 @@ module.exports = {
     });
 
     await Uptime.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -200,10 +209,39 @@ module.exports = {
       });
     });
 
+    // Performance
+    const performanceCallbacks = [];
+
+    for (let index = 1; index < 30; index += 1) {
+      performanceCallbacks.push((cb) => {
+        createPerformance
+          .addPerformance({
+            name: `performance${index}`,
+            url: `${faker.internet.url()}`,
+            description: 'performance your dear performance',
+            options: [1],
+            interval: Number(numBetween(2, 60)),
+          })
+          .then(() => cb())
+          .catch((e) => cb(e));
+      });
+    }
+
+    await new Promise((resolve, reject) => {
+      waterfall(performanceCallbacks, (e) => {
+        if (e) {
+          reject(e);
+        } else {
+          resolve();
+        }
+      });
+    });
+
     log(`${chalk.green('✔ Truncate data tables')}`);
     log(`${chalk.green('✔ Create 120 Users')}`);
     log(`${chalk.green('✔ Create 60 Projects')}`);
     log(`${chalk.green('✔ Create 40 Domains')}`);
     log(`${chalk.green('✔ Create 30 Uptimes')}`);
+    log(`${chalk.green('✔ Create 30 Performance')}`);
   },
 };

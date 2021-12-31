@@ -7,6 +7,7 @@ const constants = {
   ISREQUIRE_PASSWORD: '',
   MIN_LENGTH: '',
   MAX_LENGTH: '',
+  INVALID_OPTION: '',
   INVALID_REGEX: '',
   INVALID_PASSWORD: '',
   INVALID_ROLE: '',

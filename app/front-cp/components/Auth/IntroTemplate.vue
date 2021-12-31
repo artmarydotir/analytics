@@ -1,16 +1,20 @@
 <template>
   <v-row justify="center" class="ma-0 pa-0">
     <v-col cols="12" class="ma-0 pa-12 primary">
-      <v-sheet min-height="220" color="primary">
+      <v-sheet
+        :min-height="$vuetify.breakpoint.smAndDown ? 180 : 220"
+        color="primary"
+      >
         <h1
           class="
             mx-auto
             justify-center
             font-weight-bold
-            text-h3 text-center
+            text-center
             white--text
             pb-10
             pt-4
+            text-sm-h5 text-md-h3
           "
         >
           {{ title }}

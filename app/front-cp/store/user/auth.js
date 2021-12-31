@@ -1,6 +1,6 @@
 export const state = () => ({
   userData: {},
-  isLogin: false,
+  isAuthenticated: false,
   tokenExp: '',
 });
 
@@ -8,13 +8,13 @@ export const mutations = {
   SET_USER_DATA(state, data) {
     state.userData = data;
     localStorage.setItem('tokenExpireDate', new Date(data.expires).toString());
-    state.isLogin = true;
+    state.isAuthenticated = true;
   },
 
   CLEAR_USER_DATA(state) {
     state.userData = {};
     localStorage.removeItem('tokenExpireDate');
-    state.isLogin = false;
+    state.isAuthenticated = false;
   },
 };
 
@@ -25,6 +25,9 @@ export const getters = {
     } else {
       return '';
     }
+  },
+  GET_AUTHENTICATED(state) {
+    return state.isAuthenticated;
   },
 };
 

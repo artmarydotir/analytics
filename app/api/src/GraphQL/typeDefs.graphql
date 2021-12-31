@@ -311,6 +311,45 @@ type OutputUptimeProfile {
   description: String
 }
 
+# ********** PERFORMANCE *************
+input InputPerformanceCreate {
+  name: String!
+  url: String!
+  interval: Int!
+  description: String
+  options: [Int]!
+}
+
+type PerformanceListDocs {
+  id: Int
+  url: String
+  name: String
+  interval: Int
+  options: [Int]
+  createdAt: DateTime
+}
+
+type OutputPerformanceList {
+  docs: [PerformanceListDocs]
+}
+
+type OutputPerformanceProfile {
+  id: Int
+  url: String
+  name: String
+  description: String
+  interval: Int
+  options: [Int]
+}
+
+input InputPerformanceUpdate {
+  name: String!
+  url: String!
+  interval: Int!
+  description: String
+  options: JSON!
+}
+
 # Mutation list
 type Mutation {
   UserResetPassword(data: InputResetPasswordUser): String
@@ -330,6 +369,9 @@ type Mutation {
   UptimeCreate(data: InputUptimeCreate): Int
   UptimeDelete(data: InputGlobalID): Int
   UptimeUpdate(id: Int!, data: InputUptimeUpdate): Int
+  PerformanceCreate(data: InputPerformanceCreate): Int
+  PerformanceDelete(data: InputGlobalID): Int
+  PerformanceUpdate(id: Int!, data: InputPerformanceUpdate): Int
 }
 
 # Query list
@@ -352,4 +394,6 @@ type Query {
   DomainProfile(data: InputGlobalID): OutputDomainProfile
   UptimeList(args: InputGlobalList): OutputUptimeList
   UptimeProfile(data: InputGlobalID): OutputUptimeProfile
+  PerformanceList(args: InputGlobalList): OutputPerformanceList
+  PerformanceProfile(data: InputGlobalID): OutputPerformanceProfile
 }
