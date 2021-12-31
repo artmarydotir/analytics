@@ -12,5 +12,29 @@ export default {
       title: `${this.$t('userAdd')}`,
     };
   },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('userList'),
+          to: '/user/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('userAdd'),
+          to: `/user/add`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
+  },
 };
 </script>

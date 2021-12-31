@@ -3,6 +3,7 @@
     <Snackbar />
 
     <template v-if="loading">
+      <StaticBreadCrumb :crumbs="crumbs" />
       <DomainForm
         :title="$t('domainEdit')"
         :edit-mood="true"
@@ -30,6 +31,30 @@ export default {
     return {
       title: this.$t('domainEdit'),
     };
+  },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainList'),
+          to: '/domain/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainEdit'),
+          to: `/domain/edit/${this.domainId}`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
   async mounted() {
     this.loading = false;

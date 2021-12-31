@@ -19,5 +19,29 @@ export default {
       title: this.$t('domainAdd'),
     };
   },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainList'),
+          to: '/domain/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('domainAdd'),
+          to: '/domain/add',
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
+  },
 };
 </script>

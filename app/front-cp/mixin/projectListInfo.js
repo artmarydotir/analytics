@@ -96,6 +96,29 @@ const listInfo = {
         },
       ];
     },
+    // Breadcrumb
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('projectAdd'),
+          to: '/project/add',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('projectList'),
+          to: '/project/list',
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
 };
 export default listInfo;

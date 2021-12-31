@@ -3,6 +3,7 @@
     <Snackbar />
 
     <template v-if="loading">
+      <StaticBreadCrumb :crumbs="crumbs" />
       <PerformanceForm
         :title="$t('performanceEdit')"
         :edit-mood="true"
@@ -30,6 +31,30 @@ export default {
     return {
       title: this.$t('performanceEdit'),
     };
+  },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('performanceList'),
+          to: '/performance/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('performanceEdit'),
+          to: `/performance/edit/${this.performanceId}`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
   async mounted() {
     this.loading = false;
