@@ -7,17 +7,11 @@ const { list: uptimeOption } = require('../Schema/UptimeOption');
  */
 
 const base = Joi.object().keys({
-  name: Joi.string()
-    .min(3)
-    .max(31)
-    .pattern(/[a-z][a-z0-9._]{3,31}[a-z0-9]/)
-    .required()
-    .messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-      'string.min': errorConstMerge.MIN_LENGTH,
-      'string.max': errorConstMerge.MAX_LENGTH,
-      'string.pattern.base': errorConstMerge.INVALID_REGEX,
-    }),
+  name: Joi.string().min(3).max(40).required().messages({
+    'any.required': errorConstMerge.ISREQUIRE_FIELD,
+    'string.min': errorConstMerge.MIN_LENGTH,
+    'string.max': errorConstMerge.MAX_LENGTH,
+  }),
   url: Joi.string().uri().required().messages({
     'any.required': errorConstMerge.ISREQUIRE_FIELD,
   }),

@@ -242,7 +242,7 @@ class UserProcess {
    * @returns  {Promise<string>}
    */
   async generatePassword() {
-    const shuffleNoneAlphaList = shuffle('!@#$%^&*(*)_+=-~'.split(''));
+    const shuffleNoneAlphaList = shuffle('!@#$%^&*_+=-~'.split(''));
 
     const shuffleAlphaList = shuffle(
       crypto

@@ -25,7 +25,6 @@ class UserCreate {
    * @param {Number[]} data.options
    * @param {String} data.country
    * @param {String} data.mobile
-   * @param {Object} data.additional
    */
   async addUser(data) {
     const {
@@ -51,7 +50,7 @@ class UserCreate {
           field: element.context.label,
         });
       });
-
+      console.log(validationErrors);
       throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,
@@ -68,7 +67,6 @@ class UserCreate {
       options,
       country: country || 'IR',
       mobile: null,
-      additional: null,
     };
 
     if (email && validator.isEmail(email)) {

@@ -82,7 +82,6 @@ class ProjectList {
       id: project.id,
       title: project.title,
       options: project.options,
-      additional: project.additional,
       publicToken: project.publicToken,
       createdAt: project.createdAt,
       owner: project.Users.map((user) => ({

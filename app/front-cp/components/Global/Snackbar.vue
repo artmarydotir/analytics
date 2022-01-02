@@ -23,7 +23,10 @@
           {{ $t('errors.DUPLICATE_ENTRY') }}
         </span>
         <span v-else>
-          {{ snackbar.message[0].message }}
+          <!-- {{ snackbar.message[0].message }} -->
+          <span v-if="typeof snackbar.message == 'string'">
+            {{ $t(`errors.${snackbar.message}`) }}
+          </span>
         </span>
       </p>
       <v-divider></v-divider>

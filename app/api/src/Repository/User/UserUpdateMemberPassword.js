@@ -51,8 +51,7 @@ class UserUpdateMemberPassword {
       currentPassword,
     );
     if (validPassword) {
-      const newPasswordHash = await this.process.setPassword(newPassword);
-      await this.process.resetUserPassword(id, newPasswordHash);
+      await this.process.resetUserPassword(id, newPassword);
     }
 
     return id;

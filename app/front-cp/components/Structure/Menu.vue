@@ -22,6 +22,7 @@
     <!-- multiple 1  -->
     <v-list-group
       v-for="item in groupItems"
+      v-show="item.canSeeService"
       :key="item.title"
       v-model="item.active"
       class="mt-3 mb-3"
@@ -82,6 +83,7 @@ export default {
           action: 'mdi-monitor-eye',
           title: this.$t('uptimeManagement'),
           active: this.$route.path.includes('uptime'),
+          canSeeService: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
           items: [
             {
               title: this.$t('uptimeAdd'),
@@ -99,6 +101,7 @@ export default {
           action: 'mdi-finance',
           title: this.$t('performanceManagement'),
           active: this.$route.path.includes('performance'),
+          canSeeService: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
           items: [
             {
               title: this.$t('performanceAdd'),
@@ -116,6 +119,7 @@ export default {
           action: 'mdi-domain',
           title: this.$t('domainManagement'),
           active: this.$route.path.includes('domain'),
+          canSeeService: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
           items: [
             {
               title: this.$t('domainAdd'),
@@ -133,6 +137,11 @@ export default {
           action: 'mdi-file-table-box-outline',
           title: this.$t('projectManagement'),
           active: this.$route.path.includes('project'),
+          canSeeService: this.canSeeItem(this.currentUserRole, [
+            'SA',
+            'AD',
+            'CL',
+          ]),
           items: [
             {
               title: this.$t('projectAdd'),
@@ -150,6 +159,7 @@ export default {
           action: 'mdi-account',
           title: this.$t('userManagement'),
           active: this.$route.path.includes('user'),
+          canSeeService: this.canSeeItem(this.currentUserRole, ['SA', 'AD']),
           items: [
             {
               title: this.$t('userAdd'),

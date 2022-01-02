@@ -26,7 +26,6 @@ class DomainCreate {
    * @param {String} data.projectId
    * @param {String} data.description
    * @param {Number[]} data.options
-   * @param {Object} data.additional
    * @returns {Promise<object>}
    */
 
@@ -38,7 +37,6 @@ class DomainCreate {
       projectId,
       description,
       options = [domainOption.ACTIVE],
-      additional = {},
     } = data;
 
     const schema = domainJoiSchema();
@@ -65,7 +63,6 @@ class DomainCreate {
       wildcardDomain: null,
       description: null,
       options,
-      additional: null,
       ProjectId: null,
       enabled: true,
     };
@@ -107,10 +104,6 @@ class DomainCreate {
 
     if (description) {
       initialValues.description = description;
-    }
-
-    if (additional) {
-      initialValues.additional = additional;
     }
 
     initialValues.ProjectId = projectId;

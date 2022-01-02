@@ -9,10 +9,11 @@ const UserAuthSchema = () =>
       .valid(...list)
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_ROLE,
+        'any.only': errorConstMerge.INVALID_AUTH_TYPE,
       }),
-    email: Joi.string().required().messages({
+    email: Joi.string().email().required().messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'string.email': errorConstMerge.INVALID_EMAIL_FORMAT,
     }),
     password: Joi.string()
       .min(7)

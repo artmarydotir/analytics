@@ -65,9 +65,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744147',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const enableProject = await createProject.addProject({
@@ -81,7 +78,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_B'],
         },
       ],
-      additional: {},
     });
 
     await createDomain.addDomain({
@@ -90,9 +86,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'enable domain there for list',
       options: [1],
       projectId: enableProject.id,
-      additional: {
-        alexaRank: '21',
-      },
     });
 
     /** @type {import('fastify').FastifyInstance} */

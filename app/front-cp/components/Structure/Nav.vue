@@ -4,6 +4,7 @@
     :right="dirMode"
     app
     clipped
+    persistent
     fixed
     width="330px"
   >

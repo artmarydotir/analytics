@@ -12,7 +12,6 @@
     </template>
     <template v-else>
       <v-skeleton-loader
-        v-bind="attrs"
         type="article, article ,card-heading,actions"
       ></v-skeleton-loader>
 

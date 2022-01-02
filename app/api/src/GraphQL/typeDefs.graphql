@@ -87,7 +87,7 @@ input InputUserCreate {
   lang: String
   country: String
   mobile: String
-  options: [Int]!
+  options: [Int]
 }
 
 input InputUserUpdate {

@@ -22,7 +22,7 @@
               <v-col cols="12" md="6" lg="4">
                 <ValidationProvider
                   v-slot:default="{ errors, valid }"
-                  rules="required|min:3|alpha_spaces"
+                  rules="required|min:3"
                   :name="$t('name')"
                 >
                   <v-text-field

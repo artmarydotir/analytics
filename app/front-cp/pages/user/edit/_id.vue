@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  permissions: ['AD', 'SA'],
+  permissions: ['AD', 'SA', 'CL'],
   data() {
     return {
       userId: Number(this.$route.params.id),

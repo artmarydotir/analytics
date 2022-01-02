@@ -30,6 +30,7 @@ export default {
         return;
       }
       if (data) {
+        console.log('====>', data);
         this.profileData = data;
       }
     }

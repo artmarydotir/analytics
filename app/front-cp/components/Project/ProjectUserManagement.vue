@@ -2,10 +2,12 @@
   <div class="mx-auto">
     <Snackbar />
     <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
-      <v-card-title class="secondary white--text pa-4">
+      <v-card-title class="pa-4">
+        <v-icon> mdi-{{ mainIcon }} </v-icon>
         {{ $t('editAcl') }}
         <v-spacer></v-spacer>
       </v-card-title>
+      <v-divider></v-divider>
       <div class="pa-6">
         <ValidationObserver ref="obs">
           <v-form
