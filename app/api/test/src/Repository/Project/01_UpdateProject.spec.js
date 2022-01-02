@@ -59,9 +59,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744145',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const user2 = await createUser.addUser({
@@ -73,9 +70,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744148',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const res = await createProject.addProject({
@@ -89,7 +83,6 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       ],
       primaryOwner: user.dataValues.id,
-      additional: {},
     });
 
     const res2 = await createProject.addProject({
@@ -119,9 +112,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'new domain same projects',
         options: [1],
         projectId: res.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).toBeTruthy();
 
@@ -132,9 +122,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'new domain same project',
         options: [1],
         projectId: res.id,
-        additional: {
-          alexaRank: '5',
-        },
       }),
     ).toBeTruthy();
 
@@ -145,9 +132,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'new domain same project',
         options: [1],
         projectId: res2.id,
-        additional: {
-          alexaRank: '8',
-        },
       }),
     ).toBeTruthy();
 
@@ -156,9 +140,7 @@ describe(__filename.replace(__dirname, ''), () => {
         title: 'mosals news',
         description: 'will change you',
         publicToken: '123654a1s2',
-        additional: {
-          officeLocation: 'tehran',
-        },
+
         options: {
           ACTIVE: true,
           DELETED: true,

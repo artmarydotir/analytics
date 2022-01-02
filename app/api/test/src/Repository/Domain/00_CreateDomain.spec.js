@@ -64,9 +64,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744185',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const projectID = await createProject.addProject({
@@ -79,7 +76,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_A'],
         },
       ],
-      additional: {},
     });
 
     expect(
@@ -89,9 +85,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).toBeTruthy();
 
@@ -102,9 +95,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there you go',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '10',
-        },
       }),
     ).toBeTruthy();
 
@@ -115,9 +105,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).rejects.toThrowError();
 
@@ -128,9 +115,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).rejects.toThrowError();
 
@@ -141,9 +125,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).rejects.toThrowError();
 
@@ -154,9 +135,6 @@ describe(__filename.replace(__dirname, ''), () => {
         description: 'there',
         options: [1],
         projectId: projectID.id,
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).rejects.toThrowError();
 
@@ -166,9 +144,6 @@ describe(__filename.replace(__dirname, ''), () => {
         wildcardDomain: '',
         description: 'there',
         options: [1],
-        additional: {
-          alexaRank: '21',
-        },
       }),
     ).rejects.toThrowError();
   });

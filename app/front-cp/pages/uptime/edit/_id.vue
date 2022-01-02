@@ -2,8 +2,8 @@
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
 
-    {{ uptime }}
     <template v-if="loading">
+      <StaticBreadCrumb :crumbs="crumbs" />
       <UptimeForm
         :title="$t('uptimeEdit')"
         :edit-mood="true"
@@ -31,6 +31,30 @@ export default {
     return {
       title: this.$t('uptimeEdit'),
     };
+  },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeList'),
+          to: '/uptime/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeEdit'),
+          to: `/uptime/edit/${this.uptimeId}`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
   async mounted() {
     this.loading = false;

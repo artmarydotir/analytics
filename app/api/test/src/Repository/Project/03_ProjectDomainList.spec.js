@@ -66,9 +66,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744147',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const disableUser = await createUser.addUser({
@@ -80,9 +77,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1, 2],
       country: 'IR',
       mobile: '09017744148',
-      additional: {
-        gender: 'male',
-      },
     });
 
     const enableProject = await createProject.addProject({
@@ -96,7 +90,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_B'],
         },
       ],
-      additional: {},
     });
 
     const disableProject = await createProject.addProject({
@@ -110,7 +103,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_B'],
         },
       ],
-      additional: {},
     });
 
     await createDomain.addDomain({
@@ -119,9 +111,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'enable domain there for list',
       options: [1],
       projectId: enableProject.id,
-      additional: {
-        alexaRank: '21',
-      },
     });
 
     await createDomain.addDomain({
@@ -130,9 +119,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'disable domain there for list',
       options: [2],
       projectId: enableProject.id,
-      additional: {
-        alexaRank: '21',
-      },
     });
 
     await createDomain.addDomain({
@@ -141,9 +127,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'there for list',
       options: [1],
       projectId: disableProject.id,
-      additional: {
-        alexaRank: '21',
-      },
     });
 
     await createDomain.addDomain({
@@ -152,9 +135,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'there for list',
       options: [1],
       projectId: enableProject.id,
-      additional: {
-        alexaRank: '10',
-      },
     });
 
     expect(await projectList.getProjectDomainList()).toBeTruthy();

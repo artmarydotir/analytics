@@ -49,9 +49,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744147',
-      additional: {
-        gender: 'female',
-      },
     };
 
     await createUser.addUser(userData);

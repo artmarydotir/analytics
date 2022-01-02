@@ -91,6 +91,7 @@ module.exports = {
   projectNotFound: 'پروژه یافت نشد',
   deleteProjectWarning:
     'با حذف این پروژه ، تمام دامنه های آن نیز حذف خواهند شد.',
+  editAcl: 'ویرایش دسترسی ها',
 
   // ## USERS
   username: 'نام کاربری',

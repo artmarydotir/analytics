@@ -3,32 +3,64 @@ const { constantsMerge: errorConstMerge } = require('../Schema/ErrorMessage');
 const { list: userRoles } = require('../Schema/UserRoles');
 const { list: languageCode } = require('../Schema/LanguageCodes');
 const { list: countryCode } = require('../Schema/CountryCodes');
+const { list: userOption } = require('../Schema/UserOption');
+
+/**
+ * BASE user schema
+ */
+const base = Joi.object().keys({
+  username: Joi.string()
+    .min(4)
+    .max(32)
+    .lowercase()
+    .regex(/^(?=[a-z_\d]*[a-z])[a-z_\d]{4,}$/)
+    .required()
+    .messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'string.min': errorConstMerge.MIN_LENGTH,
+      'string.max': errorConstMerge.MAX_LENGTH,
+      'string.pattern.base': errorConstMerge.INVALID_USERNAME,
+    }),
+  email: Joi.string().required().messages({
+    'any.required': errorConstMerge.ISREQUIRE_FIELD,
+  }),
+  lang: Joi.string()
+    .required()
+    .valid(...languageCode)
+    .messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'any.only': errorConstMerge.INVALID_LANG,
+    }),
+  country: Joi.any()
+    .valid(...countryCode)
+    .allow(null, '')
+    .when('mobile', {
+      is: Joi.exist(),
+      then: Joi.required(),
+      otherwise: Joi.optional().allow(null),
+    })
+    .messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'any.only': errorConstMerge.INVALID_COUNTRY,
+    }),
+  mobile: Joi.string().allow(null, '').optional(),
+});
 
 /**
  * Create user schema
  */
 
 const CreateUserSchema = () =>
-  Joi.object({
-    username: Joi.string()
-      .min(3)
-      .max(31)
-      .pattern(/[a-z][a-z0-9._]{3,31}[a-z0-9]/)
-      .required()
+  base.keys({
+    options: Joi.array()
+      .items(Joi.number().valid(...userOption))
       .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'string.min': errorConstMerge.MIN_LENGTH,
-        'string.max': errorConstMerge.MAX_LENGTH,
-        'string.pattern.base': errorConstMerge.INVALID_REGEX,
+        'array.items': errorConstMerge.INVALID_OPTION,
       }),
-    email: Joi.string().required().messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
     password: Joi.string().required().min(7).max(32).messages({
       'any.required': errorConstMerge.ISREQUIRE_FIELD,
       'string.min': errorConstMerge.MIN_LENGTH,
       'string.max': errorConstMerge.MAX_LENGTH,
-      'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
     }),
     role: Joi.string()
       .required()
@@ -37,51 +69,13 @@ const CreateUserSchema = () =>
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
         'any.only': errorConstMerge.INVALID_ROLE,
       }),
-    lang: Joi.string()
-      .required()
-      .valid(...languageCode)
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_LANG,
-      }),
-    country: Joi.any()
-      .valid(...countryCode)
-
-      .when('mobile', {
-        is: Joi.exist(),
-        then: Joi.required(),
-        otherwise: Joi.optional().allow(null),
-      })
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_COUNTRY,
-      }),
-    mobile: Joi.string().messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
-    options: Joi.array().allow(null).optional(),
-    additional: Joi.object().allow(null).optional(),
   });
 
 /**
  * Update user schema For Superadmin
  */
 const UpdateUserSchemaSA = () =>
-  Joi.object({
-    username: Joi.string()
-      .min(3)
-      .max(31)
-      .pattern(/[a-z][a-z0-9._]{3,31}[a-z0-9]/)
-      .required()
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'string.min': errorConstMerge.MIN_LENGTH,
-        'string.max': errorConstMerge.MAX_LENGTH,
-        'string.pattern.base': errorConstMerge.INVALID_REGEX,
-      }),
-    email: Joi.string().email().required().messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
+  base.keys({
     role: Joi.string()
       .required()
       .valid(...userRoles)
@@ -89,75 +83,21 @@ const UpdateUserSchemaSA = () =>
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
         'any.only': errorConstMerge.INVALID_ROLE,
       }),
-    lang: Joi.string()
-      .required()
-      .valid(...languageCode)
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_LANG,
-      }),
-    country: Joi.any()
-      .valid(...countryCode)
-      .allow(null, '')
-      .when('mobile', {
-        is: Joi.exist(),
-        then: Joi.required(),
-        otherwise: Joi.optional().allow(null, ''),
+    options: Joi.object()
+      .keys({
+        ACTIVE: Joi.boolean().optional(),
+        DELETED: Joi.boolean().optional(),
       })
+      .required()
       .messages({
         'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_COUNTRY,
       }),
-    mobile: Joi.string().allow(null, '').messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
-    options: Joi.object().allow(null).optional(),
-    additional: Joi.object().allow(null).optional(),
   });
 
 /**
  * Update user schema For Members
  */
-const UpdateUserSchemaME = () =>
-  Joi.object({
-    username: Joi.string()
-      .min(3)
-      .max(31)
-      .pattern(/[a-z][a-z0-9._]{3,31}[a-z0-9]/)
-      .required()
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'string.min': errorConstMerge.MIN_LENGTH,
-        'string.max': errorConstMerge.MAX_LENGTH,
-        'string.pattern.base': errorConstMerge.INVALID_REGEX,
-      }),
-    email: Joi.string().required().messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
-    lang: Joi.string()
-      .required()
-      .valid(...languageCode)
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_LANG,
-      }),
-    country: Joi.any()
-      .allow(null, '')
-      .valid(...countryCode)
-      .when('mobile', {
-        is: Joi.exist(),
-        then: Joi.required(),
-        otherwise: Joi.optional().allow(null, ''),
-      })
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_COUNTRY,
-      }),
-    mobile: Joi.string().allow(null, '').messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-    }),
-    additional: Joi.object().allow(null).optional(),
-  });
+const UpdateUserSchemaME = () => base.keys();
 
 /**
  * Update Member Password
@@ -172,12 +112,17 @@ const UpdateMemberPassword = () =>
       'string.max': errorConstMerge.MAX_LENGTH,
       'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
     }),
-    newPassword: Joi.string().required().min(7).max(32).messages({
-      'any.required': errorConstMerge.ISREQUIRE_FIELD,
-      'string.min': errorConstMerge.MIN_LENGTH,
-      'string.max': errorConstMerge.MAX_LENGTH,
-      'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
-    }),
+    newPassword: Joi.string()
+      .required()
+      .min(7)
+      .max(32)
+      .regex(new RegExp('^[a-zA-Z0-9]{7,32}$'))
+      .messages({
+        'any.required': errorConstMerge.ISREQUIRE_FIELD,
+        'string.min': errorConstMerge.MIN_LENGTH,
+        'string.max': errorConstMerge.MAX_LENGTH,
+        'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
+      }),
   });
 
 module.exports = {

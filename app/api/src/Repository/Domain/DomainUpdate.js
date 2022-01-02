@@ -6,7 +6,7 @@ const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 const {
-  CreateDomainSchema: domainJoiSchema,
+  UpdateDomainSchema: domainJoiSchema,
 } = require('../../JoySchema/Domain');
 
 const { constants: domainOption } = require('../../Schema/DomainOption');
@@ -27,20 +27,12 @@ class DomainUpdate {
    * @param {String} data.projectId
    * @param {String} data.description
    * @param {Object.<string, boolean>} data.options
-   * @param {Object} data.additional
    * @returns {Promise<object>}
    */
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   async updateDomain(id, data) {
-    const {
-      domain,
-      wildcardDomain,
-      projectId,
-      description,
-      options,
-      additional = {},
-    } = data;
+    const { domain, wildcardDomain, projectId, description, options } = data;
 
     const schema = domainJoiSchema();
 
@@ -113,9 +105,6 @@ class DomainUpdate {
     if (options) {
       const newOption = await this.retrieveDomainOptions(id, options);
       initialValues.options = newOption;
-    }
-    if (additional) {
-      initialValues.additional = additional;
     }
 
     initialValues.ProjectId = projectId;

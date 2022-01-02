@@ -67,6 +67,29 @@ const listInfo = {
         },
       ];
     },
+    // Breadcrumb
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeAdd'),
+          to: '/uptime/add',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeList'),
+          to: '/uptime/list',
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
 };
 export default listInfo;

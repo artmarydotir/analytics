@@ -94,6 +94,7 @@ module.exports = {
   projectNotFound: 'Project Not Found',
   deleteProjectWarning:
     'By deleting this project, all domain that belongs to this will be deactivate too.',
+  editAcl: 'Edit Access Control List',
 
   // ## USERS
   username: 'Username',

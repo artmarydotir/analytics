@@ -66,7 +66,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_A'],
         },
       ],
-      additional: {},
     });
 
     const result1 = await projectList.fetchProjectList({

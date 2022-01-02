@@ -62,7 +62,6 @@ class ProjectCreate {
       options,
       privateToken: null,
       publicToken: null,
-      additional: null,
       primaryOwner: null,
       enabled: true,
     };

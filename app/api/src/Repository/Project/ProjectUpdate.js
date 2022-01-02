@@ -5,7 +5,7 @@ const {
 } = require('../../Schema/ErrorMessage');
 
 const {
-  CreateProjectSchema: projectJoiSchema,
+  UpdateProjectSchema: projectJoiSchema,
 } = require('../../JoySchema/Project');
 
 const { constants: projectOption } = require('../../Schema/ProjectOption');
@@ -22,7 +22,6 @@ class ProjectUpdate {
       description,
       userAndRules,
       options,
-      additional,
       primaryOwner,
     } = data;
 
@@ -91,10 +90,6 @@ class ProjectUpdate {
 
     if (primaryOwner) {
       initialValues.primaryOwner = primaryOwner;
-    }
-
-    if (additional) {
-      initialValues.additional = additional;
     }
 
     if (userAndRules) {

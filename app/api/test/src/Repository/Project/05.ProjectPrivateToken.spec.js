@@ -55,9 +55,6 @@ describe(__filename.replace(__dirname, ''), () => {
       role: 'AD',
       lang: 'fa',
       options: [1],
-      additional: {
-        gender: 'female',
-      },
     });
 
     const pData = await createProject.addProject({
@@ -71,7 +68,6 @@ describe(__filename.replace(__dirname, ''), () => {
         },
       ],
       primaryOwner: user.dataValues.id,
-      additional: {},
     });
 
     expect(

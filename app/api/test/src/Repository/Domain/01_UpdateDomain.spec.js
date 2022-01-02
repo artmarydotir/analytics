@@ -65,9 +65,6 @@ describe(__filename.replace(__dirname, ''), () => {
       options: [1],
       country: 'IR',
       mobile: '09017744185',
-      additional: {
-        gender: 'female',
-      },
     });
 
     const projectID = await createProject.addProject({
@@ -80,7 +77,6 @@ describe(__filename.replace(__dirname, ''), () => {
           rules: ['ALL', 'VIEW_A'],
         },
       ],
-      additional: {},
     });
 
     const d1 = await createDomain.addDomain({
@@ -89,9 +85,6 @@ describe(__filename.replace(__dirname, ''), () => {
       description: 'there',
       options: [1],
       projectId: projectID.id,
-      additional: {
-        alexaRank: '21',
-      },
     });
 
     await expect(updateDomain.updateDomain(null, {})).rejects.toThrowError();
@@ -149,9 +142,6 @@ describe(__filename.replace(__dirname, ''), () => {
         },
         description: 'update domain',
         projectId: projectID.id,
-        additional: {
-          alexaRank: '8',
-        },
       }),
     ).toBeTruthy();
 

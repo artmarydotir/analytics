@@ -16,5 +16,29 @@ export default {
       title: this.$t('uptimeAdd'),
     };
   },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeList'),
+          to: '/uptime/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('uptimeAdd'),
+          to: `/uptime/add`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
+  },
 };
 </script>

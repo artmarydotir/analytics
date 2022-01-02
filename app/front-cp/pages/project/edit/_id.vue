@@ -2,6 +2,7 @@
   <v-container class="pt-6 mb-4" fluid>
     <Snackbar />
     <template v-if="loading">
+      <StaticBreadCrumb :crumbs="crumbs" />
       <ProjectForm
         :title="$t('projectEdit')"
         :edit-mood="true"
@@ -10,7 +11,14 @@
       />
     </template>
     <template v-else>
-      {{ $t('projectNotFound') }}
+      <v-skeleton-loader
+        type="article, article ,card-heading,actions"
+      ></v-skeleton-loader>
+
+      <!-- {{ $t('notFound') }} -->
+      <!-- <v-overlay :value="!loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay> -->
     </template>
   </v-container>
 </template>
@@ -29,6 +37,30 @@ export default {
     return {
       title: this.$t('editProject'),
     };
+  },
+  computed: {
+    crumbs() {
+      return [
+        {
+          text: this.$t('dashboard'),
+          to: '/dashboard',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('projectList'),
+          to: '/project/list',
+          refresh: false,
+          disabled: false,
+        },
+        {
+          text: this.$t('projectEdit'),
+          to: `/project/edit/${this.projectId}`,
+          refresh: true,
+          disabled: false,
+        },
+      ];
+    },
   },
   async mounted() {
     this.loading = false;

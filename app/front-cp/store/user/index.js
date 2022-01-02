@@ -70,7 +70,7 @@ export const actions = {
             $lang: String
             $country: String
             $mobile: String
-            $options: [Int]!
+            $options: [Int]
               ) {
               UserCreate(
                 data: {

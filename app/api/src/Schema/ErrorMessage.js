@@ -1,5 +1,7 @@
 const constants = {
   ISREQUIRE_FIELD: '',
+  INVALID_EMAIL_FORMAT: '',
+  INVALID_USERNAME: '',
   UNAUTHORIZED: '',
   ISREQUIRE_ID: '',
   ISREQUIRE_EMAIL: '',
@@ -26,6 +28,7 @@ const constants = {
   NOT_ALLOWED: '',
   INVALID_PROJECT_RULE: '',
   UNPROCESSABLE_ENTITY: '',
+  INVALID_AUTH_TYPE: '',
 };
 
 const list = Object.values(constants);
