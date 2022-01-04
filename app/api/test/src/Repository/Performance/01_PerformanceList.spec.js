@@ -16,8 +16,8 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    const { Uptime } = seq.models;
-    await Uptime.destroy({
+    const { Performance } = seq.models;
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -30,26 +30,33 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add Uptime', async () => {
-    const createUptime = container.resolve('UptimeCreateRepository');
+  it('fetch Performance list', async () => {
+    const createPerformance = container.resolve('PerformanceCreateRepository');
+
+    const performList = container.resolve('PerformanceListRepository');
 
     expect(
-      await createUptime.addUptime({
-        name: 'heyuptime',
+      await createPerformance.addPerformance({
+        name: 'heyperform',
         url: 'https://jacynthe.biz/',
         description: 'i can be a description',
-        ping: false,
         interval: 6,
         options: [1],
       }),
     ).toBeTruthy();
 
-    await expect(
-      createUptime.addUptime({
-        name: 'heyuptimes',
-        options: [1],
-        ping: true,
-      }),
-    ).rejects.toThrowError();
+    const b = await performList.fetchPerformanceList({
+      limit: 20,
+      lastSeen: undefined,
+      filter: {
+        arrIn_options: [1],
+        like_url: 'jacynthe.biz',
+        dte_createdAt: new Date(),
+      },
+    });
+
+    expect(b).toBeTruthy();
+
+    expect(b).toBeTruthy();
   });
 });

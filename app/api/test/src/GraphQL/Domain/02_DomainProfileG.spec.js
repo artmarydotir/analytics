@@ -21,7 +21,27 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, Project, UserProject, Domain } = seq.models;
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Domain.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
     await User.destroy({
       where: {},
       truncate: true,
@@ -35,7 +55,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql uptime list', async () => {
+  it('graphql domain profile', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -43,16 +63,7 @@ describe(__filename.replace(__dirname, ''), () => {
       [1],
     );
 
-    const createUptime = container.resolve('UptimeCreateRepository');
-
-    await createUptime.addUptime({
-      name: 'heyuptime',
-      url: 'https://jacynthe.biz',
-      description: 'i can be a description',
-      ping: false,
-      interval: 6,
-      options: [1],
-    });
+    const { dom } = await helper.CreateDomain();
 
     /** @type {import('fastify').FastifyInstance} */
     const fastify = container.resolve('Fastify').getFastify();
@@ -67,53 +78,36 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id  name interval } }
+        query: `query ($id: Int!) {
+          DomainProfile(
+            data: {
+              id: $id
+            }
+            ) { id wildcardDomain domain ProjectId description options }
           }
         `,
         variables: {
-          limit: 5,
+          id: dom.id,
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    expect(data.UptimeList.docs.length).toBeTruthy();
+    expect(data1.statusCode).toBe(200);
 
-    // Not a valid token
     const data2 = await fastify.inject({
       url: graphQLEndpoint,
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id name interval } }
-          }
-        `,
+        query: `query ($id: Int!) {
+          DomainProfile(
+            data: {
+              id: $id
+            }
+            ) { id wildcardDomain domain ProjectId description options }
+          }`,
         variables: {
-          limit: 10,
+          id: dom.id,
         },
       },
     });

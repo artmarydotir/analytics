@@ -58,12 +58,12 @@ describe(__filename.replace(__dirname, ''), () => {
 
     await createProject.addProject({
       title: 'donyaye egh',
-      publicToken: '123654',
       description: 'hey hello',
+      primaryOwner: user.id,
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL', 'VIEW_A'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
     });
@@ -78,6 +78,14 @@ describe(__filename.replace(__dirname, ''), () => {
     });
 
     expect(result1).toBeTruthy();
-    expect(result1[0].dataValues.title).toBe('donyaye egh');
+
+    // fetchProjectList For Owner
+    const result2 = await projectList.fetchProjectListByOwner(user.id, {
+      filter: {
+        like_title: 'don',
+      },
+    });
+
+    expect(result2).toBeTruthy();
   });
 });

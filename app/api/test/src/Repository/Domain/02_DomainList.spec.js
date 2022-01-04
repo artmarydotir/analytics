@@ -88,9 +88,10 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: enableUser.dataValues.id,
-          rules: ['ALL', 'VIEW_B'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
+      primaryOwner: enableUser.id,
     });
 
     const disableProject = await createProject.addProject({
@@ -101,9 +102,10 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: disableUser.dataValues.id,
-          rules: ['ALL', 'VIEW_B'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
+      primaryOwner: disableUser.id,
     });
 
     await createDomain.addDomain({
@@ -149,6 +151,7 @@ describe(__filename.replace(__dirname, ''), () => {
       limit: 40,
       filter: {
         arrIn_options: [1],
+        like_domain: 'domain',
       },
     });
 

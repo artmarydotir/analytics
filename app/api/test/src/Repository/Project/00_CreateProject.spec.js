@@ -166,22 +166,6 @@ describe(__filename.replace(__dirname, ''), () => {
       }),
     ).rejects.toThrowError();
 
-    // Error for Duplicate name
-    // await expect(
-    //   createProject.addProject({
-    //     title: 'for profile test',
-    //     description: 'hey hello',
-    //     options: [1],
-    //     userAndRules: [
-    //       {
-    //         UserId: user.dataValues.id,
-    //         rules: ['VIEWALL'],
-    //       },
-    //     ],
-    //     primaryOwner: user3.dataValues.id,
-    //   }),
-    // ).rejects.toThrowError();
-
     await expect(
       createProject.addProject({
         description: 'hey hello there',

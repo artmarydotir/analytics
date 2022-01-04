@@ -50,7 +50,7 @@ class UserCreate {
           field: element.context.label,
         });
       });
-      console.log(validationErrors);
+
       throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
         validation: validationErrors,
         statusCode: 422,

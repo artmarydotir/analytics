@@ -21,8 +21,14 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, Performance } = seq.models;
     await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -35,7 +41,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql uptime list', async () => {
+  it('graphql performance profile', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -43,13 +49,12 @@ describe(__filename.replace(__dirname, ''), () => {
       [1],
     );
 
-    const createUptime = container.resolve('UptimeCreateRepository');
+    const createPerformance = container.resolve('PerformanceCreateRepository');
 
-    await createUptime.addUptime({
-      name: 'heyuptime',
-      url: 'https://jacynthe.biz',
+    const perform = await createPerformance.addPerformance({
+      name: 'heyperform',
+      url: 'https://jacynthe.biz/',
       description: 'i can be a description',
-      ping: false,
       interval: 6,
       options: [1],
     });
@@ -67,53 +72,36 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id  name interval } }
+        query: `query ($id: Int!) {
+          PerformanceProfile(
+            data: {
+              id: $id
+            }
+            ) { id name description options url interval }
           }
         `,
         variables: {
-          limit: 5,
+          id: perform.id,
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    expect(data.UptimeList.docs.length).toBeTruthy();
+    expect(data1.statusCode).toBe(200);
 
-    // Not a valid token
     const data2 = await fastify.inject({
       url: graphQLEndpoint,
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id name interval } }
-          }
-        `,
+        query: `query ($id: Int!) {
+          UptimeProfile(
+            data: {
+              id: $id
+            }
+            ) { id name description options url interval }
+          }`,
         variables: {
-          limit: 10,
+          id: perform.id,
         },
       },
     });

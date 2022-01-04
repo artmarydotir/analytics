@@ -46,11 +46,16 @@ describe(__filename.replace(__dirname, ''), () => {
     ).toBeTruthy();
 
     const b = await upList.fetchUptimeList({
-      limit: 30,
+      limit: 20,
+      lastSeen: undefined,
       filter: {
         arrIn_options: [1],
+        like_url: 'jacynthe.biz',
+        dte_createdAt: new Date(),
       },
     });
+
+    expect(b).toBeTruthy();
 
     expect(b).toBeTruthy();
   });

@@ -107,6 +107,6 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
     const { errors } = JSON.parse(data2.body);
-    expect(errors['0'].extensions.statusCode).toEqual(403);
+    expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

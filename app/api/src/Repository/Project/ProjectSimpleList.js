@@ -20,17 +20,13 @@ class ProjectSimpleList {
           const type = m[1];
           const name = m[2];
 
-          if (['arrIn', 'like', 'ids'].includes(type) && !where[`${name}`]) {
+          if (['like', 'ids'].includes(type) && !where[`${name}`]) {
             where[`${name}`] = {};
           }
 
           if (type === 'like') {
             where[`${name}`] = {
               [Op.like]: `%${value.replace(/["']+/g, ' ')}%`,
-            };
-          } else if (type === 'arrIn') {
-            where[`${name}`] = {
-              [Op.contains]: value,
             };
           } else if (type === 'ids') {
             where[`${name}`] = value;

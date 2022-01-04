@@ -21,7 +21,21 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, Project, UserProject } = seq.models;
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
     await User.destroy({
       where: {},
       truncate: true,
@@ -35,23 +49,40 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql uptime list', async () => {
+  it('graphql project show private token', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
       [1],
     );
+    const passw = 'onCHGni7i7EfdF$@';
 
-    const createUptime = container.resolve('UptimeCreateRepository');
+    const createUser = container.resolve('UserCreateRepository');
+    const createProject = container.resolve('ProjectCreateRepository');
 
-    await createUptime.addUptime({
-      name: 'heyuptime',
-      url: 'https://jacynthe.biz',
-      description: 'i can be a description',
-      ping: false,
-      interval: 6,
+    const user = await createUser.addUser({
+      username: 'addproject',
+      email: 'addproject@gmail.com',
+      password: 'a1asQW12!@ASd',
+      role: 'AD',
+      lang: 'fa',
       options: [1],
+      country: 'IR',
+      mobile: '09017744145',
+    });
+
+    // Create project
+    const project = await createProject.addProject({
+      title: 'for profile test',
+      description: 'hey hello',
+      userAndRules: [
+        {
+          UserId: user.id,
+          rules: ['VIEWALL'],
+        },
+      ],
+      primaryOwner: user.id,
     });
 
     /** @type {import('fastify').FastifyInstance} */
@@ -67,58 +98,25 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
+        query: `query (
+          $projectId: Int!
+          $password: String!
           ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id  name interval } }
+          ProjectShowPrivateToken(
+            data: {
+              projectId: $projectId
+              password: $password
+            }
+            )
           }
         `,
         variables: {
-          limit: 5,
+          projectId: project.id,
+          password: passw,
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    expect(data.UptimeList.docs.length).toBeTruthy();
-
-    // Not a valid token
-    const data2 = await fastify.inject({
-      url: graphQLEndpoint,
-      method: 'POST',
-      payload: {
-        operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id name interval } }
-          }
-        `,
-        variables: {
-          limit: 10,
-        },
-      },
-    });
-    const { errors } = JSON.parse(data2.body);
-
-    expect(errors['0'].extensions.statusCode).toEqual(405);
+    expect(data1.statusCode).toBe(200);
   });
 });

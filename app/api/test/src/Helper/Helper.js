@@ -46,6 +46,51 @@ class Helper {
 
     return createUser.addUser(userData);
   }
+
+  // create sample domain process
+  async CreateDomain() {
+    const createProject = this.container.resolve('ProjectCreateRepository');
+    const createUser = this.container.resolve('UserCreateRepository');
+    const createDomain = this.container.resolve('DomainCreateRepository');
+
+    const user = await createUser.addUser({
+      username: 'samplehelper',
+      email: 'samplehelper@gmail.com',
+      password: 'a1asQsW12!@AS',
+      role: 'AD',
+      lang: 'fa',
+      options: [1],
+      country: 'IR',
+      mobile: '09017744185',
+    });
+
+    const project = await createProject.addProject({
+      title: 'sample helper',
+      publicToken: '1236s57',
+      description: 'hey sample helper',
+      userAndRules: [
+        {
+          UserId: user.dataValues.id,
+          rules: ['VIEWALL', 'PROJECTADMIN'],
+        },
+      ],
+      primaryOwner: user.id,
+    });
+
+    const dom = await createDomain.addDomain({
+      domain: 'samplehelper.com',
+      wildcardDomain: '',
+      description: 'there sample helper',
+      options: [1],
+      projectId: project.id,
+    });
+
+    return {
+      user,
+      project,
+      dom,
+    };
+  }
 }
 
 module.exports = Helper;
