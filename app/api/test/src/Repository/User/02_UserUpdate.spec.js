@@ -89,7 +89,6 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const project1 = await createProject.addProject({
       title: 'my primaryowner is user1',
-      publicToken: '1236s5721',
       options: [1],
       primaryOwner: user1.id,
       userAndRules: [
@@ -102,7 +101,6 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const project2 = await createProject.addProject({
       title: 'its test',
-      publicToken: '1236s5730',
       primaryOwner: user2.id,
       options: [1],
       userAndRules: [
@@ -190,7 +188,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     await expect(
       user.updateUserByMembers(user3.dataValues.id, {
-        username: '+',
+        username: '1',
         email: 'formembers@gmail.com',
         lang: 'en',
         country: 'IR',

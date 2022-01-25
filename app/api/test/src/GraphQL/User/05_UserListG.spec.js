@@ -1,18 +1,18 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
@@ -35,12 +35,17 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  // it should add a user
-  it('graphql add user endpoint', async () => {
-    const { token, user } = await helper.CreateUserHeaderAndToken(
+  it('graphql user list', async () => {
+    const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
+      [1],
+    );
+    await helper.CreateUserHeaderAndToken(
+      'forlistcheck',
+      'forlistcheck@gmail.com',
+      'CL',
       [1],
     );
 
@@ -57,30 +62,26 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-
-        query: `mutation (
-              $id: Int!
-              $data: InputUserUpdate
-            ) {
-              UserUpdate(
-                id: $id
-                data: $data
-              )
+        query: `query(
+            $lastSeen: Int,
+            $limit: Int,
+            $filter: JSON
+          ) {
+            UserList(
+              args: {
+                filter: $filter,
+                limit: $limit,
+                lastSeen: $lastSeen
+              }
+            ) { docs { id username email role }}
           }`,
         variables: {
-          id: user.id,
-          data: {
-            username: 'maryhelper',
-            email: 'heyyy@gmail.com',
-            role: 'SA',
-            lang: 'ar',
-          },
+          limit: 5,
         },
       },
     });
 
     const { data } = JSON.parse(data1.body);
-    console.log(data1.body);
-    expect(data.UserUpdate).toEqual(user.id);
+    expect(data.UserList.docs.length).toBe(2);
   });
 });

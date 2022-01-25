@@ -17,21 +17,19 @@ describe(__filename.replace(__dirname, ''), () => {
     const seq = container.resolve('sequelize');
 
     const { User, Project, UserProject } = seq.models;
-    await UserProject.destroy({
+    await User.destroy({
       where: {},
       truncate: true,
       cascade: true,
       restartIdentity: true,
     });
-
     await Project.destroy({
       where: {},
       truncate: true,
       cascade: true,
       restartIdentity: true,
     });
-
-    await User.destroy({
+    await UserProject.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -44,22 +42,22 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add project', async () => {
-    const createProject = container.resolve('ProjectCreateRepository');
-    const token = container.resolve('ProjectPrivateTokenRepository');
+  it('fetch user list', async () => {
+    const projectList = container.resolve('ProjectSimpleListRepository');
     const createUser = container.resolve('UserCreateRepository');
+    const createProject = container.resolve('ProjectCreateRepository');
+
     const user = await createUser.addUser({
-      username: 'generatettok',
-      email: 'addproject@gmail.com',
-      password: 'a1asQW12!@AS',
+      username: 'imatestuser',
+      email: 'imatestuser@gmail.com',
+      password: 'a1WsQW12!@AS*&',
       role: 'AD',
       lang: 'fa',
       options: [1],
     });
 
-    const pData = await createProject.addProject({
-      title: 'donyaye Eghtesad',
-      publicToken: '123654',
+    await createProject.addProject({
+      title: 'donyaye egh',
       description: 'hey hello',
       primaryOwner: user.id,
       userAndRules: [
@@ -70,24 +68,13 @@ describe(__filename.replace(__dirname, ''), () => {
       ],
     });
 
-    expect(
-      await token.returnProjectPrivateToken(
-        pData.id,
-        'a1asQW12!@AS',
-        user.dataValues.id,
-      ),
-    ).toBeTruthy();
+    const result1 = await projectList.fetchProjectSimpleList({
+      limit: 40,
+      filter: {
+        like_title: 'don',
+      },
+    });
 
-    await expect(token.returnProjectPrivateToken()).rejects.toThrowError();
-    await expect(
-      token.returnProjectPrivateToken(pData.id, 'QW12!@AS', user.dataValues.id),
-    ).rejects.toThrowError();
-    await expect(
-      token.returnProjectPrivateToken(
-        456888,
-        'a1asQW12!@AS',
-        user.dataValues.id,
-      ),
-    ).rejects.toThrowError();
+    expect(result1).toBeTruthy();
   });
 });

@@ -59,9 +59,8 @@ class UptimeCreate {
       options,
     };
 
-    if (url.endsWith('/')) {
-      initialValues.url = url.slice(0, -1);
-    }
+    const urlObject = new URL(url);
+    initialValues.url = urlObject.origin;
 
     /**
      ***

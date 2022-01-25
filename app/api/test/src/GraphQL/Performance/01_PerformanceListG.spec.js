@@ -21,8 +21,14 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, Performance } = seq.models;
     await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -35,7 +41,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql uptime list', async () => {
+  it('graphql performance list', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -43,16 +49,17 @@ describe(__filename.replace(__dirname, ''), () => {
       [1],
     );
 
-    const createUptime = container.resolve('UptimeCreateRepository');
+    const createPerformance = container.resolve('PerformanceCreateRepository');
 
-    await createUptime.addUptime({
-      name: 'heyuptime',
-      url: 'https://jacynthe.biz',
-      description: 'i can be a description',
-      ping: false,
-      interval: 6,
-      options: [1],
-    });
+    expect(
+      await createPerformance.addPerformance({
+        name: 'heyperform',
+        url: 'https://jacynthe.biz/',
+        description: 'i can be a description',
+        interval: 6,
+        options: [1],
+      }),
+    ).toBeTruthy();
 
     /** @type {import('fastify').FastifyInstance} */
     const fastify = container.resolve('Fastify').getFastify();
@@ -73,7 +80,7 @@ describe(__filename.replace(__dirname, ''), () => {
             $limit: Int,
             $filter: JSON
           ) {
-            UptimeList(
+            PerformanceList(
               args: {
                 filter: $filter,
                 limit: $limit,
@@ -89,7 +96,7 @@ describe(__filename.replace(__dirname, ''), () => {
     });
 
     const { data } = JSON.parse(data1.body);
-    expect(data.UptimeList.docs.length).toBeTruthy();
+    expect(data.PerformanceList.docs.length).toBeTruthy();
 
     // Not a valid token
     const data2 = await fastify.inject({
@@ -103,7 +110,7 @@ describe(__filename.replace(__dirname, ''), () => {
             $limit: Int,
             $filter: JSON
           ) {
-            UptimeList(
+            PerformanceList(
               args: {
                 filter: $filter,
                 limit: $limit,

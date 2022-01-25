@@ -1,24 +1,22 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
-    const config = new Config(ConfigSchema, {
-      // ASM_PUBLIC_APP_TEST: true,
-    });
+    const config = new Config(ConfigSchema, {});
     container = await initContainer(config);
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
@@ -37,7 +35,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql request for forgot password hash', async () => {
+  it('graphql update user', async () => {
     const { token, user } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -50,7 +48,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const graphQLEndpoint = fastify.baseURL('/graphql/graphql');
 
-    const data1 = await fastify.inject({
+    const data = await fastify.inject({
       headers: {
         cookie: `${container.resolve('Config').ASM_AUTH_COOKIE}=${token}`,
       },
@@ -59,20 +57,31 @@ describe(__filename.replace(__dirname, ''), () => {
       payload: {
         operationName: null,
 
-        query: `query ($email: EmailAddress!) {
-          UserForgotPassword(
-            data: {
-              email: $email
-            }
-          )
-      }`,
+        query: `mutation (
+              $id: Int!
+              $data: InputUserUpdate
+            ) {
+              UserUpdate(
+                id: $id
+                data: $data
+              )
+          }`,
         variables: {
-          email: user.email,
+          id: user.id,
+          data: {
+            username: 'maryhelper',
+            email: 'heyyy@gmail.com',
+            role: 'SA',
+            lang: 'ar',
+            options: {
+              ACTIVE: true,
+              DELETED: false,
+            },
+          },
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    expect(data.UserForgotPassword).toBeTruthy();
+    expect(data.statusCode).toBe(200);
   });
 });

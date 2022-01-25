@@ -79,10 +79,10 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL', 'VIEW_A'],
+          rules: ['VIEWALL'],
         },
       ],
-      primaryOwner: user.dataValues.id,
+      primaryOwner: user.id,
     });
 
     const res2 = await createProject.addProject({
@@ -92,7 +92,7 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL'],
+          rules: ['VIEWALL'],
         },
       ],
       primaryOwner: user.dataValues.id,
@@ -139,7 +139,6 @@ describe(__filename.replace(__dirname, ''), () => {
       await updateProject.updateProject(res.id, {
         title: 'mosals news',
         description: 'will change you',
-        publicToken: '123654a1s2',
 
         options: {
           ACTIVE: true,
@@ -148,11 +147,11 @@ describe(__filename.replace(__dirname, ''), () => {
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_C'],
+            rules: ['VIEWALL'],
           },
           {
             UserId: user2.dataValues.id,
-            rules: ['NEWS_A'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
         ],
         primaryOwner: user.dataValues.id,
@@ -171,11 +170,11 @@ describe(__filename.replace(__dirname, ''), () => {
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_C'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
           {
             UserId: user2.dataValues.id,
-            rules: ['NEWS_A'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
         ],
       }),
@@ -192,11 +191,11 @@ describe(__filename.replace(__dirname, ''), () => {
         userAndRules: [
           {
             UserId: user.dataValues.id,
-            rules: ['ALL', 'VIEW_C'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
           {
             UserId: user2.dataValues.id,
-            rules: ['NEWS_A'],
+            rules: ['VIEWALL', 'PROJECTADMIN'],
           },
         ],
       }),

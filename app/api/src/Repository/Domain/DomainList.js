@@ -39,17 +39,19 @@ class DomainList {
             query[`${name}`] = {
               [Op.contains]: value,
             };
-          } else if (type === 'dts') {
-            query[`${name}`] = {
-              [Op.gte]: new Date(value),
-            };
-          } else if (type === 'dte') {
-            query[`${name}`] = {
-              [Op.lte]: new Date(value),
-            };
           } else if (type === 'boolean') {
             query[`${name}`] = value;
           }
+          const a = {};
+          if (type === 'dts') {
+            a[Op.gte] = new Date(value);
+          } else if (type === 'dte') {
+            a[Op.lte] = new Date(value);
+          }
+          query[`${name}`] = {
+            ...query[`${name}`],
+            ...a,
+          };
         }
       });
     }

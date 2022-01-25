@@ -16,7 +16,7 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
     const seq = container.resolve('sequelize');
 
-    const { User, Project, UserProject } = seq.models;
+    const { User, Project, UserProject, Domain } = seq.models;
     await UserProject.destroy({
       where: {},
       truncate: true,
@@ -31,6 +31,12 @@ describe(__filename.replace(__dirname, ''), () => {
       restartIdentity: true,
     });
 
+    await Domain.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
     await User.destroy({
       where: {},
       truncate: true,
@@ -44,50 +50,47 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add project', async () => {
+  it('domain profile', async () => {
     const createProject = container.resolve('ProjectCreateRepository');
-    const token = container.resolve('ProjectPrivateTokenRepository');
+    const profileProject = container.resolve('DomainProfileRepository');
     const createUser = container.resolve('UserCreateRepository');
+    const createDomain = container.resolve('DomainCreateRepository');
+
     const user = await createUser.addUser({
-      username: 'generatettok',
-      email: 'addproject@gmail.com',
-      password: 'a1asQW12!@AS',
+      username: 'sadomains',
+      email: 'adosmainss@gmail.com',
+      password: 'a1asQsW12!@AS',
       role: 'AD',
       lang: 'fa',
       options: [1],
+      country: 'IR',
+      mobile: '09017744185',
     });
 
-    const pData = await createProject.addProject({
-      title: 'donyaye Eghtesad',
-      publicToken: '123654',
-      description: 'hey hello',
-      primaryOwner: user.id,
+    const project = await createProject.addProject({
+      title: 'donyssasfh g',
+      publicToken: '1236s57',
+      description: 'hey shesllo',
       userAndRules: [
         {
           UserId: user.dataValues.id,
           rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
+      primaryOwner: user.id,
     });
 
-    expect(
-      await token.returnProjectPrivateToken(
-        pData.id,
-        'a1asQW12!@AS',
-        user.dataValues.id,
-      ),
-    ).toBeTruthy();
+    const dom = await createDomain.addDomain({
+      domain: 'aa.com',
+      wildcardDomain: '',
+      description: 'there',
+      options: [1],
+      projectId: project.id,
+    });
 
-    await expect(token.returnProjectPrivateToken()).rejects.toThrowError();
-    await expect(
-      token.returnProjectPrivateToken(pData.id, 'QW12!@AS', user.dataValues.id),
-    ).rejects.toThrowError();
-    await expect(
-      token.returnProjectPrivateToken(
-        456888,
-        'a1asQW12!@AS',
-        user.dataValues.id,
-      ),
-    ).rejects.toThrowError();
+    expect(await profileProject.returnDomainData(dom.id)).toBeTruthy();
+
+    await expect(profileProject.returnDomainData()).rejects.toThrowError();
+    await expect(profileProject.returnDomainData(126)).rejects.toThrowError();
   });
 });

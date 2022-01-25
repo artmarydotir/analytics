@@ -73,9 +73,10 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL', 'VIEW_A'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
+      primaryOwner: user.id,
     });
 
     expect(

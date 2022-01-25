@@ -81,26 +81,26 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const enableProject = await createProject.addProject({
       title: 'my project for list',
-      publicToken: 'project00080',
       options: [1],
       description: 'hello test for list',
+      primaryOwner: enableUser.id,
       userAndRules: [
         {
           UserId: enableUser.dataValues.id,
-          rules: ['ALL', 'VIEW_B'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
     });
 
     const disableProject = await createProject.addProject({
       title: 'my disable project',
-      publicToken: 'project00090',
+      primaryOwner: enableUser.id,
       description: 'hello test for list',
       options: [1, 2],
       userAndRules: [
         {
           UserId: disableUser.dataValues.id,
-          rules: ['ALL', 'VIEW_B'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
     });

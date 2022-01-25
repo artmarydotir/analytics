@@ -1,18 +1,18 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
@@ -107,6 +107,6 @@ describe(__filename.replace(__dirname, ''), () => {
       },
     });
     const { errors } = JSON.parse(data2.body);
-    expect(errors['0'].extensions.statusCode).toEqual(403);
+    expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

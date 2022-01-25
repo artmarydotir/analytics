@@ -35,7 +35,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql uptime list', async () => {
+  it('graphql uptime profile', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -45,7 +45,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const createUptime = container.resolve('UptimeCreateRepository');
 
-    await createUptime.addUptime({
+    const up = await createUptime.addUptime({
       name: 'heyuptime',
       url: 'https://jacynthe.biz',
       description: 'i can be a description',
@@ -67,53 +67,36 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id  name interval } }
+        query: `query ($id: Int!) {
+          UptimeProfile(
+            data: {
+              id: $id
+            }
+            ) { id name description options url interval ping }
           }
         `,
         variables: {
-          limit: 5,
+          id: up.id,
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    expect(data.UptimeList.docs.length).toBeTruthy();
+    expect(data1.statusCode).toBe(200);
 
-    // Not a valid token
     const data2 = await fastify.inject({
       url: graphQLEndpoint,
       method: 'POST',
       payload: {
         operationName: null,
-        query: `
-        query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UptimeList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id name interval } }
-          }
-        `,
+        query: `query ($id: Int!) {
+          UptimeProfile(
+            data: {
+              id: $id
+            }
+            ) { id name description options url interval ping }
+          }`,
         variables: {
-          limit: 10,
+          id: up.id,
         },
       },
     });

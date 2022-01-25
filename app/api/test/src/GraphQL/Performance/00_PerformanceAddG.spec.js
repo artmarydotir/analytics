@@ -1,18 +1,18 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
@@ -21,8 +21,14 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User } = seq.models;
+    const { User, Performance } = seq.models;
     await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -35,17 +41,11 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql show profile of user', async () => {
+  it('graphql add performance', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
-      [1],
-    );
-    await helper.CreateUserHeaderAndToken(
-      'forlistcheck',
-      'forlistcheck@gmail.com',
-      'CL',
       [1],
     );
 
@@ -62,27 +62,35 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
+        query: `
+          mutation(
+            $name: String!
+            $url: String!
+            $interval: Int!
+            $description: String
+            $options: [Int]!
           ) {
-            UserList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
+            PerformanceCreate(
+              data: {
+                name: $name
+                url: $url
+                interval: $interval
+                description: $description
+                options: $options
               }
-            ) { docs { id username email role }}
-          }`,
+            )
+          }
+        `,
         variables: {
-          limit: 5,
+          name: 'testname',
+          url: 'http://test.com',
+          interval: 5,
+          description: 'test description',
+          options: [1],
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    console.log('+++++++++++++++++++++++=');
-    console.log(data.UserList);
+    expect(data1.statusCode).toBe(200);
   });
 });

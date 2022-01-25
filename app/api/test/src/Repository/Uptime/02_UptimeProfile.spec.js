@@ -30,26 +30,23 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('add Uptime', async () => {
+  it('fetch uptime profile', async () => {
     const createUptime = container.resolve('UptimeCreateRepository');
+    const upProfile = container.resolve('UptimeProfileRepository');
 
-    expect(
-      await createUptime.addUptime({
-        name: 'heyuptime',
-        url: 'https://jacynthe.biz/',
-        description: 'i can be a description',
-        ping: false,
-        interval: 6,
-        options: [1],
-      }),
-    ).toBeTruthy();
+    const profile = await createUptime.addUptime({
+      name: 'heyuptime',
+      url: 'https://jacynthe.biz',
+      description: 'i can be a description',
+      ping: false,
+      interval: 6,
+      options: [1],
+    });
 
-    await expect(
-      createUptime.addUptime({
-        name: 'heyuptimes',
-        options: [1],
-        ping: true,
-      }),
-    ).rejects.toThrowError();
+    const b = await upProfile.returnUptimeData(profile.id);
+    expect(b).toBeTruthy();
+
+    await expect(upProfile.returnUptimeData()).rejects.toThrowError();
+    await expect(upProfile.returnUptimeData(125)).rejects.toThrowError();
   });
 });
