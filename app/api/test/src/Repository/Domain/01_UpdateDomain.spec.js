@@ -6,6 +6,7 @@ require('../../../../globals');
 const { initContainer } = require('../../../../src/Container');
 const { Config } = require('../../../../src/Config');
 const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const { list: projectRule } = require('../../../../src/Schema/ProjectRules');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
@@ -74,9 +75,10 @@ describe(__filename.replace(__dirname, ''), () => {
       userAndRules: [
         {
           UserId: user.dataValues.id,
-          rules: ['ALL', 'VIEW_A'],
+          rules: projectRule,
         },
       ],
+      primaryOwner: user.dataValues.id,
     });
 
     const d1 = await createDomain.addDomain({

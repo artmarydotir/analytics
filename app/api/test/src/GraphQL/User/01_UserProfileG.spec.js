@@ -1,18 +1,18 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
@@ -35,8 +35,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  // it should add a user
-  it('graphql add user endpoint', async () => {
+  it('graphql show profile of user', async () => {
     const { token, user } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
@@ -57,30 +56,57 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-
-        query: `mutation (
-              $id: Int!
-              $data: InputUserUpdate
+        query: `query(
+            $id: Int!
+          ) {
+            UserProfile(
+              data: {
+                id: $id,
+              }
             ) {
-              UserUpdate(
-                id: $id
-                data: $data
-              )
+              id
+              username
+              email
+              role
+              lang
+              country
+              mobile
+              options
+            }
           }`,
         variables: {
           id: user.id,
-          data: {
-            username: 'maryhelper',
-            email: 'heyyy@gmail.com',
-            role: 'SA',
-            lang: 'ar',
-          },
         },
       },
     });
 
     const { data } = JSON.parse(data1.body);
-    console.log(data1.body);
-    expect(data.UserUpdate).toEqual(user.id);
+    expect(data.UserProfile.username).toEqual(user.username);
+
+    const data2 = await fastify.inject({
+      url: graphQLEndpoint,
+      method: 'POST',
+      payload: {
+        operationName: null,
+        query: `query(
+            $id: Int!
+          ) {
+            UserProfile(
+              data: {
+                id: $id,
+              }
+            ) {
+              id
+              username
+              email
+            }
+          }`,
+        variables: {
+          id: user.id,
+        },
+      },
+    });
+    const { errors } = JSON.parse(data2.body);
+    expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

@@ -1,18 +1,18 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
@@ -35,17 +35,11 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql show profile of user', async () => {
-    const { token } = await helper.CreateUserHeaderAndToken(
+  it('graphql update user', async () => {
+    const { token, user } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
-      [1],
-    );
-    await helper.CreateUserHeaderAndToken(
-      'forlistcheck',
-      'forlistcheck@gmail.com',
-      'CL',
       [1],
     );
 
@@ -54,7 +48,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const graphQLEndpoint = fastify.baseURL('/graphql/graphql');
 
-    const data1 = await fastify.inject({
+    const data = await fastify.inject({
       headers: {
         cookie: `${container.resolve('Config').ASM_AUTH_COOKIE}=${token}`,
       },
@@ -62,27 +56,32 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-        query: `query(
-            $lastSeen: Int,
-            $limit: Int,
-            $filter: JSON
-          ) {
-            UserList(
-              args: {
-                filter: $filter,
-                limit: $limit,
-                lastSeen: $lastSeen
-              }
-            ) { docs { id username email role }}
+
+        query: `mutation (
+              $id: Int!
+              $data: InputUserUpdate
+            ) {
+              UserUpdate(
+                id: $id
+                data: $data
+              )
           }`,
         variables: {
-          limit: 5,
+          id: user.id,
+          data: {
+            username: 'maryhelper',
+            email: 'heyyy@gmail.com',
+            role: 'SA',
+            lang: 'ar',
+            options: {
+              ACTIVE: true,
+              DELETED: false,
+            },
+          },
         },
       },
     });
 
-    const { data } = JSON.parse(data1.body);
-    console.log('+++++++++++++++++++++++=');
-    console.log(data.UserList);
+    expect(data.statusCode).toBe(200);
   });
 });

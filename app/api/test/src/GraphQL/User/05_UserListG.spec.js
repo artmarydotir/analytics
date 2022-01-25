@@ -1,24 +1,22 @@
 /* eslint-env jest */
 
 // @ts-ignore
-require('../../../globals');
+require('../../../../globals');
 
-const { initContainer } = require('../../../src/Container');
-const { Config } = require('../../../src/Config');
-const { ConfigSchema } = require('../../../src/ConfigSchema');
-const Helper = require('../Helper/Helper');
+const { initContainer } = require('../../../../src/Container');
+const { Config } = require('../../../../src/Config');
+const { ConfigSchema } = require('../../../../src/ConfigSchema');
+const Helper = require('../../Helper/Helper');
 
 describe(__filename.replace(__dirname, ''), () => {
   /** @type {import('awilix').AwilixContainer} */
   let container;
 
-  /** @type {import('../Helper/Helper')} */
+  /** @type {import('../../Helper/Helper')} */
   let helper;
 
   beforeAll(async () => {
-    const config = new Config(ConfigSchema, {
-      // ASM_PUBLIC_APP_TEST: true,
-    });
+    const config = new Config(ConfigSchema, {});
     container = await initContainer(config);
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
@@ -37,11 +35,17 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql request for forgot password hash', async () => {
-    const { token, user } = await helper.CreateUserHeaderAndToken(
+  it('graphql user list', async () => {
+    const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
+      [1],
+    );
+    await helper.CreateUserHeaderAndToken(
+      'forlistcheck',
+      'forlistcheck@gmail.com',
+      'CL',
       [1],
     );
 
@@ -58,21 +62,26 @@ describe(__filename.replace(__dirname, ''), () => {
       method: 'POST',
       payload: {
         operationName: null,
-
-        query: `query ($email: EmailAddress!) {
-          UserForgotPassword(
-            data: {
-              email: $email
-            }
-          )
-      }`,
+        query: `query(
+            $lastSeen: Int,
+            $limit: Int,
+            $filter: JSON
+          ) {
+            UserList(
+              args: {
+                filter: $filter,
+                limit: $limit,
+                lastSeen: $lastSeen
+              }
+            ) { docs { id username email role }}
+          }`,
         variables: {
-          email: user.email,
+          limit: 5,
         },
       },
     });
 
     const { data } = JSON.parse(data1.body);
-    expect(data.UserForgotPassword).toBeTruthy();
+    expect(data.UserList.docs.length).toBe(2);
   });
 });
