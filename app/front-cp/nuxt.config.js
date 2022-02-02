@@ -65,6 +65,7 @@ export default {
     { src: '~/plugins/vuex-persist.js' },
     '~/plugins/vee-validate.js',
     { src: '~/plugins/axios.js', ssr: false },
+    { src: '~/plugins/echarts.js', ssr: false },
   ],
   components: {
     dirs: [
@@ -78,6 +79,7 @@ export default {
       '~/components/Domain',
       '~/components/Uptime',
       '~/components/Performance',
+      '~/components/Charts',
     ],
   },
 

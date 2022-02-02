@@ -91,6 +91,53 @@ class Helper {
       dom,
     };
   }
+
+  // create sample project
+  async CreateProject() {
+    const createProject = this.container.resolve('ProjectCreateRepository');
+    const createUser = this.container.resolve('UserCreateRepository');
+    const user = await createUser.addUser({
+      username: 'samplehelper',
+      email: 'samplehelper@gmail.com',
+      password: 'a1asQsW12!@AS',
+      role: 'AD',
+      lang: 'fa',
+      options: [1],
+      country: 'IR',
+      mobile: '09017744185',
+    });
+
+    const user2 = await createUser.addUser({
+      username: 'useraccess',
+      email: 'useraccess@gmail.com',
+      password: 'a1asQsW12!@AS',
+      role: 'AD',
+      lang: 'fa',
+      options: [1],
+    });
+
+    const project = await createProject.addProject({
+      title: 'sample helper',
+      publicToken: '1236s57',
+      description: 'hey sample helper',
+      userAndRules: [
+        {
+          UserId: user.dataValues.id,
+          rules: ['VIEWALL', 'PROJECTADMIN'],
+        },
+        {
+          UserId: user2.dataValues.id,
+          rules: ['VIEWALL'],
+        },
+      ],
+      options: [1],
+      primaryOwner: user.id,
+    });
+
+    return {
+      project,
+    };
+  }
 }
 
 module.exports = Helper;

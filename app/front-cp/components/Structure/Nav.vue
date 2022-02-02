@@ -6,7 +6,7 @@
     clipped
     persistent
     fixed
-    width="330px"
+    width="325px"
   >
     <v-sheet class="pa-4">
       <v-list-item-avatar>

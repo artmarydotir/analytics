@@ -4,25 +4,33 @@
       offset-y
       min-width="130"
       nudge-bottom="16"
-      light
+      :dark="$vuetify.theme.dark"
       left
       origin="right right"
+      :close-on-click="true"
       transition="slide-y-transition"
     >
       <template v-slot:activator="{ on }">
-        <v-btn text color="white" dark class="nocase" v-on="on">
+        <v-btn
+          text
+          :color="color"
+          dark
+          class="nocase"
+          :small="btnSize"
+          v-on="on"
+        >
           <span v-if="$i18n.locale == 'fa'" class="fn-t inline-b"> فا </span>
           <span v-if="$i18n.locale == 'en'" class="fn-t inline-b mr-1">
             En
           </span>
-          <v-icon class="inline-b pr-2">mdi-earth</v-icon>
+          <v-icon :size="iconSize" dark class="inline-b pr-2">mdi-earth</v-icon>
         </v-btn>
       </template>
       <v-list>
         <v-list-item
           v-for="locale in availableLocales"
           :key="locale.code"
-          @click.stop="$i18n.setLocale(locale.code)"
+          @click="$i18n.setLocale(locale.code)"
           @change="checkDirection(locale.code)"
         >
           <v-list-item-title>{{ locale.name }}</v-list-item-title>
@@ -36,7 +44,20 @@ const rtlLanguages = ['ar', 'dv', 'fa', 'he', 'ps', 'ur', 'yi'];
 
 export default {
   name: 'LangSwitcher',
-
+  props: {
+    color: {
+      type: String,
+      default: 'white',
+    },
+    iconSize: {
+      type: String,
+      default: 'medium',
+    },
+    btnSize: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       defaultL: this.$i18n.locale,

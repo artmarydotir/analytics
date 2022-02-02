@@ -3,6 +3,11 @@ const { constants: userOption } = require('../../Schema/UserOption');
 const { constants: projectOption } = require('../../Schema/ProjectOption');
 const { constants: domainOption } = require('../../Schema/DomainOption');
 
+/**
+ * @class ProjectDomainList
+ * @classdesc - ProjectDomainList For Collector
+ * @todo - not used yet
+ */
 class ProjectDomainList {
   constructor({ sequelize }) {
     this.sequelize = sequelize;
@@ -29,6 +34,7 @@ class ProjectDomainList {
           model: Project,
           attributes: ['publicToken'],
           where: {
+            enabled: true,
             [Op.not]: {
               options: {
                 [Op.contains]: [projectOption.DELETED],
@@ -71,6 +77,7 @@ class ProjectDomainList {
         result[r.Project.dataValues.publicToken].push(r.wildcardDomain);
       }
     });
+
     return result;
   }
 }
