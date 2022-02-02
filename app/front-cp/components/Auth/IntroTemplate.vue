@@ -2,7 +2,7 @@
   <v-row justify="center" class="ma-0 pa-0">
     <v-col cols="12" class="ma-0 pa-12 primary">
       <v-sheet
-        :min-height="$vuetify.breakpoint.smAndDown ? 180 : 220"
+        :min-height="$vuetify.breakpoint.smAndDown ? 180 : 200"
         color="primary"
       >
         <h1
@@ -13,7 +13,7 @@
             text-center
             white--text
             pb-10
-            pt-4
+            pt-3
             text-sm-h5 text-md-h3
           "
         >

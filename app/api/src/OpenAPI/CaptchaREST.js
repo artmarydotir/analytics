@@ -1,12 +1,10 @@
-const { to } = require('await-to-js');
-
 class CaptchaREST {
   constructor({ CaptchaRepository, Config, Fastify }) {
     /** @type {import('fastify').FastifyInstance} */
     this.fastify = Fastify.getFastify();
 
     /** @type {import('../Core/Fastify/GenericResponse').GenericResponse} */
-    const e403 = Fastify.getGenericError(403);
+
     const e404 = Fastify.getGenericError(404);
 
     this.fastify.route({
@@ -24,11 +22,10 @@ class CaptchaREST {
         },
       },
       handler: async (req, reply) => {
-        // /** @type {Object} */
-        // const { body } = req;
-
+        // @ts-ignore
+        const { lang } = req.query;
         try {
-          return await CaptchaRepository.generateCaptcha();
+          return await CaptchaRepository.generateCaptcha(lang);
         } catch (e) {
           return reply
             .status(

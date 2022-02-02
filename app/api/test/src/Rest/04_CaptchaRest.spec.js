@@ -32,6 +32,11 @@ describe(__filename.replace(__dirname, ''), () => {
     const result1 = await fastify.inject({
       url: captchaURL,
       method: 'GET',
+
+      // add query params
+      query: {
+        lang: 'fa',
+      },
     });
 
     expect(result1.statusCode).toEqual(200);

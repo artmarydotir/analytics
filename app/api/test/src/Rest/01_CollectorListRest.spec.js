@@ -72,10 +72,11 @@ describe(__filename.replace(__dirname, ''), () => {
       publicToken: 'project00080',
       options: [1],
       description: 'hello test for list',
+      primaryOwner: enableUser.id,
       userAndRules: [
         {
           UserId: enableUser.dataValues.id,
-          rules: ['ALL', 'VIEW_B'],
+          rules: ['VIEWALL', 'PROJECTADMIN'],
         },
       ],
     });

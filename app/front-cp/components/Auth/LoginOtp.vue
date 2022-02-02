@@ -37,21 +37,29 @@
                 }"
                 :name="$t('otpCode')"
               >
-                <v-text-field
+                <!-- <v-text-field
                   v-model="user.otp"
                   :error-messages="errors"
                   :success="valid"
-                  :label="$t('otpCode')"
+                  :label="$t('totpCode')"
                   type="text"
                   dir="ltr"
                   outlined
                   prepend-inner-icon="mdi-lock-reset"
                   @click:append="show = !show"
-                />
+                /> -->
+                <v-otp-input
+                  v-model="user.otp"
+                  type="string"
+                  :error-messages="errors"
+                  :success="valid"
+                  length="6"
+                  :dark="$vuetify.theme.dark"
+                ></v-otp-input>
               </ValidationProvider>
             </v-col>
           </v-row>
-          <v-card-actions class="mt-4 pb-10 mx-auto text-center justify-center">
+          <v-card-actions class="mt-7 pb-10 mx-auto text-center justify-center">
             <v-btn dark type="submit" x-large color="cyan" class="pl-12 pr-12">
               {{ $t('login') }}
               <v-icon right class="pt-1" small dark>
@@ -72,7 +80,6 @@ export default {
   name: 'LoginOtp',
   data() {
     return {
-      text: 'aaa',
       isDisabled: false,
       show: false,
       type: 'AO',

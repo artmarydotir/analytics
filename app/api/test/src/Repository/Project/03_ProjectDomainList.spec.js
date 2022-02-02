@@ -51,7 +51,7 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('fetch project list', async () => {
+  it('collector get public token and enable domain', async () => {
     const createProject = container.resolve('ProjectCreateRepository');
     const createUser = container.resolve('UserCreateRepository');
     const createDomain = container.resolve('DomainCreateRepository');

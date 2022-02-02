@@ -1,17 +1,17 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" md="6" class="d-flex mx-auto pt-0">
-      <v-img class="text-center bgcolor" :src="captchaImage"> </v-img>
-      <v-btn
-        large
-        text
-        icon
-        color="red"
-        class="mt-2 mr-2 ml-2"
-        @click="recaptcha"
-      >
-        <v-icon>mdi-repeat</v-icon>
-      </v-btn>
+    <v-col cols="12" md="8" class="mx-auto pt-0">
+      <v-row justify="center" align="center">
+        <v-col cols="10" class="pl-1 pr-1">
+          <v-img class="d-flex text-center bgcolor" :src="captchaImage">
+          </v-img>
+        </v-col>
+        <v-col cols="2" class="pl-1 pr-1">
+          <v-btn large text icon color="red" class="d-flex" @click="recaptcha">
+            <v-icon>mdi-repeat</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-col>
     <v-col cols="12" class="pb-0">
       <ValidationProvider
@@ -64,6 +64,11 @@ export default {
       try {
         const res = await this.$axios.$get(
           `${window.applicationBaseURL}api/open-api/captcha`,
+          {
+            params: {
+              lang: this.$i18n.locale,
+            },
+          },
         );
 
         this.captcha.id = res.id;

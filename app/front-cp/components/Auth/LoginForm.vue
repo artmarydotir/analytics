@@ -4,8 +4,8 @@
     <v-tabs
       v-model="tab"
       fixed-tabs
-      slider-color="yellow darken-1"
-      background-color="cyan darken-1"
+      slider-color="amber darken-1"
+      background-color="primary darken-1"
       dark
       slider-size="4"
     >
@@ -19,7 +19,7 @@
         {{ $t('otp') }}
       </v-tab>
     </v-tabs>
-    <v-card elevation="7">
+    <v-card elevation="7" rounded="0">
       <v-tabs-items v-model="tab">
         <v-tab-item value="tab-1">
           <v-card flat>
