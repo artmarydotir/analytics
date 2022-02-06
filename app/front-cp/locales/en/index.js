@@ -12,6 +12,20 @@ module.exports = {
   contactSupport: 'Contact {name} support',
   telSupport: 'Tel {name}',
   pageNotFound: 'page    dddNotFound',
+
+  // ## Dashboard
+  session: 'Session',
+  bounceRate: 'Bounce Rate',
+  pageViews: 'Page Views',
+  sessionDuration: 'Session Duration',
+  returnUsers: 'Return Users',
+  today: 'Today',
+  yesterday: 'Yesterday',
+  last7days: 'Last 7 days',
+  last28days: 'Last 28 days',
+  last90days: 'Last 90 days',
+  audienceOverview: 'Audience Overview',
+
   // ## Login
   email: 'Email',
   password: 'Password',
@@ -29,6 +43,9 @@ module.exports = {
   newPassword: 'New password',
   repeatPassword: 'Repeat password',
   changePassword: 'Change Password',
+  forgetPassword: 'Forget Password',
+  enterEmail:
+    'Enter your email, we will send you a code to reset your password.',
 
   // ## MENU
   dashboard: 'Dashboard',

@@ -10,6 +10,7 @@ module.exports = {
   projectDescription: 'توضیحات بیشتر در مورد پروژه',
   loading: 'بارگزاری...',
   pageNotFound: 'یافت نشد',
+
   // ## Login
   login: 'ورود',
   admin: 'ادمین',
@@ -29,6 +30,7 @@ module.exports = {
   newPassword: 'رمزعبور جدید',
   repeatPassword: 'تکرار رمزعبور',
   changePassword: 'تغییر رمزعبور',
+
   // ## MENU
   dashboard: 'داشبورد',
   domainManagement: 'مدیریت دامنه ها',

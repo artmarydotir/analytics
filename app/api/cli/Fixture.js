@@ -1,9 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable sonarjs/no-identical-functions */
 const { waterfall } = require('async');
 const chalk = require('chalk');
 const _ = require('lodash');
 
-const faker = require('faker/locale/en');
+// eslint-disable-next-line node/no-unpublished-require
+const { faker } = require('@faker-js/faker');
 
 const { log } = console;
 const { list: userRoles } = require('../src/Schema/UserRoles');

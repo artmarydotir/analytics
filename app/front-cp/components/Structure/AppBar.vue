@@ -1,7 +1,9 @@
 <template>
   <v-app-bar
-    :clipped-left="($vuetify.rtl === false) & $vuetify.breakpoint.lgAndUp"
-    :clipped-right="$vuetify.rtl & $vuetify.breakpoint.lgAndUp"
+    :clipped-left="
+      ($vuetify.rtl === false) & $vuetify.breakpoint.lgAndUp ? true : false
+    "
+    :clipped-right="$vuetify.rtl & $vuetify.breakpoint.lgAndUp ? true : false"
     app
     dark
     clipped
