@@ -65,7 +65,6 @@ export default {
     { src: '~/plugins/vuex-persist.js' },
     '~/plugins/vee-validate.js',
     { src: '~/plugins/axios.js', ssr: false },
-    { src: '~/plugins/echarts.js', ssr: false },
   ],
   components: {
     dirs: [
@@ -80,6 +79,8 @@ export default {
       '~/components/Uptime',
       '~/components/Performance',
       '~/components/Charts',
+      '~/components/Dashboard',
+      '~/components/Dashboard/Home',
     ],
   },
 
@@ -87,6 +88,7 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
+    '@nuxtjs/composition-api/module',
   ],
 
   modules: ['@nuxtjs/axios', ['nuxt-i18n', I18N]],
@@ -113,5 +115,7 @@ export default {
     treeShake: true,
   },
 
-  build: {},
+  build: {
+    // transpile: [/echarts/, /zrender/],
+  },
 };

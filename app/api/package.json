@@ -41,6 +41,7 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "@jest/test-sequencer": "^27",
     "@types/ioredis": "^4",
     "@types/jest": "^27",
@@ -57,7 +58,6 @@
     "eslint-plugin-security": "^1",
     "eslint-plugin-sonarjs": "^0",
     "eslint-plugin-sql": "^1",
-    "faker": "^5",
     "jest": "^27",
     "link-module-alias": "^1",
     "prettier": "^2",

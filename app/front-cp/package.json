@@ -19,12 +19,14 @@
     "@nuxtjs/axios": "^5",
     "aasaam-vuetify-datetime": "0.0.1",
     "core-js": "^3.15",
-    "echarts": "^5.2",
+    "echarts": "^5.3",
     "is-valid-domain": "^0.1",
+    "luxon": "^2.3",
     "nuxt": "^2.15",
     "nuxt-i18n": "^6",
     "otplib": "^12",
     "qrcode": "^1",
+    "vue-echarts": "^6.0",
     "vuetify": "^2.6"
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "@aasaam/noto-font": "^0",
     "@babel/eslint-parser": "^7",
     "@mdi/font": "^5",
+    "@nuxtjs/composition-api": "^0.31.0",
     "@nuxtjs/eslint-config": "^6",
     "@nuxtjs/eslint-module": "^3",
     "@nuxtjs/stylelint-module": "^4",
