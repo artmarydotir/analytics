@@ -27,7 +27,7 @@ export default function ({ app, store }) {
           background: colors.indigo.lighten5,
         },
         dark: {
-          primary: colors.blue.darken2,
+          primary: '#536dfe',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

@@ -12,6 +12,8 @@
         :label="$t('mobileNumber')"
         outlined
         required
+        dir="ltr"
+        type="tel"
       />
     </ValidationProvider>
   </div>

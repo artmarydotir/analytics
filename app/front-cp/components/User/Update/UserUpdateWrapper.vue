@@ -4,17 +4,15 @@
       <v-card :elevation="$vuetify.theme.dark ? 9 : 8">
         <v-tabs
           v-model="tab"
-          background-color="middle font-weight-light"
           centered
-          dark
-          color="white"
+          :background-color="$vuetify.theme.dark ? '' : 'grey lighten-3'"
           :grow="$vuetify.breakpoint.smAndDown ? true : false"
           :fixed-tabs="$vuetify.breakpoint.mdAndUp ? true : false"
           :icons-and-text="$vuetify.breakpoint.mdAndUp"
           slider-size="4"
           show-arrows
         >
-          <v-tabs-slider color="white darken-3"></v-tabs-slider>
+          <v-tabs-slider color="primary"></v-tabs-slider>
 
           <v-tab href="#tab-2" class="pb-2">
             {{ $t('editData') }}
@@ -29,7 +27,7 @@
             <v-icon>mdi-account-key</v-icon>
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-model="tab" class="my-6">
           <v-tab-item value="tab-2">
             <UpdateMainInfo :data-given="userInfo" />
           </v-tab-item>

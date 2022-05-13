@@ -4,14 +4,14 @@
     right
     bottom
     offset-y
-    nudge-bottom="10"
+    nudge-bottom="16"
   >
     <template v-slot:activator="{ on }">
-      <v-btn icon v-on="on">
+      <v-btn text v-on="on">
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </template>
-    <v-list>
+    <v-list dense>
       <v-list-item exact :to="localePath('user-profile')" color="blue">
         <v-list-item-title>
           {{ $t('showProfile') }}

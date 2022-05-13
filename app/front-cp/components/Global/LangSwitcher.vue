@@ -8,7 +8,7 @@
       left
       origin="right right"
       :close-on-click="true"
-      transition="slide-y-transition"
+      transition="slide-x-transition"
     >
       <template v-slot:activator="{ on }">
         <v-btn
@@ -27,7 +27,7 @@
           </v-icon>
         </v-btn>
       </template>
-      <v-list>
+      <v-list dense>
         <v-list-item
           v-for="locale in availableLocales"
           :key="locale.code"

@@ -70,6 +70,10 @@
           </v-chip>
         </template>
 
+        <template v-slot:[`item.mobile`]="{ item }">
+          <span dir="ltr"> {{ item.mobile }} </span>
+        </template>
+
         <template v-slot:[`item.options`]="{ item }">
           <v-chip
             v-if="item.options.includes(1)"
