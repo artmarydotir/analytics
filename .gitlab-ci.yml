@@ -1,74 +1,37 @@
-image: docker:stable
+name: build
 
-services:
-  - docker:dind
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 0"
 
-stages:
-  - test
-  - build
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🤌🏽
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-variables:
-  DOCKER_DRIVER: overlay2
-  TEST_CI_NAMESPACE: analytic-demo
-  CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM: $AASAAM_REGISTRY_HUB_NAME/analytic-demo-backend:latest
-  CONTAINER_WEB_RELEASE_IMAGE_AASAAM: $AASAAM_REGISTRY_HUB_NAME/analytic-demo-web:latest
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-before_script:
-  - docker login -u $AASAAM_REGISTRY_USER -p $AASAAM_REGISTRY_PASSWORD $AASAAM_REGISTRY_HUB_ENDPOINT
-
-test:
-  stage: test
-  script:
-    # gc
-    - docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
-    - docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
-    - docker rmi $TEST_CI_NAMESPACE || true
-    - docker network rm $TEST_CI_NAMESPACE || true
-
-    # build
-    - docker build -f Dockerfile.ci -t $TEST_CI_NAMESPACE .
-
-    # network
-    - docker network create $TEST_CI_NAMESPACE
-
-    ################
-    # Dependencies #
-    ################
-    # redis
-    - docker run --name $TEST_CI_NAMESPACE-redis --network=$TEST_CI_NAMESPACE -d redis:6
-    # postgres
-    - |
-      docker run --name $TEST_CI_NAMESPACE-postgres --network=$TEST_CI_NAMESPACE \
-        -e POSTGRES_DB="pg-db" \
-        -e POSTGRES_USER="pg-user" \
-        -e POSTGRES_PASSWORD="pg-password" \
-        -e POSTGRES_HOST_AUTH_METHOD="true" \
-        -d postgres:13
-
-    # run ci
-    - |
-      docker run --name $TEST_CI_NAMESPACE --network=$TEST_CI_NAMESPACE \
-        -e ASM_REDIS_URI="redis://$TEST_CI_NAMESPACE-redis" \
-        -e ASM_POSTGRES_URI="postgres://pg-user:pg-password@$TEST_CI_NAMESPACE-postgres:5432/pg-db" \
-        -e ASM_PUBLIC_APP_TEST='true' \
-        $TEST_CI_NAMESPACE /app/backend/ci.sh
-
-    # gc
-    - docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
-    - docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres || true
-    - docker rmi $TEST_CI_NAMESPACE || true
-    - docker network rm $TEST_CI_NAMESPACE || true
-  coverage: '/TOTAL_COVERAGE_FOR_CI_F: \d+\.\d+/'
-
-build:
-  stage: build
-  script:
-    # build
-    - docker build -f Dockerfile.backend -t $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM .
-    - docker build -f Dockerfile.web -t $CONTAINER_WEB_RELEASE_IMAGE_AASAAM .
-    # push
-    - docker push $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM
-    - docker push $CONTAINER_WEB_RELEASE_IMAGE_AASAAM
-    # remove image
-    - docker rmi $CONTAINER_BACKEND_RELEASE_IMAGE_AASAAM
-    - docker rmi $CONTAINER_WEB_RELEASE_IMAGE_AASAAM
+      - name: Build and push
+        run: |
+          docker-compose -f docker-compose.prod.yml build
+          echo "List of docker images"
+          docker images
+          echo "OK"
+          docker tag htm-test_htm-web ghcr.io/artmarydotir/htm-test-web:latest
+          docker tag htm-test_htm-backend ghcr.io/artmarydotir/htm-test-backend:latest
+          docker push ghcr.io/artmarydotir/htm-test-web:latest
+          docker push ghcr.io/artmarydotir/htm-test-backend:latest

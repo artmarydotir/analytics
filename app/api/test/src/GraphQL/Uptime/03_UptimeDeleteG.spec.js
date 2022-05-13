@@ -42,13 +42,15 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql add user endpoint', async () => {
+  it('graphql delete uptime monitoring', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
       [1],
     );
+
+    const uptime = await helper.CreateUptime();
 
     /** @type {import('fastify').FastifyInstance} */
     const fastify = container.resolve('Fastify').getFastify();
@@ -64,76 +66,20 @@ describe(__filename.replace(__dirname, ''), () => {
       payload: {
         operationName: null,
         query: `
-          mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
-          ) {
-            UptimeCreate(
+          mutation($id: Int!) {
+            UptimeDelete(
               data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
+                id: $id,
               }
             )
           }
         `,
         variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
+          id: uptime.id,
         },
       },
     });
 
     expect(data1.statusCode).toBe(200);
-    const data2 = await fastify.inject({
-      url: graphQLEndpoint,
-      method: 'POST',
-      payload: {
-        operationName: null,
-        query: `
-          mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
-          ) {
-            UptimeCreate(
-              data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
-              }
-            )
-          }
-        `,
-        variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
-        },
-      },
-    });
-
-    const { errors } = JSON.parse(data2.body);
-    expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

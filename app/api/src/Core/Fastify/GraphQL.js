@@ -19,6 +19,7 @@ class GraphQL {
         const [e] = gqlContext.errors;
         let statusCode = 500;
         if (e.extensions && e.extensions.statusCode) {
+          // @ts-ignore
           statusCode = e.extensions.statusCode;
         }
         return {

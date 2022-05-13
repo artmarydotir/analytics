@@ -1,5 +1,5 @@
 # Copyright(c) 2021 aasaam software development group
-FROM node:16-bullseye-slim
+FROM node:18-bullseye-slim
 
 RUN export DEBIAN_FRONTEND=noninteractive ; \
   export LANG=en_US.utf8 ; \

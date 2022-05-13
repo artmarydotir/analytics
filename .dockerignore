@@ -8,4 +8,7 @@ app/front-cp/.nuxt/
 app/front-cp/dist/
 app/front-cp/coverage/
 app/front-cp/node_modules/
-app/front-cp/package-lock.json
+
+
+tmp/
+storage/

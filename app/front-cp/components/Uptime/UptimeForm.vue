@@ -140,9 +140,12 @@
 </template>
 
 <script>
+import routingFn from '@/mixin/routingFn';
 const { to } = require('await-to-js');
+
 export default {
   name: 'UptimeForm',
+  mixins: [routingFn],
   props: {
     title: {
       type: String,
@@ -211,7 +214,7 @@ export default {
         this.$store.dispatch('uptime/addUptime', this.innerUptime),
       );
       if (data) {
-        this.redirecting();
+        this.redirecting('uptime-list');
       } else {
         this.errorCallback();
       }
@@ -225,7 +228,7 @@ export default {
       );
 
       if (data) {
-        this.redirecting();
+        this.redirecting('uptime-list');
       } else {
         this.errorCallback();
       }
@@ -234,30 +237,12 @@ export default {
     updatingFunction() {
       const cloneData = { ...this.innerUptime };
 
-      console.log('cloneData', cloneData);
       cloneData.options = this.temporaryOptions;
       delete cloneData.id;
       return {
         id: this.innerUptime.id,
         data: cloneData,
       };
-    },
-    redirecting() {
-      this.isDisabled = true;
-      setTimeout(() => {
-        this.$router.push(
-          this.localeRoute({
-            name: 'uptime-list',
-          }),
-        );
-      }, 1100);
-    },
-
-    errorCallback() {
-      this.isDisabled = false;
-      // setTimeout(() => {
-      //   this.$store.commit('CLOSE_NOTIFICATION', false);
-      // }, 3000);
     },
   },
 };

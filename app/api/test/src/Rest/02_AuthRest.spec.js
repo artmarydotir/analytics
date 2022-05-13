@@ -34,7 +34,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('sign in', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    const auth = container.resolve('UserAuthRepository');
+    container.resolve('UserAuthRepository');
     const captcha = container.resolve('CaptchaRepository');
     const capResult = await captcha.generateCaptcha();
     const redis = await container.resolve('Redis');
@@ -79,14 +79,8 @@ describe(__filename.replace(__dirname, ''), () => {
 
     expect(result1.statusCode).toEqual(200);
 
-    console.log(container.resolve('Config').ASM_AUTH_REFRESH_COOKIE);
-    // console.log(result1.headers);
-
+    // @ts-ignore
     const [, { value: AuthRefreshToken }] = result1.cookies;
-
-    // const allCookie = result1.cookies;
-    // const b = allCookie.find((x) => x.name === 'AuthToken');
-    // console.log(b);
 
     const result2 = await fastify.inject({
       url: refreshURL,
@@ -99,6 +93,6 @@ describe(__filename.replace(__dirname, ''), () => {
       payload: {},
     });
 
-    console.log(result2.headers);
+    expect(result2.statusCode).toEqual(200);
   });
 });

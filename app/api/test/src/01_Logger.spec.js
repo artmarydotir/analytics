@@ -90,7 +90,7 @@ describe(__filename.replace(__dirname, ''), () => {
       ASM_PUBLIC_APP_NS: 'test',
       ASM_LOG_LEVEL: 6,
       ASM_PUBLIC_APP_TEST: false,
-      ASM_LOG_STDOUT_FILTER: ['def', 'http', 'pg' ],
+      ASM_LOG_STDOUT_FILTER: ['def', 'http', 'pg'],
     };
 
     const logger = new Logger(Config);

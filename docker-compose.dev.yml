@@ -38,7 +38,7 @@ services:
     environment:
       ASM_FRONT_CP_PORT: ${ASM_FRONT_CP_PORT:-3000}
       ASM_FRONT_CP_PATH: ${ASM_FRONT_CP_PATH:-_cp}
-    image: node:16-bullseye-slim
+    image: node:18-bullseye-slim
     working_dir: /app/front-cp
 
     volumes:

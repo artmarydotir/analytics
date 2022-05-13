@@ -1,5 +1,5 @@
 class CaptchaREST {
-  constructor({ CaptchaRepository, Config, Fastify }) {
+  constructor({ CaptchaRepository, Fastify, redisClient }) {
     /** @type {import('fastify').FastifyInstance} */
     this.fastify = Fastify.getFastify();
 
@@ -22,6 +22,16 @@ class CaptchaREST {
         },
       },
       handler: async (req, reply) => {
+        const tryNumber = await redisClient.get(
+          `ipclean:${req.headers['x-client-ip']}`,
+        );
+
+        if (tryNumber <= 3) {
+          return {
+            id: '',
+            image: '',
+          };
+        }
         // @ts-ignore
         const { lang } = req.query;
         try {

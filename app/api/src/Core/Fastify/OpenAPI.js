@@ -1,6 +1,6 @@
 const { Organization } = require('@aasaam/information');
 
-const fastifySwagger = require('fastify-swagger').default;
+const fastifySwagger = require('@fastify/swagger').default;
 
 const { GenericResponse } = require('./GenericResponse');
 
@@ -92,7 +92,7 @@ class OpenAPI {
     const defaultSchemaError = new GenericResponse(500);
     fastify.addSchema(defaultSchemaError.getSchema());
 
-    /** @type {import('fastify-swagger').SwaggerOptions} */
+    /** @type {import('@fastify/swagger').SwaggerOptions} */
     const openApiConfig = {
       routePrefix: fastify.openAPIBaseURL('/docs'),
       mode: 'dynamic',

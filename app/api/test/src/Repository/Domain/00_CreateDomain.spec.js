@@ -92,7 +92,7 @@ describe(__filename.replace(__dirname, ''), () => {
     expect(
       await createDomain.addDomain({
         domain: '',
-        wildcardDomain: '*.google.tld',
+        wildcardDomain: '*.example.com',
         description: 'there you go',
         options: [1],
         projectId: projectID.id,

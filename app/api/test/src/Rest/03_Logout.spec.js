@@ -34,7 +34,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
   it('sign in', async () => {
     const createUser = container.resolve('UserCreateRepository');
-    const auth = container.resolve('UserAuthRepository');
+    container.resolve('UserAuthRepository');
     const captcha = container.resolve('CaptchaRepository');
     const capResult = await captcha.generateCaptcha();
     const redis = await container.resolve('Redis');
@@ -84,10 +84,12 @@ describe(__filename.replace(__dirname, ''), () => {
       url: logoutURL,
       method: 'GET',
       payload: {},
+      // @ts-ignore
       cookies: result1.cookies[0],
     });
 
     const allCookie = result2.cookies;
+    // @ts-ignore
     const b = allCookie.find((x) => x.name === 'AuthToken');
 
     expect(b.value).toBe('0');

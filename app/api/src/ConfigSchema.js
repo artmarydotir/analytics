@@ -47,7 +47,7 @@ const ConfigSchema = {
     ASM_DEFAULT_ADMIN_EMAIL: {
       type: 'string',
       description: 'Default administrator email',
-      default: 'adminer@gmail.com',
+      default: 'superadmin@example.com',
     },
 
     ASM_PUBLIC_DOMAIN: {

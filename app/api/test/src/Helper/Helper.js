@@ -47,6 +47,44 @@ class Helper {
     return createUser.addUser(userData);
   }
 
+  /**
+   *
+   * @returns
+   */
+  async CreatePerformance() {
+    const data = {
+      name: 'heyperform',
+      url: 'https://jacynthe.biz/',
+      description: 'i can be a description',
+      interval: 6,
+      options: [1],
+    };
+
+    const createPerformance = this.container.resolve(
+      'PerformanceCreateRepository',
+    );
+
+    return createPerformance.addPerformance(data);
+  }
+
+  /**
+   *
+   * @returns
+   */
+  async CreateUptime() {
+    const data = {
+      name: 'heyuptime',
+      url: 'https://jacynthe.com',
+      interval: 6,
+      ping: true,
+      options: [1],
+    };
+
+    const createUptime = this.container.resolve('UptimeCreateRepository');
+
+    return createUptime.addUptime(data);
+  }
+
   // create sample domain process
   async CreateDomain() {
     const createProject = this.container.resolve('ProjectCreateRepository');
@@ -56,7 +94,7 @@ class Helper {
     const user = await createUser.addUser({
       username: 'samplehelper',
       email: 'samplehelper@gmail.com',
-      password: 'a1asQsW12!@AS',
+      password: 'a1asQsW12!@ASs',
       role: 'AD',
       lang: 'fa',
       options: [1],

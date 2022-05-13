@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const { ErrorWithProps } = require('mercurius').default;
 const {
   constantsMerge: errorConstMerge,
@@ -62,7 +61,7 @@ class Captcha {
     let isValidInput = false;
 
     const currentValue = await redis.get(`captcha:${id}`);
-
+    await redis.del(`captcha:${id}`);
     if (currentValue && Number(currentValue) === Number(input)) {
       isValidInput = true;
     }

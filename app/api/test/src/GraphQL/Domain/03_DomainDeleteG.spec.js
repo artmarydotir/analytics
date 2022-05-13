@@ -21,15 +21,28 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User, Uptime } = seq.models;
-    await User.destroy({
+    const { User, Project, UserProject, Domain } = seq.models;
+    await UserProject.destroy({
       where: {},
       truncate: true,
       cascade: true,
       restartIdentity: true,
     });
 
-    await Uptime.destroy({
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+
+    await Domain.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await User.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -42,13 +55,15 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql add user endpoint', async () => {
+  it('graphql delete domain', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
       [1],
     );
+
+    const { dom } = await helper.CreateDomain();
 
     /** @type {import('fastify').FastifyInstance} */
     const fastify = container.resolve('Fastify').getFastify();
@@ -65,37 +80,23 @@ describe(__filename.replace(__dirname, ''), () => {
         operationName: null,
         query: `
           mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
+            $id: Int!
           ) {
-            UptimeCreate(
+            DomainDelete(
               data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
+                id: $id,
               }
             )
           }
         `,
         variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
+          id: dom.id,
         },
       },
     });
 
     expect(data1.statusCode).toBe(200);
+
     const data2 = await fastify.inject({
       url: graphQLEndpoint,
       method: 'POST',
@@ -103,37 +104,23 @@ describe(__filename.replace(__dirname, ''), () => {
         operationName: null,
         query: `
           mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
+            $id: Int!
           ) {
-            UptimeCreate(
+            DomainDelete(
               data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
+                id: $id,
               }
             )
           }
         `,
         variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
+          id: dom.id,
         },
       },
     });
 
     const { errors } = JSON.parse(data2.body);
+
     expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

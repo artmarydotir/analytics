@@ -37,6 +37,7 @@
                     :error-messages="errors"
                     :success="valid"
                     type="text"
+                    dir="ltr"
                     outlined
                     :disabled="disableDomain"
                     :label="$t('domain')"
@@ -50,7 +51,7 @@
                   :rules="{
                     required_if:
                       innerDomain.domain && innerDomain.domain.length < 0,
-                    isDomain: { wild: true },
+                    isDomain: { wild: false },
                   }"
                   :name="$t('wildcardDomain')"
                 >
@@ -61,6 +62,9 @@
                     :success="valid"
                     type="text"
                     outlined
+                    dir="ltr"
+                    :suffix="$vuetify.rtl ? '.*' : ''"
+                    :prefix="$vuetify.rtl ? '' : '*.'"
                     :disabled="disableWDomain"
                     :label="$t('wildcardDomain')"
                   >
@@ -127,11 +131,13 @@
 </template>
 
 <script>
+import routingFn from '@/mixin/routingFn';
 const { to } = require('await-to-js');
 const _ = require('lodash');
 
 export default {
   name: 'DomainForm',
+  mixins: [routingFn],
   props: {
     title: {
       type: String,
@@ -226,7 +232,7 @@ export default {
         this.$store.dispatch('domain/addDomain', this.innerDomain),
       );
       if (data) {
-        this.redirecting();
+        this.redirecting('domain-list');
       } else {
         this.errorCallback();
       }
@@ -240,7 +246,7 @@ export default {
       );
 
       if (data) {
-        this.redirecting();
+        this.redirecting('domain-list');
       } else {
         this.errorCallback();
       }
@@ -256,28 +262,19 @@ export default {
         cloneData.projectId = this.innerDomain.ProjectId;
         delete cloneData.ProjectId;
       }
+
+      // delete null values
+      Object.keys(cloneData).forEach((key) => {
+        if (cloneData[key] === null) {
+          delete cloneData[key];
+        }
+      });
+
       delete cloneData.id;
       return {
         id: this.innerDomain.id,
         data: cloneData,
       };
-    },
-    redirecting() {
-      this.isDisabled = true;
-      setTimeout(() => {
-        this.$router.push(
-          this.localeRoute({
-            name: 'domain-list',
-          }),
-        );
-      }, 1100);
-    },
-
-    errorCallback() {
-      this.isDisabled = false;
-      // setTimeout(() => {
-      //   this.$store.commit('CLOSE_NOTIFICATION', false);
-      // }, 3000);
     },
   },
 };

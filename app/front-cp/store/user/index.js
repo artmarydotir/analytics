@@ -269,4 +269,33 @@ export const actions = {
       throw new Error('error');
     }
   },
+
+  // ***************************************
+  async getCaptcha({ commit }, input) {
+    try {
+      const response = await this.$axios.$get(
+        `${window.applicationBaseURL}api/open-api/captcha`,
+        {
+          params: {
+            lang: input,
+          },
+        },
+      );
+
+      return response;
+    } catch (error) {
+      const { data } = error.response;
+      console.log(data);
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: data.message,
+        },
+        { root: true },
+      );
+      throw new Error('error');
+    }
+  },
 };

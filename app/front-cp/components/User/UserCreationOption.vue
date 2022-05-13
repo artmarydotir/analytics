@@ -7,13 +7,13 @@
         :value="1"
       ></v-checkbox>
     </v-col>
-    <v-col cols="12" md="6">
+    <!-- <v-col cols="12" md="6">
       <v-checkbox
         v-model="options.remove"
         :label="$t('remove')"
         :value="2"
       ></v-checkbox>
-    </v-col>
+    </v-col> -->
   </v-row>
 </template>
 

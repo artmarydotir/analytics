@@ -1,27 +1,26 @@
 const allRTLLanguages = ['ar', 'dv', 'fa', 'he', 'ps', 'ur', 'yi'];
 
-const supportedLocales = process.env.ASM_BUILD_SUPPORTED_LOCALES
-  ? process.env.ASM_BUILD_SUPPORTED_LOCALES.trim()
-      .split(',')
-      .map((l) => l.trim())
-  : ['fa', 'en'];
+export default function ({ app, route, store, redirect }) {
+  const supportedLocales = app.$config
+    ? app.$config.supportedLocales
+    : ['fa', 'en'];
 
-const defaultLocale = process.env.ASM_BUILD_DEFAULT_LOCALE
-  ? process.env.ASM_BUILD_DEFAULT_LOCALE
-  : 'en';
+  const defaultLocale = app.$config ? app.$config.lang : 'en';
 
-const rtlLanguages = [];
-const ltrLanguages = [];
-supportedLocales.forEach((l) => {
-  if (allRTLLanguages.includes(l)) {
-    rtlLanguages.push(l);
-  } else {
-    ltrLanguages.push(l);
-  }
-});
+  const rtlLanguages = [];
+  const ltrLanguages = [];
 
-export default function ({ app, route, store }) {
-  const input = route.path.split('/')[1];
+  supportedLocales.forEach((l) => {
+    if (allRTLLanguages.includes(l)) {
+      rtlLanguages.push(l);
+    } else {
+      ltrLanguages.push(l);
+    }
+  });
+
+  const input = route.path.split('/')[1]
+    ? route.path.split('/')[1]
+    : app.$config.lang;
 
   let applicationLanguage = defaultLocale;
 
@@ -29,7 +28,11 @@ export default function ({ app, route, store }) {
     applicationLanguage = input;
   }
 
-  app.i18n.locale = applicationLanguage;
+  app.i18n.setLocale(applicationLanguage);
 
   app.vuetify.framework.rtl = rtlLanguages.includes(applicationLanguage);
+
+  if (route.path === '/') {
+    return redirect(`/${defaultLocale}`);
+  }
 }

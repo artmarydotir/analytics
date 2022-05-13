@@ -5,7 +5,7 @@ const init = require('./init');
 
   const Config = container.resolve('Config');
 
-  const Logger = container.resolve('Logger');
+  container.resolve('Logger');
 
   /** @type {import('./src/Core/Fastify')} */
   const Fastify = container.resolve('Fastify');

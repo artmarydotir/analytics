@@ -1,5 +1,5 @@
 const { fastify } = require('fastify');
-const { fastifyCookie } = require('fastify-cookie');
+const { fastifyCookie } = require('@fastify/cookie');
 
 const { Decorate } = require('./Fastify/Decorate');
 const { ErrorHandler } = require('./Fastify/ErrorHandler');

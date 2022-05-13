@@ -29,6 +29,7 @@ const constants = {
   INVALID_PROJECT_RULE: '',
   UNPROCESSABLE_ENTITY: '',
   INVALID_AUTH_TYPE: '',
+  INVALID_STRING: '',
 };
 
 const list = Object.values(constants);

@@ -32,10 +32,7 @@ class UserProcess {
    */
   verifyOtp(input, otpSecret) {
     const isValid = authenticator.check(input, otpSecret);
-    if (isValid === true) {
-      return true;
-    }
-    return false;
+    return isValid === true;
   }
 
   /**
@@ -99,10 +96,7 @@ class UserProcess {
         options: { [Op.contains]: [UserOption.ACTIVE] },
       },
     });
-    if (res) {
-      return true;
-    }
-    return false;
+    return !!res;
   }
 
   /**
@@ -263,15 +257,25 @@ class UserProcess {
    * @param {Object} param
    * @param {String} param.username
    * @param {String} param.email
+   * @param {String} param.password
    * @returns  {Promise<{}>}
    */
-  async setGeneratedPassword({ username = null, email = null }) {
-    const generatedPassword = await this.generatePassword();
+  async setGeneratedPassword({
+    username = null,
+    email = null,
+    password = null,
+  }) {
+    let psw;
+    if (!password) {
+      psw = await this.generatePassword();
+    } else {
+      psw = password;
+    }
 
     const { User } = this.sequelize.models;
     const user = await User.update(
       {
-        password: await this.setPassword(generatedPassword),
+        password: await this.setPassword(psw),
       },
       {
         where: {
@@ -280,7 +284,7 @@ class UserProcess {
       },
     );
 
-    return { found: user[0] > 0, generatedPassword };
+    return { found: user[0] > 0, psw };
   }
 
   /**

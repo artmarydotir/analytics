@@ -1,7 +1,4 @@
 /* eslint-disable class-methods-use-this */
-const validator = require('validator').default;
-const isValidHostname = require('is-valid-hostname');
-
 const { ErrorWithProps } = require('mercurius').default;
 const {
   constantsMerge: errorConstMerge,
@@ -79,33 +76,19 @@ class DomainCreate {
       });
     }
 
-    if (domain) {
-      const invalid = validator.isIP(domain, 4) || !isValidHostname(domain);
-
-      if (invalid) {
-        throw new ErrorWithProps(errorConstMerge.INVALID_DOMAIN, {
-          statusCode: 400,
-        });
-      }
-      initialValues.domain = domain;
-    }
-
     if (wildcardDomain) {
-      const isValid = this.isValidWildcardDomain(wildcardDomain);
-
-      if (isValid) {
-        initialValues.wildcardDomain = wildcardDomain;
-      } else {
-        throw new ErrorWithProps(errorConstMerge.INVALID_WILDCARD_DOMAIN, {
-          statusCode: 400,
-        });
+      let wDomain = wildcardDomain;
+      if (wildcardDomain.startsWith('*.')) {
+        wDomain = wildcardDomain.replace('*.', '');
       }
+
+      initialValues.wildcardDomain = wDomain;
     }
 
     if (description) {
       initialValues.description = description;
     }
-
+    initialValues.domain = domain;
     initialValues.ProjectId = projectId;
 
     /**
@@ -123,24 +106,6 @@ class DomainCreate {
     }
 
     return result;
-  }
-
-  /**
-   *
-   * @param {*} input
-   * @returns {Boolean}
-   */
-  isValidWildcardDomain(input) {
-    let isValid = false;
-
-    if (input.startsWith('*.')) {
-      const desiredDomain = input.replace('*.', '');
-      isValid = isValidHostname(desiredDomain);
-    } else {
-      isValid = false;
-    }
-
-    return isValid;
   }
 }
 

@@ -1,5 +1,3 @@
-const validator = require('validator').default;
-const isValidHostname = require('is-valid-hostname');
 const { uniq } = require('lodash');
 const { ErrorWithProps } = require('mercurius').default;
 const {
@@ -38,7 +36,7 @@ class DomainUpdate {
 
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
-        statusCode: 400,
+        statusCode: 422,
       });
     }
 
@@ -63,40 +61,28 @@ class DomainUpdate {
 
     if (domain && wildcardDomain) {
       throw new ErrorWithProps(errorConstMerge.NOT_REQUIRED_BOTH, {
-        statusCode: 400,
+        statusCode: 422,
       });
     }
 
     if (!domain && !wildcardDomain) {
       throw new ErrorWithProps(errorConstMerge.REQUIRED_ONLY, {
-        statusCode: 400,
+        statusCode: 422,
       });
     }
 
     if (domain) {
-      const invalid = validator.isIP(domain, 4) || !isValidHostname(domain);
-
-      if (invalid) {
-        throw new ErrorWithProps(errorConstMerge.INVALID_DOMAIN, {
-          statusCode: 400,
-        });
-      }
       initialValues.domain = domain;
       initialValues.wildcardDomain = null;
     }
 
     if (wildcardDomain) {
-      const isValid =
-        this.domainFunctions.isValidWildcardDomain(wildcardDomain);
-
-      if (isValid) {
-        initialValues.wildcardDomain = wildcardDomain;
-        initialValues.domain = null;
-      } else {
-        throw new ErrorWithProps(errorConstMerge.INVALID_WILDCARD_DOMAIN, {
-          statusCode: 400,
-        });
+      let wDomain = wildcardDomain;
+      if (wildcardDomain.startsWith('*.')) {
+        wDomain = wildcardDomain.replace('*.', '');
       }
+      initialValues.wildcardDomain = wDomain;
+      initialValues.domain = null;
     }
 
     if (description) {
@@ -167,6 +153,7 @@ class DomainUpdate {
    * @param {Number} id
    * @param {Object.<string, boolean>} props
    */
+  // eslint-disable-next-line consistent-return
   async patchDomainOptions(id, props) {
     if (!id) {
       throw new ErrorWithProps(errorConstMerge.ISREQUIRE_ID, {
