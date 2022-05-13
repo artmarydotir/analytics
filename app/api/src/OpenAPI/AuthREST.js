@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-collapsible-if */
 const { to } = require('await-to-js');
 
 class AuthREST {
@@ -7,6 +8,7 @@ class AuthREST {
     JWT,
     Config,
     Fastify,
+    redisClient,
   }) {
     /** @type {import('fastify').FastifyInstance} */
     this.fastify = Fastify.getFastify();
@@ -15,6 +17,7 @@ class AuthREST {
 
     /** @type {import('../Core/Fastify/GenericResponse').GenericResponse} */
     const e405 = Fastify.getGenericError(405);
+    const e422 = Fastify.getGenericError(422);
 
     this.fastify.route({
       url: refreshURL,
@@ -26,22 +29,23 @@ class AuthREST {
         const refreshToken = req.cookies[Config.ASM_AUTH_REFRESH_COOKIE];
 
         if (!refreshToken) {
-          console.log(['11111111', 'No refresh token', new Date()]);
           return e405.reply(reply);
         }
 
         const [err, refreshTokenData] = await to(JWT.verify(refreshToken));
         const { payload } = refreshTokenData;
 
-        if (err || !payload.expire || payload.expire < Date.now()) {
-          console.log(['2222', 'No date expire token', new Date()]);
+        if (
+          err ||
+          !payload.exp ||
+          payload.exp < Math.round(Date.now() / 1000)
+        ) {
           return e405.reply(reply);
         }
 
         const user = await UserProcessRepository.returnActiveUserDataByID(
           payload.uid,
         );
-        // console.log(refreshTokenData, '----------------');
 
         // // > token new
         const token = await JWT.sign(
@@ -73,7 +77,6 @@ class AuthREST {
         lastHour.setTime(payload.expire - 3600000);
 
         if (lastHour < new Date()) {
-          console.log(['3333333333333', 'last hour iffff', new Date()]);
           const refreshTime = new Date();
           refreshTime.setTime(refreshTime.getTime() + refreshTokenTTL * 1000);
 
@@ -107,8 +110,8 @@ class AuthREST {
       method: 'POST',
       config: {
         rateLimit: {
-          max: 4,
-          timeWindow: '1 minute',
+          max: 30,
+          timeWindow: '5 minute',
         },
       },
       schema: {
@@ -132,6 +135,17 @@ class AuthREST {
       handler: async (req, reply) => {
         /** @type {Object} */
         const { body } = req;
+
+        const tryNumber = await redisClient.get(
+          `ipclean:${req.headers['x-client-ip']}`,
+        );
+
+        if (tryNumber && tryNumber > 3) {
+          // body must have a captcha
+          if (!body.data.captcha) {
+            return e422.reply(reply);
+          }
+        }
 
         try {
           const user = await UserAuthRepository.signIn(body.type, body.data);
@@ -186,6 +200,11 @@ class AuthREST {
             roles: user.role,
           };
         } catch (e) {
+          const key = `ipclean:${req.headers['x-client-ip']}`;
+
+          await redisClient.incr(key);
+          await redisClient.expire(key, 60);
+
           const status =
             e.extensions && e.extensions.statusCode
               ? e.extensions.statusCode

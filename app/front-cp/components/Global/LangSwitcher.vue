@@ -14,8 +14,7 @@
         <v-btn
           text
           :color="color"
-          dark
-          class="nocase"
+          :dark="$vuetify.theme.dark"
           :small="btnSize"
           v-on="on"
         >
@@ -23,17 +22,21 @@
           <span v-if="$i18n.locale == 'en'" class="fn-t inline-b mr-1">
             En
           </span>
-          <v-icon :size="iconSize" dark class="inline-b pr-2">mdi-earth</v-icon>
+          <v-icon :size="iconSize" dark class="inline-b pr-2">
+            mdi-earth
+          </v-icon>
         </v-btn>
       </template>
       <v-list>
         <v-list-item
           v-for="locale in availableLocales"
           :key="locale.code"
-          @click="$i18n.setLocale(locale.code)"
-          @change="checkDirection(locale.code)"
+          :to="switchLocalePath(locale.code)"
+          @click="$i18n.locale = locale.code"
         >
-          <v-list-item-title>{{ locale.name }}</v-list-item-title>
+          <v-list-item-title>
+            {{ $t(locale.name) }}
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -47,7 +50,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'white',
+      default: 'white--text',
     },
     iconSize: {
       type: String,
@@ -68,9 +71,9 @@ export default {
       return this.$i18n.locales;
     },
   },
+
   methods: {
     checkDirection(locale) {
-      this.$store.commit('SET_USER_LANG', locale);
       if (rtlLanguages.includes(locale)) {
         this.$vuetify.rtl = true;
       } else {

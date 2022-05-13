@@ -1,4 +1,4 @@
-const fastifyRateLimit = require('fastify-rate-limit');
+const fastifyRateLimit = require('@fastify/rate-limit').default;
 
 class RateLimit {
   /**
@@ -6,7 +6,7 @@ class RateLimit {
    * @param {Object} container
    */
   static setup(fastify, container) {
-    /** @type {import('fastify-rate-limit').RateLimitPluginOptions} */
+    /** @type {import('@fastify/rate-limit').RateLimitPluginOptions} */
     const config = {
       global: false,
       max: 10,
@@ -17,13 +17,10 @@ class RateLimit {
           return true;
         }
         const appClientSecret = req.raw.getFirstHeader('x-client-app-secret');
-        if (
+        return !!(
           appClientSecret &&
           appClientSecret === container.Config.ASM_CLIENT_APP_SECRET_HEADER
-        ) {
-          return true;
-        }
-        return false;
+        );
       },
       redis: container.redisClient,
       skipOnError: false,

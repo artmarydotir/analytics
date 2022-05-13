@@ -8,6 +8,7 @@ class ErrorHandler {
   static setup(fastify, container) {
     const { ASM_PUBLIC_APP_TEST } = container.Config;
 
+    // @ts-ignore
     fastify.setErrorHandler((e, req, reply) => {
       let schemaError = new GenericResponse(e.statusCode ? e.statusCode : 500);
 

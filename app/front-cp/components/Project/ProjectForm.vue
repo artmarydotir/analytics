@@ -64,7 +64,7 @@
               <v-col v-if="editMood" cols="12" md="6" lg="4">
                 <ProjectUpdateOption
                   :value.sync="project.options"
-                  @sendOptions="reciveOptions"
+                  @sendOptions="receiveOptions"
                 />
               </v-col>
 
@@ -121,10 +121,12 @@
 </template>
 
 <script>
+import routingFn from '@/mixin/routingFn';
 const { to } = require('await-to-js');
 
 export default {
   name: 'ProjectForm',
+  mixins: [routingFn],
   props: {
     title: {
       required: true,
@@ -192,7 +194,7 @@ export default {
       );
 
       if (data) {
-        this.redirecting();
+        this.redirecting('project-list');
       } else {
         this.errorCallback();
       }
@@ -207,7 +209,7 @@ export default {
         this.$store.dispatch('project/addProject', this.innerProject),
       );
       if (data) {
-        this.redirecting();
+        this.redirecting('project-list');
       } else {
         this.errorCallback();
       }
@@ -218,6 +220,14 @@ export default {
       cloneData.options = this.temporaryOptions;
       delete cloneData.publicToken;
       delete cloneData.id;
+
+      // delete null values
+      Object.keys(cloneData).forEach((key) => {
+        if (cloneData[key] === null) {
+          delete cloneData[key];
+        }
+      });
+
       return {
         id: this.innerProject.id,
         data: cloneData,
@@ -228,26 +238,8 @@ export default {
       this.$set(this.innerProject, 'userAndRules', value);
     },
 
-    reciveOptions(options) {
+    receiveOptions(options) {
       this.temporaryOptions = options;
-    },
-
-    redirecting() {
-      this.isDisabled = true;
-      setTimeout(() => {
-        this.$router.push(
-          this.localeRoute({
-            name: 'project-list',
-          }),
-        );
-      }, 1100);
-    },
-
-    errorCallback() {
-      this.isDisabled = false;
-      setTimeout(() => {
-        this.$store.commit('CLOSE_NOTIFICATION', false);
-      }, 6000);
     },
   },
 };

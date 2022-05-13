@@ -49,7 +49,7 @@ describe(__filename.replace(__dirname, ''), () => {
       await updatePAss.setMemberPassword(
         user.id,
         'a1asQW12!@AS*&',
-        'imnewPass12#$%D',
+        'a1asQW12!@AS*&@',
       ),
     ).toBeTruthy();
   });

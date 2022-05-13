@@ -1,10 +1,9 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row v-if="showBox" justify="center" align="center">
     <v-col cols="12" md="8" class="mx-auto pt-0">
       <v-row justify="center" align="center">
         <v-col cols="10" class="pl-1 pr-1">
-          <v-img class="d-flex text-center bgcolor" :src="captchaImage">
-          </v-img>
+          <v-img class="d-flex text-center" :src="captchaImage"> </v-img>
         </v-col>
         <v-col cols="2" class="pl-1 pr-1">
           <v-btn large text icon color="red" class="d-flex" @click="recaptcha">
@@ -17,7 +16,7 @@
       <ValidationProvider
         v-slot:default="{ errors }"
         :name="$t('captcha')"
-        :rules="{ required: true, min: 3, max: 6 }"
+        :rules="{ required: isRequired, min: 3, max: 6 }"
       >
         <v-text-field
           v-model="captcha.value"
@@ -36,10 +35,13 @@
 </template>
 
 <script>
+const { to } = require('await-to-js');
+
 export default {
   name: 'Captcha',
   data() {
     return {
+      showBox: false,
       max: 6,
       min: 3,
       captchaImage: null,
@@ -49,6 +51,11 @@ export default {
       },
     };
   },
+  computed: {
+    isRequired() {
+      return this.showBox;
+    },
+  },
   watch: {
     'captcha.value'(v) {
       if (v.length >= this.min && v.length <= this.max) {
@@ -56,37 +63,28 @@ export default {
       }
     },
   },
-  created() {
-    this.getCaptcha();
+  mounted() {
+    this.captchaCall();
   },
   methods: {
-    async getCaptcha() {
-      try {
-        const res = await this.$axios.$get(
-          `${window.applicationBaseURL}api/open-api/captcha`,
-          {
-            params: {
-              lang: this.$i18n.locale,
-            },
-          },
-        );
+    async captchaCall() {
+      const [, res] = await to(
+        this.$store.dispatch('user/getCaptcha', this.$i18n.locale),
+      );
 
+      if (res.id === '') {
+        this.showBox = false;
+      } else {
+        this.showBox = true;
         this.captcha.id = res.id;
         this.captchaImage = res.image;
-      } catch (e) {
-        console.log(e);
       }
     },
-    recaptcha() {
+
+    async recaptcha() {
       this.captchaImage = '';
-      this.getCaptcha();
+      await this.captchaCall();
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.bgcolor {
-  background-color: rgb(203, 190, 226);
-}
-</style>

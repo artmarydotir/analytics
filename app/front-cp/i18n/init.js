@@ -21,4 +21,5 @@ export const defaultLocaleProjectInfo = {
   loading: defaultLocaleData.loading,
   dir: defaultLocaleData.dir,
   lang: defaultLocale,
+  supportedLocales,
 };

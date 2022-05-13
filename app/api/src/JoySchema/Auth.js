@@ -30,16 +30,10 @@ const UserAuthSchema = () =>
         'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
       }),
 
-    captcha: Joi.object()
-      .when('type', {
-        is: Joi.exist().valid(constants.AUTH_PASSWORD),
-        then: Joi.required(),
-        otherwise: Joi.optional(),
-      })
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'any.only': errorConstMerge.INVALID_CAPTCHA,
-      }),
+    captcha: Joi.object().optional().allow(null).messages({
+      'any.only': errorConstMerge.INVALID_CAPTCHA,
+    }),
+
     otp: Joi.number().when('type', {
       is: Joi.exist().valid(constants.AUTH_OTP),
       then: Joi.required(),

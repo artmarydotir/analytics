@@ -7,7 +7,6 @@ module.exports = {
   description: 'Create Super Amin User',
   /**
    * @param {import('awilix').AwilixContainer} container
-   * @param {Object} args
    */
 
   async runAction(container) {
@@ -15,33 +14,38 @@ module.exports = {
     const userProcess = container.resolve('UserProcessRepository');
     const config = container.resolve('Config');
     const userExist = await userProcess.isUserExistAndActive({
-      username: config.ASM_DEFAULT_ADMIN_USERNAME,
+      email: config.ASM_DEFAULT_ADMIN_EMAIL,
     });
 
     if (userExist) {
+      let passWord;
       const { generatedPassword } = await userProcess.setGeneratedPassword({
-        username: config.ASM_DEFAULT_ADMIN_USERNAME,
+        email: config.ASM_DEFAULT_ADMIN_EMAIL,
       });
 
-      log(
-        `😇 Username is: ${chalk.white.bgMagenta.bold(
-          config.ASM_DEFAULT_ADMIN_USERNAME,
-        )}`,
-      );
+      passWord = generatedPassword;
+      if (config.ASM_PUBLIC_APP_TEST) {
+        passWord = 'testPassworda1s2d3';
+        await userProcess.setGeneratedPassword({
+          email: config.ASM_DEFAULT_ADMIN_EMAIL,
+          password: 'testPassworda1s2d3',
+        });
+      }
+
       log(
         `😇 email is: ${chalk.white.bgRed.bold(
           config.ASM_DEFAULT_ADMIN_EMAIL,
         )}`,
       );
-      log(
-        `👉 Generated Password is: ${chalk.white.bgBlue.bold(
-          generatedPassword,
-        )} 👈`,
-      );
+      log(`👉 Generated Password is: ${chalk.white.bgBlue.bold(passWord)} 👈`);
     } else {
-      const newPassword = await userProcess.generatePassword({
-        username: config.ASM_DEFAULT_ADMIN_USERNAME,
-      });
+      let newPassword;
+
+      if (config.ASM_PUBLIC_APP_TEST) {
+        newPassword = 'testPassworda1s2d3';
+      } else {
+        newPassword = await userProcess.generatePassword();
+      }
 
       const user = await userRepository.addUser({
         username: config.ASM_DEFAULT_ADMIN_USERNAME,
@@ -54,11 +58,6 @@ module.exports = {
 
       if (user) {
         log(`${chalk.yellow.bold('🔔 New user created: 🔔')}`);
-        log(
-          `😇 Username is: ${chalk.white.bgRed.bold(
-            config.ASM_DEFAULT_ADMIN_USERNAME,
-          )}`,
-        );
         log(
           `😇 email is: ${chalk.white.bgRed.bold(
             config.ASM_DEFAULT_ADMIN_EMAIL,

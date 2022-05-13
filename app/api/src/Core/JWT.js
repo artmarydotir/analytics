@@ -22,7 +22,7 @@ class JWT {
    * @return {Promise<String>}
    */
   async sign(payload, ttl) {
-    const nowUnix = Math.floor(Date.now() / 1000) - 1;
+    const nowUnix = Math.floor(Date.now() / 1000) - 2;
     return new SignJWT(payload)
       .setNotBefore(nowUnix)
       .setExpirationTime(nowUnix + ttl + 1)
@@ -49,7 +49,7 @@ class JWT {
 
   /**
    * @param {String} token
-   * @return {Promise<import('jose/types').JWTVerifyResult>}
+   * @return {Promise<import('jose').JWTVerifyResult>}
    */
   async verify(token) {
     return jwtVerify(token, this.secret);

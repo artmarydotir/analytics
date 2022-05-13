@@ -1,8 +1,8 @@
 const { ErrorWithProps } = require('mercurius').default;
 const { constantsMerge: errorConstMerge } = require('../Schema/ErrorMessage');
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 module.exports = (e) => {
-  // console.log(e.errors, '----');
   if (e.errors) {
     let duplicateEntry = false;
     let nullEntry = false;

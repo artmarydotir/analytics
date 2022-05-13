@@ -27,7 +27,8 @@ const schema = {
           type: 'string',
         },
         captcha: {
-          type: 'object',
+          require: false,
+          type: ['object', 'null'],
           properties: {
             id: {
               type: 'string',

@@ -52,7 +52,7 @@
               </ValidationProvider>
             </v-col>
             <v-col cols="12" md="9" lg="8" class="pb-0">
-              <Captcha @solvedCaptcha="getCaptchaValue" />
+              <Captcha :key="elem" @solvedCaptcha="getCaptchaValue" />
             </v-col>
           </v-row>
           <v-card-actions class="mt-4 pb-10 mx-auto text-center justify-center">
@@ -85,6 +85,7 @@ export default {
   name: 'LoginPassword',
   data() {
     return {
+      elem: 0,
       isDisabled: false,
       show: false,
       type: 'AP',
@@ -100,15 +101,18 @@ export default {
       return this.$vuetify.rtl ? 'left' : 'right';
     },
   },
+
   methods: {
     getCaptchaValue(v) {
       this.user.captcha = v;
     },
+
     async onSubmit() {
       const validity = await this.$refs.obs.validate();
       if (!validity) {
         return;
       }
+
       const [err, data] = await to(
         this.$store.dispatch('user/auth/signIn', {
           type: this.type,
@@ -121,6 +125,7 @@ export default {
         setTimeout(() => {
           this.$store.commit('CLOSE_NOTIFICATION', false);
         }, 2000);
+        this.elem++;
       }
 
       if (data) {

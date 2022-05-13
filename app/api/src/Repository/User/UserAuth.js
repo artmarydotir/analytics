@@ -40,6 +40,7 @@ class Authentication {
       await schema.validateAsync(incomingData, { abortEarly: false });
     } catch (e) {
       const validationErrors = [];
+
       e.details.forEach((element) => {
         validationErrors.push({
           message: element.message,
@@ -61,10 +62,13 @@ class Authentication {
         password,
       );
 
-      const isValidCaptcha = await this.captcha.solveCaptcha(
-        captcha.id,
-        captcha.value,
-      );
+      let isValidCaptcha = true;
+      if (captcha) {
+        isValidCaptcha = await this.captcha.solveCaptcha(
+          captcha.id,
+          captcha.value,
+        );
+      }
 
       success = validPassword && isValidCaptcha;
     } else if (type === constants.AUTH_OTP) {

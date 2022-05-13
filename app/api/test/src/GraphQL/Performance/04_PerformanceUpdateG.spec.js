@@ -21,15 +21,14 @@ describe(__filename.replace(__dirname, ''), () => {
     helper = new Helper(container);
     const seq = container.resolve('sequelize');
 
-    const { User, Uptime } = seq.models;
+    const { User, Performance } = seq.models;
     await User.destroy({
       where: {},
       truncate: true,
       cascade: true,
       restartIdentity: true,
     });
-
-    await Uptime.destroy({
+    await Performance.destroy({
       where: {},
       truncate: true,
       cascade: true,
@@ -42,13 +41,15 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('graphql add user endpoint', async () => {
+  it('graphql update performance', async () => {
     const { token } = await helper.CreateUserHeaderAndToken(
       'maryhelper',
       'maryhelper@gmail.com',
       'SA',
       [1],
     );
+
+    const performance = await helper.CreatePerformance();
 
     /** @type {import('fastify').FastifyInstance} */
     const fastify = container.resolve('Fastify').getFastify();
@@ -65,75 +66,31 @@ describe(__filename.replace(__dirname, ''), () => {
         operationName: null,
         query: `
           mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
-          ) {
-            UptimeCreate(
-              data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
-              }
+              $id: Int!
+              $data: InputPerformanceUpdate
+            ) {
+            PerformanceUpdate(
+              id: $id
+              data: $data
             )
           }
         `,
         variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
+          id: performance.id,
+          data: {
+            name: 'highperformance',
+            url: 'https://jacynthe.biz/',
+            description: 'i will be changed',
+            interval: 10,
+            options: {
+              ACTIVE: false,
+              DELETED: true,
+            },
+          },
         },
       },
     });
 
     expect(data1.statusCode).toBe(200);
-    const data2 = await fastify.inject({
-      url: graphQLEndpoint,
-      method: 'POST',
-      payload: {
-        operationName: null,
-        query: `
-          mutation(
-            $name: String!
-            $url: String!
-            $interval: Int!
-            $ping: Boolean!
-            $description: String
-            $options: [Int]!
-          ) {
-            UptimeCreate(
-              data: {
-                name: $name
-                url: $url
-                interval: $interval
-                ping: $ping
-                description: $description
-                options: $options
-              }
-            )
-          }
-        `,
-        variables: {
-          name: 'testname',
-          url: 'http://test.com',
-          interval: 5,
-          ping: false,
-          description: 'test description',
-          options: [1],
-        },
-      },
-    });
-
-    const { errors } = JSON.parse(data2.body);
-    expect(errors['0'].extensions.statusCode).toEqual(405);
   });
 });

@@ -131,9 +131,12 @@
 </template>
 
 <script>
+import routingFn from '@/mixin/routingFn';
 const { to } = require('await-to-js');
+
 export default {
   name: 'PerformanceForm',
+  mixins: [routingFn],
   props: {
     title: {
       type: String,
@@ -204,7 +207,7 @@ export default {
         ),
       );
       if (data) {
-        this.redirecting();
+        this.redirecting('performance-list');
       } else {
         this.errorCallback();
       }
@@ -218,7 +221,7 @@ export default {
       );
 
       if (data) {
-        this.redirecting();
+        this.redirecting('performance-list');
       } else {
         this.errorCallback();
       }
@@ -234,23 +237,6 @@ export default {
         id: this.innerPerformance.id,
         data: cloneData,
       };
-    },
-    redirecting() {
-      this.isDisabled = true;
-      setTimeout(() => {
-        this.$router.push(
-          this.localeRoute({
-            name: 'performance-list',
-          }),
-        );
-      }, 1100);
-    },
-
-    errorCallback() {
-      this.isDisabled = false;
-      setTimeout(() => {
-        this.$store.commit('CLOSE_NOTIFICATION', false);
-      }, 3000);
     },
   },
 };

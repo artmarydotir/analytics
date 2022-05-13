@@ -17,24 +17,24 @@ describe(__filename.replace(__dirname, ''), () => {
     const seq = container.resolve('sequelize');
 
     const { User, Project, UserProject } = seq.models;
-    // await User.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
-    // await Project.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
-    // await UserProject.destroy({
-    //   where: {},
-    //   truncate: true,
-    //   cascade: true,
-    //   restartIdentity: true,
-    // });
+    await User.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await Project.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
+    await UserProject.destroy({
+      where: {},
+      truncate: true,
+      cascade: true,
+      restartIdentity: true,
+    });
   });
 
   afterAll(async () => {
@@ -45,7 +45,7 @@ describe(__filename.replace(__dirname, ''), () => {
   it('fetch user list', async () => {
     const projectList = container.resolve('ProjectListRepository');
 
-    const result1 = await projectList.fetchProjectListByOwner(5, {
+    await projectList.fetchProjectListByOwner(5, {
       lastSeen: 2,
       limit: 10,
       filter: {
@@ -53,8 +53,5 @@ describe(__filename.replace(__dirname, ''), () => {
         // like_description: 'dear',
       },
     });
-
-    console.log('****####');
-    console.log(result1);
   });
 });

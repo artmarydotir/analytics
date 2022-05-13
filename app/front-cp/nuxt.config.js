@@ -6,7 +6,7 @@ const headLinks = [
   {
     rel: 'manifest',
     hid: 'manifest',
-    href: `/manifest-${localeProjectInfo.lang}.json`,
+    href: `/_cp/manifest-${localeProjectInfo.lang}.json`,
   },
 ];
 
@@ -34,6 +34,7 @@ export default {
   publicRuntimeConfig: {
     dir: localeProjectInfo.dir,
     lang: localeProjectInfo.lang,
+    supportedLocales: localeProjectInfo.supportedLocales || ['fa', 'en'],
   },
   head: {
     titleTemplate: `%s - ${localeProjectInfo.projectName}`,
@@ -61,11 +62,7 @@ export default {
 
   css: ['@aasaam/noto-font/dist/font-face.css', '~/assets/main.scss'],
 
-  plugins: [
-    { src: '~/plugins/vuex-persist.js' },
-    '~/plugins/vee-validate.js',
-    { src: '~/plugins/axios.js', ssr: false },
-  ],
+  plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
   components: {
     dirs: [
       '~/components',

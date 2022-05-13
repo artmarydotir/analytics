@@ -97,7 +97,8 @@ const UpdateUserSchemaSA = () =>
 /**
  * Update user schema For Members
  */
-const UpdateUserSchemaME = () => base.keys();
+const UpdateUserSchemaME = () => base;
+// const UpdateUserSchemaME = () => base.keys();
 
 /**
  * Update Member Password
@@ -112,17 +113,11 @@ const UpdateMemberPassword = () =>
       'string.max': errorConstMerge.MAX_LENGTH,
       'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
     }),
-    newPassword: Joi.string()
-      .required()
-      .min(7)
-      .max(32)
-      .regex(new RegExp('^[a-zA-Z0-9]{7,32}$'))
-      .messages({
-        'any.required': errorConstMerge.ISREQUIRE_FIELD,
-        'string.min': errorConstMerge.MIN_LENGTH,
-        'string.max': errorConstMerge.MAX_LENGTH,
-        'string.pattern.base': errorConstMerge.INVALID_PASSWORD,
-      }),
+    newPassword: Joi.string().required().min(7).max(32).messages({
+      'any.required': errorConstMerge.ISREQUIRE_FIELD,
+      'string.min': errorConstMerge.MIN_LENGTH,
+      'string.max': errorConstMerge.MAX_LENGTH,
+    }),
   });
 
 module.exports = {
