@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-npm install
+yarn install
 
 ./node_modules/.bin/depcheck . --ignores="@types/*,depcheck,typescript"
 

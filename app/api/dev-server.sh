@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 cd /app/api \
-  && pm2-runtime pm2.dev.config.js
+  && ./node_modules/.bin/pm2-runtime pm2.dev.config.js

@@ -7,25 +7,16 @@ services:
     depends_on:
       - analytic-redis
       - analytic-postgres
-    build:
-      context: .
-      dockerfile: Dockerfile.dev.api
-      args:
-        PROXY_HTTP: ${PROXY_HTTP}
+    image: node:18-alpine
     working_dir: /app/api
     ports:
       - ${ASM_APP_PORT:-3000}:${ASM_APP_PORT:-3000}
 
     volumes:
-      - ./storage:/storage
-
       # development
       - ./app/api:/app/api
-
-      # cache
       - ./tmp/.npm:/.npm
-
-      # logs
+      - ./tmp/.yarn:/.yarn
       - ./tmp/logs:/logs
     env_file:
       - ./.env.dev
@@ -88,7 +79,6 @@ services:
       - ./nginx/common-protected.conf:/etc/nginx/common-protected.conf:ro
       - ./nginx/templates/default.dev.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./nginx/cert-local:/cert:ro
-      - ./storage:/storage
 
   ###############
   # Dependencies #

@@ -22,20 +22,24 @@ Object.keys(manifest.icons).forEach((name) => {
 export default {
   ssr: false,
   target: 'static',
+
   router: {
     base: '/_cp',
     mode: 'hash',
     middleware: ['direction'],
   },
+
   server: {
     port: parseInt(process.env.ASM_FRONT_CP_PORT, 10) || 3000,
     host: '0.0.0.0',
   },
+
   publicRuntimeConfig: {
     dir: localeProjectInfo.dir,
     lang: localeProjectInfo.lang,
     supportedLocales: localeProjectInfo.supportedLocales || ['fa', 'en'],
   },
+
   head: {
     titleTemplate: `%s - ${localeProjectInfo.projectName}`,
     title: localeProjectInfo.loading,
@@ -61,8 +65,11 @@ export default {
   },
 
   css: ['@aasaam/noto-font/dist/font-face.modern.css', '~/assets/main.scss'],
+  plugins: [
+    { src: '~/plugins/vuex-persist.js', ssr: false },
+    '~/plugins/vee-validate.js',
+  ],
 
-  plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
   components: {
     dirs: [
       '~/components',
@@ -88,7 +95,7 @@ export default {
     '@nuxtjs/composition-api/module',
   ],
 
-  modules: ['@nuxtjs/axios', ['nuxt-i18n', I18N]],
+  modules: ['@nuxtjs/axios', ['@nuxtjs/i18n', I18N]],
 
   loading: {
     color: process.env.ASM_BUILD_NUXT_LOADING_COLOR
@@ -113,6 +120,11 @@ export default {
   },
 
   build: {
+    extend(config, { isClient }) {
+      if (isClient) {
+        config.devtool = 'source-map';
+      }
+    },
     // extractCSS: true,
     // transpile: [/echarts/, /zrender/],
     // maxChunkSize: 300000,
