@@ -6,6 +6,7 @@ export default function ({ app, store }) {
   return {
     icons: {
       iconfont: 'mdi',
+      // only woff2 is supported
     },
     rtl: app.$config.dir === 'rtl',
 

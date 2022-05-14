@@ -3,17 +3,13 @@ version: "3"
 services:
   # backend
   analytic-backend:
+    image: ghcr.io/artmarydotir/analytic-backend:latest
     depends_on:
-      - analytic-postgres
       - analytic-redis
       - analytic-rest-captcha
+      - analytic-postgres
     container_name: analytic-backend
-    build:
-      args:
-        - PROXY_HTTP=${PROXY_HTTP:-}
-      context: .
-      dockerfile: Dockerfile.backend
-    working_dir: /app/api
+
     environment:
       ASM_PUBLIC_APP_TEST: "false"
       ASM_PUBLIC_APP_NS: ${ASM_PUBLIC_APP_NS:-analytic}
@@ -24,24 +20,36 @@ services:
 
   # front and nginx
   analytic-web:
+    image: ghcr.io/artmarydotir/analytic-web:latest
+    depends_on:
+      - analytic-backend
     container_name: analytic-web
-    build:
-      args:
-        - PROXY_HTTP=${PROXY_HTTP:-}
-      context: .
-      dockerfile: Dockerfile.web
     ports:
       - 80:80
+      - 443:443
     environment:
       ASM_NGINX_WORKER_PROCESSES: ${ASM_NGINX_WORKER_PROCESSES:-2}
       ASM_NGINX_WORKER_RLIMIT_NOFILE: ${ASM_NGINX_WORKER_RLIMIT_NOFILE:-1024}
       ASM_NGINX_WORKER_CONNECTIONS: ${ASM_NGINX_WORKER_CONNECTIONS:-512}
       ASM_NGINX_ERROR_LOG_LEVEL: ${ASM_NGINX_ERROR_LOG_LEVEL:-warn}
       ASM_NGINX_TMPFS_CACHE_SIZE_MB: ${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-128}
+      ASM_NGINX_LARGE_CACHE_SIZE_MB: ${ASM_NGINX_LARGE_CACHE_SIZE_MB:-2048}
+      ASM_NGINX_LIMIT_CONNECTION: ${ASM_NGINX_LIMIT_CONNECTION:-16}
+      ASM_NGINX_LIMIT_RPS: ${ASM_NGINX_LIMIT_RPS:-4}
+      ASM_NGINX_LIMIT_RATE_KBS: ${ASM_NGINX_LIMIT_RATE_KBS:-32}
+      ASM_NGINX_LIMIT_BURST: ${ASM_NGINX_LIMIT_BURST:-64}
+      ASM_NGINX_LIMIT_RATE_AFTER_MB: ${ASM_NGINX_LIMIT_RATE_AFTER_MB:-1}
       ASM_APP_PORT: ${ASM_APP_PORT:-3001}
       ASM_PUBLIC_BASE_URL: ${ASM_PUBLIC_BASE_URL:-/}
+      ASM_FRONT_CP_PORT: ${ASM_FRONT_CP_PORT:-3000}
+      ASM_FRONT_CP_PATH: ${ASM_FRONT_CP_PATH:-_cp}
+      ASM_ACCESS_LOG_COMMENT: ${ASM_ACCESS_LOG_COMMENT:-}
+      ASM_PUBLIC_APP_LANG: ${ASM_PUBLIC_APP_LANG:-en}
     tmpfs:
       - /nginx-tmpfs:rw,nodev,nosuid,noexec,noatime,size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-192}m
+    volumes:
+      - ./nginx/templates/default.prod.conf.template:/etc/nginx/templates/default.conf.template
+      # - ./app/front-cp/dist:/web-app
 
   # databases
   analytic-redis:

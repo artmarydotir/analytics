@@ -1,4 +1,4 @@
-# Copyright(c) 2021 aasaam software development group
+# Copyright(c) 2022 aasaam software development group
 FROM node:18-bullseye-slim
 
 ARG PROXY_HTTP
@@ -11,8 +11,7 @@ RUN export DEBIAN_FRONTEND=noninteractive ; \
   echo "You are using proxy: $PROXY_HTTP"; \
   apt-get update -y \
   && apt-get autoremove -y \
-  && apt-get -y upgrade && apt-get install -y --no-install-recommends \
-    curl file build-essential python3 ca-certificates ffmpeg fonts-noto-ui-core \
+  && apt-get -y upgrade && apt-get install -y --no-install-recommends curl ca-certificates \
   && curl -sf https://gobinaries.com/tj/node-prune | sh \
   && echo 'cache = "/.npm"' > /root/.npmrc \
   && mkdir /.npm \
@@ -28,6 +27,7 @@ RUN export DEBIAN_FRONTEND=noninteractive ; \
   && rm -rf /.npm \
   && mkdir /.npm \
   && chown node:node /.npm -R \
+  && echo "1" \
   && rm -r /var/lib/apt/lists/* && rm -rf /tmp && mkdir /tmp && chmod 777 /tmp && truncate -s 0 /var/log/*.log
 
 WORKDIR /app/api

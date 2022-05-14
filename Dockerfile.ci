@@ -1,4 +1,4 @@
-# Copyright(c) 2021 aasaam software development group
+# Copyright(c) 2022 aasaam software development group
 FROM node:18-bullseye-slim
 
 RUN export DEBIAN_FRONTEND=noninteractive ; \
@@ -16,5 +16,5 @@ RUN export DEBIAN_FRONTEND=noninteractive ; \
   && mkdir /app \
   && rm -r /var/lib/apt/lists/* && rm -rf /tmp && mkdir /tmp && chmod 777 /tmp && truncate -s 0 /var/log/*.log
 
-ADD app/backend /app/backend
-WORKDIR /app/backend
+ADD app/api /app/api
+WORKDIR /app/api

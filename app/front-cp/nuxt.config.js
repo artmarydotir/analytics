@@ -60,7 +60,7 @@ export default {
     link: headLinks,
   },
 
-  css: ['@aasaam/noto-font/dist/font-face.css', '~/assets/main.scss'],
+  css: ['@aasaam/noto-font/dist/font-face.modern.css', '~/assets/main.scss'],
 
   plugins: [{ src: '~/plugins/vuex-persist.js' }, '~/plugins/vee-validate.js'],
   components: {
@@ -113,6 +113,8 @@ export default {
   },
 
   build: {
+    // extractCSS: true,
     // transpile: [/echarts/, /zrender/],
+    // maxChunkSize: 300000,
   },
 };
