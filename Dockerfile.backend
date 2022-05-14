@@ -1,27 +1,21 @@
-# Copyright(c) 2021 aasaam software development group
-FROM node:18-bullseye-slim
+# Copyright(c) 2022 aasaam software development group
+FROM node:18-alpine
+
+ARG PROXY_HTTP
+
+ADD app/api /app/api
 
 RUN export DEBIAN_FRONTEND=noninteractive ; \
   export LANG=en_US.utf8 ; \
   export LC_ALL=C.UTF-8 ; \
-  apt-get update -y \
-  && apt-get autoremove -y \
-  && apt-get -y upgrade && apt-get install -y --no-install-recommends curl build-essential ca-certificates \
-  && curl -sf https://gobinaries.com/tj/node-prune | sh \
-  && echo 'cache = "/tmp/npm"' > /root/.npmrc \
-  && npm -g update \
-  && node-prune /usr/local/lib/node_modules \
-  && mkdir /app \
-  && rm -r /var/lib/apt/lists/* && rm -rf /tmp && mkdir /tmp && chmod 777 /tmp && truncate -s 0 /var/log/*.log
-
-ADD app/backend /app/backend
-
-RUN cd /app/backend \
-  && npm install --production --force \
-  && node-prune
+  export HTTP_PROXY=$PROXY_HTTP ; \
+  export HTTPS_PROXY=$PROXY_HTTP ; \
+  echo "You are using proxy: $PROXY_HTTP"; \
+  cd /app/api && \
+  yarn install --production
 
 EXPOSE 3001/tcp
 
 STOPSIGNAL SIGTERM
-WORKDIR /app/backend
-CMD ["pm2-runtime", "pm2.prod.config.js"]
+WORKDIR /app/api
+CMD ["./node_modules/.bin/pm2-runtime", "pm2.prod.config.js"]

@@ -6,6 +6,7 @@ export default function ({ app, store }) {
   return {
     icons: {
       iconfont: 'mdi',
+      // only woff2 is supported
     },
     rtl: app.$config.dir === 'rtl',
 
@@ -27,7 +28,7 @@ export default function ({ app, store }) {
           background: colors.indigo.lighten5,
         },
         dark: {
-          primary: colors.blue.darken2,
+          primary: '#536dfe',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,

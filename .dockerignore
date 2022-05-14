@@ -2,6 +2,7 @@
 app/api/node_modules/
 app/api/coverage/
 app/api/package-lock.json
+app/api/yarn.lock
 
 # front-cp
 app/front-cp/.nuxt/
@@ -11,4 +12,3 @@ app/front-cp/node_modules/
 
 
 tmp/
-storage/

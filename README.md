@@ -23,8 +23,11 @@ For development:
 [adminer](http://127.0.0.1:8080/?pgsql=analytic-postgres&username=pg-user&db=pg-db)
 [Redis Commander](http://127.0.0.1:8082/)
 
-
 ```
 ALTER SEQUENCE users_id_seq RESTART;
 UPDATE users SET id = DEFAULT;
 ```
+
+docker exec -it analytic-redis redis-cli FLUSHALL
+
+docker-compose -f docker-compose.prod.yml build --build-arg PROXY_HTTP=192.168.1.218:3390

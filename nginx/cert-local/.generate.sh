@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 rm -rf *.pem *.csr \
   && cfssl gencert -initca ca-csr.json | cfssljson -bare ca - \

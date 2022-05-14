@@ -17,10 +17,10 @@
       <span class="hidden-sm-and-down"> {{ $t('projectName') }} </span>
     </v-toolbar-title>
     <v-spacer />
-    <v-btn :to="localePath('dashboard')" icon>
+    <v-btn :to="localePath('dashboard')" text>
       <v-icon>mdi-apps</v-icon>
     </v-btn>
-    <v-btn icon @click="changeTheme">
+    <v-btn text class="ml-1 mr-1" @click="changeTheme">
       <v-icon v-if="$vuetify.theme.dark">mdi-weather-night</v-icon>
       <v-icon v-if="!$vuetify.theme.dark"> mdi-white-balance-sunny </v-icon>
     </v-btn>

@@ -1,7 +1,9 @@
-import createPersistedState from 'vuex-persistedstate';
+import VuexPersistence from 'vuex-persist';
 
 export default ({ store }) => {
-  createPersistedState({
+  new VuexPersistence({
+    /* your options */
     key: '_persistStates',
-  })(store);
+    modules: ['user', 'helper', 'index'],
+  }).plugin(store);
 };
