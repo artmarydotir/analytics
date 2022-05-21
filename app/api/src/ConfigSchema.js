@@ -13,6 +13,7 @@ const ConfigSchema = {
     'ASM_PUBLIC_APP_TITLE',
     'ASM_PUBLIC_BASE_URL',
     'ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES',
+    'ASM_CLICKHOUSE_URI',
 
     // private
     'ASM_PM_ID',
@@ -32,6 +33,16 @@ const ConfigSchema = {
     // 'ASM_CAPTCHA_URI',
   ],
   properties: {
+    ASM_CLICKHOUSE_URI: {
+      type: 'string',
+      default: 'http://localhost',
+    },
+
+    ASM_CLICKHOUSE_PORT: {
+      type: 'integer',
+      default: 8123,
+    },
+
     ASM_PM_ID: {
       type: 'number',
       description: 'PM2 process identifier',

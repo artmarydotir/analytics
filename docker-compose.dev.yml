@@ -10,7 +10,7 @@ services:
     image: node:18-alpine
     working_dir: /app/api
     ports:
-      - ${ASM_APP_PORT:-3000}:${ASM_APP_PORT:-3000}
+      - ${ASM_APP_PORT:-3001}:${ASM_APP_PORT:-3001}
 
     volumes:
       # development
