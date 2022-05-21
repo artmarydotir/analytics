@@ -10,6 +10,7 @@ const graphqlResolvers = require('./GraphQL/resolvers');
 
 // dependencies
 const Redis = require('./Connections/Redis');
+const ClickHouse = require('./Connections/ClickHouse');
 const EntityManager = require('./Connections/EntityManager');
 
 /**
@@ -38,6 +39,13 @@ const initContainer = async (Config) => {
     }),
   });
 
+  // ClickHouse
+  container.register({
+    ClickHouse: asClass(ClickHouse, {
+      lifetime: Lifetime.SINGLETON,
+    }),
+  });
+
   container.register({
     EntityManager: asClass(EntityManager, {
       lifetime: Lifetime.SINGLETON,
@@ -51,6 +59,7 @@ const initContainer = async (Config) => {
   const mQEmitter = await container.resolve('Redis').getMQEmitter();
 
   const sequelize = await container.resolve('EntityManager').getSequelize();
+  const clickHouseClient = await container.resolve('ClickHouse').getClient();
 
   const graphqlTypeDefs = await graphqlTypeDefsLoader();
 
@@ -61,6 +70,7 @@ const initContainer = async (Config) => {
 
     graphqlTypeDefs: asValue(graphqlTypeDefs),
     graphqlResolvers: asValue(graphqlResolvers),
+    clickHouseClient: asValue(clickHouseClient),
   });
 
   // Repository
