@@ -24,19 +24,29 @@ describe(__filename.replace(__dirname, ''), () => {
   it('get all current user in project', async () => {
     const cms = container.resolve('PageViewCountRepository');
     const referer = container.resolve('RefererDataRepository');
+    const top = container.resolve('TopUrlsRepository');
 
     // const r = await cms.getPageViewCount({
     //   publicToken: 'project00001',
-    //   privateToken: 'uYI127In0xpBXRYNuslBL8GWsop591ZD',
-    //   type: ['Users', 'Sessions', 'PageView'],
-    //   startDate: '2022-04-28T12:17:42.008Z',
-    //   endDate: null,
+    //   types: ['Users', 'Sessions', 'PageView'],
+    //   startDate: '2022-05-28T12:17:42.008Z',
     // });
-    const r = await referer.getRefererData({
+    // const a = new Date();
+    // a.setDate(a.getDate() - 28);
+
+    // const r = await referer.getRefererData({
+    //   publicToken: 'project00001',
+    //   // refererType: 'SessionReferer',
+    //   startDate: '2022-01-28T12:17:42.008Z',
+    //   limit: 30,
+    //   // endDate: null,
+    // });
+
+    const r = await top.getTopUrls({
       publicToken: 'project00001',
-      refererType: 'SessionReferer',
-      refererTypeValue: '0',
-      startDate: '2022-04-28T12:17:42.008Z',
+      type: 'URL',
+      startDate: '2022-01-28T12:17:42.008Z',
+      limit: 30,
       // endDate: null,
     });
 

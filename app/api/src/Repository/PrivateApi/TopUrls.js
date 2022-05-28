@@ -8,7 +8,7 @@ const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 
-class RefererData {
+class TopUrls {
   constructor({ clickHouseClient }) {
     this.clickHouseClient = clickHouseClient;
   }
@@ -18,31 +18,24 @@ class RefererData {
    * @param {Object} params
    * @param {String} params.publicToken
    * @param {String} [params.lang]
-   * @param {String} [params.refererType]
+   * @param {String} [params.type]
    * @param {String} [params.startDate]
    * @param {String} [params.endDate]
    * @param {Number} [params.limit]
    */
-  async getRefererData({
-    lang,
-    publicToken,
-    refererType,
-    startDate,
-    endDate,
-    limit,
-  }) {
+  async getTopUrls({ lang, publicToken, type, startDate, endDate, limit }) {
     const {
       startUnixTime,
       endDateUnixTime,
       startDate: startDateProcessed,
       endDate: endDateProcessed,
-    } = formatter('5y', startDate, endDate);
+    } = formatter('1y', startDate, endDate);
 
     const maxLimit = minMaxNumber(limit, 1, 200);
 
     const result = {
       query: {
-        refererType,
+        type,
         startDate: startDateProcessed,
         endDate: endDateProcessed,
         publicToken,
@@ -53,24 +46,24 @@ class RefererData {
 
     // build dynamic query
     const selects = [];
-    let group = `PRefererURLExternalName`;
+    let group = `PCanonicalURLChecksum`;
     const whereAnd = [
       `Created BETWEEN FROM_UNIXTIME(${startUnixTime}) AND FROM_UNIXTIME(${endDateUnixTime})`,
       `PublicInstanceID = ${escaper(publicToken)}`,
       `Mode BETWEEN 0 AND 99`,
     ];
 
-    if (refererType === 'SessionReferer') {
-      group = `SRefererURLExternalName`;
+    if (type === 'CanonicalURL') {
+      result.query.type = 'CanonicalURL';
       selects.push(`COUNT(*) AS Count`);
-      selects.push(`any(SRefererURLExternalName) AS Name`);
-      selects.push(`any(SRefererURLExternalType) AS Type`);
-      whereAnd.push(`SRefererURLExternalType > 0`);
+      selects.push(`any(PTitle) AS Title`);
+      selects.push(`any(PCanonicalURL) AS URL`);
     } else {
+      group = `PURLChecksum`;
+      result.query.type = 'URL';
       selects.push(`COUNT(*) AS Count`);
-      selects.push(`any(PRefererURLExternalName) AS Name`);
-      selects.push(`any(PRefererURLExternalType) AS Type`);
-      whereAnd.push(`PRefererURLExternalType > 0`);
+      selects.push(`any(PTitle) AS Title`);
+      selects.push(`any(PURL) AS URL`);
     }
 
     if (lang) {
@@ -88,10 +81,12 @@ class RefererData {
       LIMIT ${maxLimit}
       `;
 
+    console.log(query);
+
     result.result = await this.clickHouseClient.query(query).toPromise();
 
     return result;
   }
 }
 
-module.exports = RefererData;
+module.exports = TopUrls;

@@ -44,9 +44,9 @@ module.exports = (maxDiff, start, end) => {
       {
         endDate,
         startDate,
-        statusCode: 422,
+        statusCode: 416,
       },
-      422,
+      416,
     );
   }
 

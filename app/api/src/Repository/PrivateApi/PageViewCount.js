@@ -70,7 +70,7 @@ class PageViewCount {
     const whereAnd = [
       `Created BETWEEN FROM_UNIXTIME(${startUnixTime}) AND FROM_UNIXTIME(${endDateUnixTime})`,
       `PublicInstanceID = ${escaper(publicToken)}`,
-      `Mode BETWEEN 0 AND 100`,
+      `Mode BETWEEN 0 AND 99`,
     ];
 
     if (types.includes('Users')) {
