@@ -1,12 +1,12 @@
 /** @type {import('json-schema').JSONSchema4} */
 const schema = {
-  $id: 'PageViewCount',
-  title: 'PageView Count',
-  description: 'Get users, pageviews, sessions count',
+  $id: 'RefererData',
+  title: 'Referer Data',
+  description: 'Get Referer Data',
   type: 'object',
   properties: {
-    types: {
-      type: 'array',
+    refererType: {
+      type: 'string',
       require: true,
     },
     lang: {
@@ -19,6 +19,10 @@ const schema = {
     },
     endDate: {
       type: 'string',
+      require: false,
+    },
+    limit: {
+      type: 'number',
       require: false,
     },
   },

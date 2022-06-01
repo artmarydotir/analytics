@@ -21,9 +21,20 @@ describe(__filename.replace(__dirname, ''), () => {
     await container.dispose();
   });
 
-  it('connection check', async () => {
-    const click = container.resolve('ConnectionClickRepository');
+  it('Get referer data', async () => {
+    const referer = container.resolve('RefererDataRepository');
 
-    await click.firstCheck();
+    const a = new Date();
+    a.setDate(a.getDate() - 58);
+
+    const r = await referer.getRefererData({
+      publicToken: 'project00001',
+      refererType: 'SessionReferer', // OR 'PageViewReferer'
+      startDate: a.toISOString(),
+      limit: 30,
+    });
+
+    console.log(r);
+    expect(r.result).toBeInstanceOf(Array);
   });
 });

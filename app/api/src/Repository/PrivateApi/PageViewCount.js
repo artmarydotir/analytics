@@ -86,7 +86,7 @@ class PageViewCount {
     }
 
     if (lang) {
-      whereAnd.push(`Lang = ${escaper(lang)}`);
+      whereAnd.push(`PLang = ${escaper(lang)}`);
       result.query.lang = lang;
     }
 

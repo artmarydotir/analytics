@@ -2,7 +2,7 @@ const { ErrorWithProps } = require('mercurius').default;
 const formatter = require('../../Utils/DateTimeFormatter');
 const minMaxNumber = require('../../Utils/MinMaxNumber');
 const escaper = require('../../Utils/ClickhouseEscape');
-// const { RefererDataSchema } = require('../../JoySchema/RefererData');
+const { RefererDataSchema } = require('../../JoySchema/RefererData');
 
 const {
   constantsMerge: errorConstMerge,
@@ -31,12 +31,38 @@ class RefererData {
     endDate,
     limit,
   }) {
+    const schema = RefererDataSchema();
+
+    try {
+      await schema.validateAsync(
+        { publicToken, refererType, startDate, endDate, limit },
+        { abortEarly: false },
+      );
+    } catch (e) {
+      const validationErrors = [];
+      e.details.forEach((element) => {
+        validationErrors.push({
+          message: element.message,
+          field: element.context.label,
+        });
+      });
+
+      throw new ErrorWithProps(
+        errorConstMerge.UNPROCESSABLE_ENTITY,
+        {
+          validation: validationErrors,
+          statusCode: 422,
+        },
+        422,
+      );
+    }
+
     const {
       startUnixTime,
       endDateUnixTime,
       startDate: startDateProcessed,
       endDate: endDateProcessed,
-    } = formatter('5y', startDate, endDate);
+    } = formatter('1y', startDate, endDate);
 
     const maxLimit = minMaxNumber(limit, 1, 200);
 
@@ -74,7 +100,7 @@ class RefererData {
     }
 
     if (lang) {
-      whereAnd.push(`Lang = ${escaper(lang)}`);
+      whereAnd.push(`PLang = ${escaper(lang)}`);
       result.query.lang = lang;
     }
 

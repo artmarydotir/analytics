@@ -2,7 +2,7 @@ const { ErrorWithProps } = require('mercurius').default;
 const formatter = require('../../Utils/DateTimeFormatter');
 const minMaxNumber = require('../../Utils/MinMaxNumber');
 const escaper = require('../../Utils/ClickhouseEscape');
-// const { RefererDataSchema } = require('../../JoySchema/RefererData');
+const { TopUrlsSchema } = require('../../JoySchema/TopUrls');
 
 const {
   constantsMerge: errorConstMerge,
@@ -24,12 +24,45 @@ class TopUrls {
    * @param {Number} [params.limit]
    */
   async getTopUrls({ lang, publicToken, type, startDate, endDate, limit }) {
+    const schema = TopUrlsSchema();
+
+    try {
+      await schema.validateAsync(
+        {
+          publicToken,
+          lang,
+          type,
+          startDate,
+          endDate,
+          limit,
+        },
+        { abortEarly: false },
+      );
+    } catch (e) {
+      const validationErrors = [];
+      e.details.forEach((element) => {
+        validationErrors.push({
+          message: element.message,
+          field: element.context.label,
+        });
+      });
+
+      throw new ErrorWithProps(
+        errorConstMerge.UNPROCESSABLE_ENTITY,
+        {
+          validation: validationErrors,
+          statusCode: 422,
+        },
+        422,
+      );
+    }
+
     const {
       startUnixTime,
       endDateUnixTime,
       startDate: startDateProcessed,
       endDate: endDateProcessed,
-    } = formatter('1y', startDate, endDate);
+    } = formatter('30d', startDate, endDate);
 
     const maxLimit = minMaxNumber(limit, 1, 200);
 
@@ -67,7 +100,7 @@ class TopUrls {
     }
 
     if (lang) {
-      whereAnd.push(`Lang = ${escaper(lang)}`);
+      whereAnd.push(`PLang = ${escaper(lang)}`);
       result.query.lang = lang;
     }
 
@@ -80,8 +113,6 @@ class TopUrls {
       ORDER BY Count DESC
       LIMIT ${maxLimit}
       `;
-
-    console.log(query);
 
     result.result = await this.clickHouseClient.query(query).toPromise();
 
