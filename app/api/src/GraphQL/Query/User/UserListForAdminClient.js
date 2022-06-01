@@ -33,7 +33,11 @@ module.exports = async (_, { projectId, args }, { container, token }) => {
     });
   }
 
-  throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-    statusCode: 403,
-  });
+  throw new ErrorWithProps(
+    errorConstMerge.FORBIDDEN,
+    {
+      statusCode: 403,
+    },
+    403,
+  );
 };

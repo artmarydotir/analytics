@@ -10,18 +10,26 @@ module.exports = async (_, { data }, { container, token }) => {
   const { id } = data;
 
   if (!token) {
-    throw new ErrorWithProps(errorConstMerge.NOT_ALLOWED, {
-      statusCode: 405,
-    });
+    throw new ErrorWithProps(
+      errorConstMerge.NOT_ALLOWED,
+      {
+        statusCode: 405,
+      },
+      405,
+    );
   }
 
   if (
     !token.roles ||
     (token.roles !== userRoles.SUPERADMIN && id !== token.uid)
   ) {
-    throw new ErrorWithProps(errorConstMerge.FORBIDDEN, {
-      statusCode: 403,
-    });
+    throw new ErrorWithProps(
+      errorConstMerge.FORBIDDEN,
+      {
+        statusCode: 403,
+      },
+      403,
+    );
   }
 
   return UserProfileRepository.returnUserData(id);

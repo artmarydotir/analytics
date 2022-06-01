@@ -48,10 +48,14 @@ class Authentication {
         });
       });
 
-      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
-        validation: validationErrors,
-        statusCode: 422,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.UNPROCESSABLE_ENTITY,
+        {
+          validation: validationErrors,
+          statusCode: 422,
+        },
+        422,
+      );
     }
 
     const userData = await this.user.returnActiveUserData({ email });
@@ -76,9 +80,13 @@ class Authentication {
       success = validOtp;
     }
     if (!success) {
-      throw new ErrorWithProps(errorConstMerge.UNAUTHORIZED, {
-        statusCode: 401,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.UNAUTHORIZED,
+        {
+          statusCode: 401,
+        },
+        401,
+      );
     }
     return userData;
   }

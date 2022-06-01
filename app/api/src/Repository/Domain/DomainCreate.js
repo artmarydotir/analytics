@@ -49,10 +49,14 @@ class DomainCreate {
         });
       });
 
-      throw new ErrorWithProps(errorConstMerge.UNPROCESSABLE_ENTITY, {
-        validation: validationErrors,
-        statusCode: 422,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.UNPROCESSABLE_ENTITY,
+        {
+          validation: validationErrors,
+          statusCode: 422,
+        },
+        422,
+      );
     }
 
     const initialValues = {
@@ -65,15 +69,23 @@ class DomainCreate {
     };
 
     if (domain && wildcardDomain) {
-      throw new ErrorWithProps(errorConstMerge.NOT_REQUIRED_BOTH, {
-        statusCode: 400,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.NOT_REQUIRED_BOTH,
+        {
+          statusCode: 400,
+        },
+        400,
+      );
     }
 
     if (!domain && !wildcardDomain) {
-      throw new ErrorWithProps(errorConstMerge.REQUIRED_ONLY, {
-        statusCode: 400,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.REQUIRED_ONLY,
+        {
+          statusCode: 400,
+        },
+        400,
+      );
     }
 
     if (wildcardDomain) {

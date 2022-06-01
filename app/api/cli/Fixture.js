@@ -15,7 +15,6 @@ module.exports = {
   description: 'Creating Fixture',
   /**
    * @param {import('awilix').AwilixContainer} container
-   * @param {Object} args
    */
 
   // eslint-disable-next-line sonarjs/cognitive-complexity

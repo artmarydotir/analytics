@@ -30,6 +30,12 @@ const constants = {
   UNPROCESSABLE_ENTITY: '',
   INVALID_AUTH_TYPE: '',
   INVALID_STRING: '',
+  INVALID_PAIR_KEY: '',
+  INVALID_DATE_RANGE: '',
+  INVALID_DATE: '',
+  INVALID_REFERER_TYPE: '',
+  INVALID_NUMBER: '',
+  INVALID_URL_TYPE: '',
 };
 
 const list = Object.values(constants);

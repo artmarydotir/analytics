@@ -21,7 +21,11 @@ class Decorate {
    */
   static onRequest(fastify, container) {
     // http no cache by default
-    fastify.addHook('onRequest', async (_, reply) => {
+    fastify.addHook('onRequest', async (req, reply) => {
+      // if (req.url.includes('/private-api/')) {
+      //   // later
+      //   console.log(container);
+      // }
       reply.header('Expires', new Date(0).toUTCString());
       reply.header('Pragma', 'no-cache');
       reply.header(
@@ -64,15 +68,10 @@ class Decorate {
         req.raw.token = payload;
       }
 
-      req.raw.requireUserRole = (roles) => {
-        if (
-          req.raw.token &&
-          intersection(req.raw.token.roles, roles).length >= 1
-        ) {
-          return true;
-        }
-        return false;
-      };
+      req.raw.requireUserRole = (roles) =>
+        !!(
+          req.raw.token && intersection(req.raw.token.roles, roles).length >= 1
+        );
 
       // get client ip
       req.raw.getClientIP = function getClientIP() {

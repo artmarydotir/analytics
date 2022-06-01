@@ -197,6 +197,12 @@ const ConfigSchema = {
       default: 'x-user-api-key',
     },
 
+    ASM_CLIENT_API_KEY: {
+      type: 'string',
+      description: 'Header that carry the stored user token.',
+      default: 'x-client-api-key',
+    },
+
     ASM_COLLECTOR_API_KEY: {
       type: 'string',
       description: 'Header that carry the stored collector.',

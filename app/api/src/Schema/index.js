@@ -12,6 +12,9 @@ const { schema: UserAuthType } = require('./UserAuthType');
 const { schema: UserSignIn } = require('./UserSignIn');
 const { schema: Captcha } = require('./Captcha');
 const { schema: UserResetPassword } = require('./UserResetPassword');
+const { schema: PvPageview } = require('./PvPageview');
+const { schema: RefererData } = require('./RefererData');
+const { schema: TopUrls } = require('./TopUrls');
 
 module.exports = [
   CountryCodes,
@@ -28,4 +31,7 @@ module.exports = [
   UserSignIn,
   Captcha,
   UserResetPassword,
+  PvPageview,
+  RefererData,
+  TopUrls,
 ];

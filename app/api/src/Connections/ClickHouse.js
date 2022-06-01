@@ -18,6 +18,7 @@ class ClickH {
   async getClient() {
     if (this.connection === null) {
       this.connection = new ClickHouse({
+        // host: '10.0.10.189',
         host: '192.168.1.218',
         port: this.port,
         basicAuth: {

@@ -53,9 +53,13 @@ class Captcha {
    */
   async solveCaptcha(id, input) {
     if (!input) {
-      throw new ErrorWithProps(errorConstMerge.ISREQUIRE_FIELD, {
-        statusCode: 400,
-      });
+      throw new ErrorWithProps(
+        errorConstMerge.ISREQUIRE_FIELD,
+        {
+          statusCode: 400,
+        },
+        400,
+      );
     }
     const redis = await this.Redis.getRedis();
     let isValidInput = false;
