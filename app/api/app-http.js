@@ -1,24 +1,29 @@
 const init = require('./init');
 
 (async function appHTTP() {
-  const container = await init();
+  try {
+    const container = await init();
 
-  const Config = container.resolve('Config');
+    const Config = container.resolve('Config');
 
-  container.resolve('Logger');
+    container.resolve('Logger');
 
-  /** @type {import('./src/Core/Fastify')} */
-  const Fastify = container.resolve('Fastify');
+    /** @type {import('./src/Core/Fastify')} */
+    const Fastify = container.resolve('Fastify');
 
-  const app = Fastify.getFastify();
+    const app = Fastify.getFastify();
 
-  Object.keys(container.registrations).forEach((dep) => {
-    if (dep.match(/REST$/)) {
-      container.resolve(dep);
-    }
-  });
+    Object.keys(container.registrations).forEach((dep) => {
+      if (dep.match(/REST$/)) {
+        container.resolve(dep);
+      }
+    });
 
-  await app.listen(Config.ASM_APP_PORT, '0.0.0.0');
+    await app.listen(Config.ASM_APP_PORT, '0.0.0.0');
+  } catch (e) {
+    console.log(e);
+    process.exit(1);
+  }
 })();
 
 // const { Config: ConfigClass } = require('./src/Config');

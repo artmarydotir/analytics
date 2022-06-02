@@ -77,7 +77,9 @@ class TopUrls {
       result: undefined,
     };
 
-    // build dynamic query
+    /**
+     * Build query
+     */
     const selects = [];
     let group = `PCanonicalURLChecksum`;
     const whereAnd = [

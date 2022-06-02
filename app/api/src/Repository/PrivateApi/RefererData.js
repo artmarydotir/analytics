@@ -77,7 +77,9 @@ class RefererData {
       result: undefined,
     };
 
-    // build dynamic query
+    /**
+     * Build query
+     */
     const selects = [];
     let group = `PRefererURLExternalName`;
     const whereAnd = [

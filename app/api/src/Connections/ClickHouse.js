@@ -2,11 +2,10 @@ const { ClickHouse } = require('clickhouse');
 
 class ClickH {
   constructor({ Config }) {
-    /** @private */
-    this.uri = Config.ASM_CLICKHOUSE_URI;
-
-    /** @private */
-    this.port = Config.ASM_CLICKHOUSE_PORT;
+    this.selected =
+      Config.ASM_CLICKHOUSE_SERVERS[
+        Math.floor(Math.random() * Config.ASM_CLICKHOUSE_SERVERS.length)
+      ];
 
     /**
      * @type {import('clickhouse').ClickHouse}
@@ -15,20 +14,39 @@ class ClickH {
     this.connection = null;
   }
 
+  async checkConnection() {
+    const result = await Promise.race([
+      new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([
+            {
+              SUCCESS: 0,
+            },
+          ]);
+        }, 2000);
+      }),
+      this.connection.query('SELECT 1 AS SUCCESS').toPromise(),
+    ]);
+
+    return result[0].SUCCESS === 1;
+  }
+
   async getClient() {
+    const uri = new URL(this.selected);
+
     if (this.connection === null) {
       this.connection = new ClickHouse({
-        // host: '10.0.10.189',
-        host: '192.168.1.218',
-        port: this.port,
+        host: `${uri.protocol}${uri.hostname}`,
+        port: uri.port,
         basicAuth: {
-          username: 'analytics',
-          password: 'password123123',
+          username: uri.username,
+          password: uri.password,
         },
         config: {
-          database: 'analytics',
+          session_timeout: 1,
+          database: uri.pathname.replace(/\//, ''),
         },
-        debug: true,
+        debug: uri.searchParams.has('debug'),
         format: 'json',
         raw: false,
       });

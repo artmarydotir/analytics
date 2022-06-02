@@ -65,7 +65,9 @@ class PageViewCount {
       result: undefined,
     };
 
-    // build dynamic query
+    /**
+     * Build query
+     */
     const selects = [];
     const whereAnd = [
       `Created BETWEEN FROM_UNIXTIME(${startUnixTime}) AND FROM_UNIXTIME(${endDateUnixTime})`,
