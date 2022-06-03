@@ -20,13 +20,15 @@ const EntityManager = require('./Connections/EntityManager');
 const initContainer = async (Config) => {
   const container = createContainer();
 
+  const LoggerInstance = new Logger(Config.getAll());
+
   container.register({
     // config
     Config: asValue(Config.getAll()),
     PublicConfig: asValue(Config.getPublic()),
 
     // logger
-    Logger: asValue(new Logger(Config.getAll())),
+    Logger: asValue(LoggerInstance),
   });
 
   // Redis
@@ -43,6 +45,9 @@ const initContainer = async (Config) => {
   container.register({
     ClickHouse: asClass(ClickHouse, {
       lifetime: Lifetime.SINGLETON,
+      // async dispose(i) {
+      //   await i.interval();
+      // },
     }),
   });
 
@@ -59,7 +64,25 @@ const initContainer = async (Config) => {
   const mQEmitter = await container.resolve('Redis').getMQEmitter();
 
   const sequelize = await container.resolve('EntityManager').getSequelize();
-  const clickHouseClient = await container.resolve('ClickHouse').getClient();
+  const ClickHouseInstance = container.resolve('ClickHouse');
+  const clickHouseClient = await ClickHouseInstance.getClient();
+
+  await ClickHouseInstance.checkConnection();
+  // if (!clickHouseConnectionSuccess) {
+  //   console.log({
+  //     s: 'failed',
+  //     clickHouseConnectionSuccess,
+  //     pid: process.env.pm_id,
+  //   });
+
+  //   process.exit(1);
+  // } else {
+  //   console.log({
+  //     s: 'OK',
+  //     clickHouseConnectionSuccess,
+  //     pid: process.env.pm_id,
+  //   });
+  // }
 
   const graphqlTypeDefs = await graphqlTypeDefsLoader();
 

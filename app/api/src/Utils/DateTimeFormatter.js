@@ -51,14 +51,14 @@ module.exports = (maxDiff, start, end) => {
   }
 
   let resolution = 'month';
-  let resolutionFormat = '%Y-%m-00 12:00:00';
+  let resolutionFormat = '%Y-%m-01 12:00:00';
   if (diff < 6 * hourMilliseconds) {
     resolution = 'minute';
-    resolutionFormat = '%Y-%m-%d %H:%M:00';
-  } else if (diff < 24 * 7 * hourMilliseconds) {
+    resolutionFormat = '%Y-%m-%d %H:%M:30';
+  } else if (diff < 7 * 24 * hourMilliseconds) {
     resolution = 'hour';
-    resolutionFormat = '%Y-%m-%d %H:00:00';
-  } else if (diff < 24 * 30 * hourMilliseconds) {
+    resolutionFormat = '%Y-%m-%d %H:30:30';
+  } else if (diff < 32 * 24 * hourMilliseconds) {
     resolution = 'day';
     resolutionFormat = '%Y-%m-%d 12:00:00';
   }

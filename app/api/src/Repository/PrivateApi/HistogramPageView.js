@@ -1,13 +1,16 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 const { ErrorWithProps } = require('mercurius').default;
 const formatter = require('../../Utils/DateTimeFormatter');
 const escaper = require('../../Utils/ClickhouseEscape');
-const { BasePageViewCountSchema } = require('../../JoySchema/PageViewCount');
+const {
+  HistogramPageViewSchema,
+} = require('../../JoySchema/HistogramPageView');
 
 const {
   constantsMerge: errorConstMerge,
 } = require('../../Schema/ErrorMessage');
 
-class PageViewCount {
+class HistogramPageView {
   constructor({ clickHouseClient }) {
     this.clickHouseClient = clickHouseClient;
   }
@@ -15,18 +18,24 @@ class PageViewCount {
   /**
    *
    * @param {object} params
-   * @param {string} params.lang
    * @param {string} params.publicToken
    * @param {Array} params.types
-   * @param {string} params.startDate
-   * @param {string} params.endDate
+   * @param {string} [params.lang]
+   * @param {string} [params.startDate]
+   * @param {string} [params.endDate]
    */
-  async getPageViewCount({ publicToken, types, lang, startDate, endDate }) {
-    const schema = BasePageViewCountSchema();
+  async getHistogramPageView({ publicToken, types, lang, startDate, endDate }) {
+    const schema = HistogramPageViewSchema();
 
     try {
       await schema.validateAsync(
-        { publicToken, types, startDate, endDate },
+        {
+          publicToken,
+          types,
+          lang,
+          startDate,
+          endDate,
+        },
         { abortEarly: false },
       );
     } catch (e) {
@@ -53,13 +62,16 @@ class PageViewCount {
       endDateUnixTime,
       startDate: startDateProcessed,
       endDate: endDateProcessed,
-    } = formatter('30d', startDate, endDate);
+      resolutionFormat,
+      resolution,
+    } = formatter('10y', startDate, endDate);
 
     const result = {
       query: {
         types,
         startDate: startDateProcessed,
         endDate: endDateProcessed,
+        resolution,
         publicToken,
       },
       result: undefined,
@@ -68,19 +80,20 @@ class PageViewCount {
     /**
      * Build query
      */
-    const selects = [];
+    const group = 'Time';
+    const selects = [`formatDateTime(Created, '${resolutionFormat}') AS Time`];
     const whereAnd = [
       `Created BETWEEN FROM_UNIXTIME(${startUnixTime}) AND FROM_UNIXTIME(${endDateUnixTime})`,
       `PublicInstanceID = ${escaper(publicToken)}`,
       `Mode BETWEEN 0 AND 99`,
     ];
 
-    if (types.includes('Users')) {
-      selects.push(`count(distinct(CidUserChecksum)) AS Users`);
-    }
-
     if (types.includes('PageView')) {
       selects.push(`count(*) AS PageView`);
+    }
+
+    if (types.includes('Users')) {
+      selects.push(`count(distinct(CidUserChecksum)) AS Users`);
     }
 
     if (types.includes('Sessions')) {
@@ -96,14 +109,49 @@ class PageViewCount {
       SELECT
         ${selects.join(', ')}
       FROM Records
-      WHERE ${whereAnd.join(' AND ')}`;
+      WHERE ${whereAnd.join(' AND ')}
+      GROUP BY ${group}
+      ORDER BY Time DESC
+      `;
 
+    /** @type {any[]} */
     const queryResult = await this.clickHouseClient.query(query).toPromise();
 
-    [result.result] = queryResult;
+    const histogram = {
+      Time: [],
+    };
+
+    queryResult.map((row, i) => {
+      // histogram.Time[`${i}`] = Math.round(
+      //   new Date(row.CreatedMe).getTime() / 1000,
+      // );
+      histogram.Time[`${i}`] = new Date(row.Time);
+      if (types.includes('PageView')) {
+        if (!histogram.PageView) {
+          histogram.PageView = [];
+        }
+        histogram.PageView[`${i}`] = row.PageView;
+      }
+      if (types.includes('Users')) {
+        if (!histogram.Users) {
+          histogram.Users = [];
+        }
+        histogram.Users[`${i}`] = row.Users;
+      }
+      if (types.includes('Sessions')) {
+        if (!histogram.Sessions) {
+          histogram.Sessions = [];
+        }
+        histogram.Sessions[`${i}`] = row.Sessions;
+      }
+
+      return row;
+    });
+
+    result.result = histogram;
 
     return result;
   }
 }
 
-module.exports = PageViewCount;
+module.exports = HistogramPageView;

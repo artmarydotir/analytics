@@ -13,7 +13,6 @@ const ConfigSchema = {
     'ASM_PUBLIC_APP_TITLE',
     'ASM_PUBLIC_BASE_URL',
     'ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES',
-    'ASM_CLICKHOUSE_URI',
 
     // private
     'ASM_PM_ID',
@@ -33,14 +32,13 @@ const ConfigSchema = {
     // 'ASM_CAPTCHA_URI',
   ],
   properties: {
-    ASM_CLICKHOUSE_URI: {
+    ASM_CLICKHOUSE_SERVERS: {
       type: 'string',
-      default: 'http://localhost',
-    },
-
-    ASM_CLICKHOUSE_PORT: {
-      type: 'integer',
-      default: 8123,
+      // @ts-ignore
+      separator: ',',
+      default: 'http://analytics:password123123@192.168.1.218:8123/analytics',
+      // default:
+      //   'http://analytics:password123123@192.168.1.218:8123/analytics?debug=1,http://analytics:password123123@10.0.10.189:8123/analytics?debug=1',
     },
 
     ASM_PM_ID: {

@@ -17,18 +17,36 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 1000));
     await container.dispose();
   });
 
-  it('Get referer data', async () => {
+  it('Get max cursor Id', async () => {
     const cursorEntity = container.resolve('CursorEntityPageViewRepository');
 
     const r = await cursorEntity.getCursorEntityPv({
       publicToken: 'project00001',
-      // cursorID: '20220528075837655',
+      entityModule: 'post',
     });
 
-    console.log(r);
+    expect(r.query.cursorID).toBe(undefined);
+  });
+
+  it('Get page view with cursor', async () => {
+    const cursorEntity = container.resolve('CursorEntityPageViewRepository');
+
+    const possiblePast = new Date(new Date().getTime() - 604800000)
+      .toISOString()
+      .slice(0, 10)
+      .replace(/-/g, '');
+    const possiblePastInt = parseInt(possiblePast, 10);
+
+    const r2 = await cursorEntity.getCursorEntityPv({
+      publicToken: 'project00001',
+      cursorID: `${possiblePastInt}000000000`,
+      entityModule: 'news',
+    });
+    console.log(r2.result.items[0]);
+    expect(r2.result.items).toBeInstanceOf(Array);
   });
 });
