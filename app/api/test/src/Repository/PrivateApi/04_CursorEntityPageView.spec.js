@@ -17,7 +17,7 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 1000));
     await container.dispose();
   });
 
@@ -26,7 +26,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const r = await cursorEntity.getCursorEntityPv({
       publicToken: 'project00001',
-      module: 'post',
+      entityModule: 'post',
     });
 
     expect(r.query.cursorID).toBe(undefined);
@@ -44,9 +44,9 @@ describe(__filename.replace(__dirname, ''), () => {
     const r2 = await cursorEntity.getCursorEntityPv({
       publicToken: 'project00001',
       cursorID: `${possiblePastInt}000000000`,
-      module: 'post',
+      entityModule: 'news',
     });
-
+    console.log(r2.result.items[0]);
     expect(r2.result.items).toBeInstanceOf(Array);
   });
 });

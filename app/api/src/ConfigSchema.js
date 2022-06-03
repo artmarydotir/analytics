@@ -36,14 +36,9 @@ const ConfigSchema = {
       type: 'string',
       // @ts-ignore
       separator: ',',
-      // default:
-      //   'http://analytics:password123123@192.168.1.218:8123/analytics?debug=1',
-      default:
-        'http://analytics:password123123@192.168.1.218:8123/analytics,http://analytics:password123123@10.0.10.189:8123/analytics',
+      default: 'http://analytics:password123123@192.168.1.218:8123/analytics',
       // default:
       //   'http://analytics:password123123@192.168.1.218:8123/analytics?debug=1,http://analytics:password123123@10.0.10.189:8123/analytics?debug=1',
-      // default:
-      //   'http://analytics:password123123@10.0.10.189:8123/analytics?debug=1',
     },
 
     ASM_PM_ID: {

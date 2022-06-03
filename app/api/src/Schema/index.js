@@ -15,6 +15,8 @@ const { schema: UserResetPassword } = require('./UserResetPassword');
 const { schema: PvPageview } = require('./PvPageview');
 const { schema: RefererData } = require('./RefererData');
 const { schema: TopUrls } = require('./TopUrls');
+const { schema: PageViewCursor } = require('./PageViewCursor');
+const { schema: HistogramPageView } = require('./HistogramPageView');
 
 module.exports = [
   CountryCodes,
@@ -34,4 +36,6 @@ module.exports = [
   PvPageview,
   RefererData,
   TopUrls,
+  PageViewCursor,
+  HistogramPageView,
 ];
