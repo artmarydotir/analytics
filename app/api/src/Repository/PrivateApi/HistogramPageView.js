@@ -64,7 +64,7 @@ class HistogramPageView {
       endDate: endDateProcessed,
       resolutionFormat,
       resolution,
-    } = formatter('10y', startDate, endDate);
+    } = formatter('1y', startDate, endDate);
 
     const result = {
       query: {
