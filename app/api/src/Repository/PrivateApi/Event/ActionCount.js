@@ -8,7 +8,7 @@ const {
   constantsMerge: errorConstMerge,
 } = require('../../../Schema/ErrorMessage');
 
-class CategoryCount {
+class ActionCount {
   constructor({ clickHouseClient }) {
     this.clickHouseClient = clickHouseClient;
   }
@@ -22,7 +22,7 @@ class CategoryCount {
    * @param {string} [params.endDate]
    * @param {Number} [params.limit]
    */
-  async getCategoryCount({ publicToken, category, startDate, endDate, limit }) {
+  async getActionCount({ publicToken, category, startDate, endDate, limit }) {
     const schema = EVActionCountSchema();
 
     try {
@@ -103,4 +103,4 @@ class CategoryCount {
   }
 }
 
-module.exports = CategoryCount;
+module.exports = ActionCount;

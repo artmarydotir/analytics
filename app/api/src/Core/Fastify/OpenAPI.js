@@ -133,6 +133,12 @@ class OpenAPI {
               in: 'header',
               name: container.Config.ASM_AUTH_USER_API_KEY,
             },
+            privateToken: {
+              description: 'Project private API Key',
+              type: 'apiKey',
+              in: 'header',
+              name: 'x-private-token',
+            },
           },
         },
       },

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 class PageViewCountREST {
   constructor({ Fastify, PageViewCountRepository, ProjectValidityRepository }) {
     /** @type {import('fastify').FastifyInstance} */
@@ -8,7 +9,7 @@ class PageViewCountREST {
     const e404 = Fastify.getGenericError(404);
     const e422 = Fastify.getGenericError(422);
 
-    const apiUrl = this.fastify.openAPIBaseURL('/private/pageview-count');
+    const apiUrl = this.fastify.openAPIBaseURL('/private/pageview/count');
 
     this.fastify.route({
       url: apiUrl,
@@ -16,7 +17,7 @@ class PageViewCountREST {
       schema: {
         description: 'Get users, pageviews, sessions count',
         operationId: 'PageViewCount',
-        tags: ['Analytics'],
+        tags: ['AnalyticsPageView'],
         body: {
           $ref: 'PageViewCount#',
         },
@@ -34,6 +35,11 @@ class PageViewCountREST {
           },
           required: ['x-public-token', 'x-private-token'],
         },
+        security: [
+          {
+            privateToken: [],
+          },
+        ],
         response: {
           404: e404.getSchema(),
           422: e422.getSchema(),
