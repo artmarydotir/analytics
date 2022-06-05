@@ -17,6 +17,10 @@ const { schema: RefererData } = require('./RefererData');
 const { schema: TopUrls } = require('./TopUrls');
 const { schema: PageViewCursor } = require('./PageViewCursor');
 const { schema: HistogramPageView } = require('./HistogramPageView');
+const { schema: ActionCount } = require('./ActionCount');
+const { schema: CategoryCount } = require('./CategoryCount');
+const { schema: IdentCount } = require('./IdentCount');
+const { schema: IdentHistogram } = require('./IdentHistogram');
 
 module.exports = [
   CountryCodes,
@@ -38,4 +42,8 @@ module.exports = [
   TopUrls,
   PageViewCursor,
   HistogramPageView,
+  ActionCount,
+  CategoryCount,
+  IdentCount,
+  IdentHistogram,
 ];

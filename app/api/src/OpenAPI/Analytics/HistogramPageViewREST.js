@@ -13,7 +13,7 @@ class PageViewCountREST {
     const e404 = Fastify.getGenericError(404);
     const e422 = Fastify.getGenericError(422);
 
-    const apiUrl = this.fastify.openAPIBaseURL('/private/histogram-page-view');
+    const apiUrl = this.fastify.openAPIBaseURL('/private/pageview/histogram');
 
     this.fastify.route({
       url: apiUrl,
@@ -21,7 +21,7 @@ class PageViewCountREST {
       schema: {
         description: 'Get histogram Count page views - session - users',
         operationId: 'HistogramPageView',
-        tags: ['Analytics'],
+        tags: ['AnalyticsPageView'],
         body: {
           $ref: 'HistogramPageView#',
         },
@@ -39,6 +39,11 @@ class PageViewCountREST {
           },
           required: ['x-public-token', 'x-private-token'],
         },
+        security: [
+          {
+            privateToken: [],
+          },
+        ],
         response: {
           404: e404.getSchema(),
           422: e422.getSchema(),

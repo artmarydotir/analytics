@@ -24,7 +24,7 @@ class Config {
   process(envObject) {
     /** @type {any} */
     const ConfigObject = {
-      ASM_PM_ID: process.env.pm_id || '0',
+      ASM_PM_ID: process.env.pm_id || 0,
     };
     Object.keys(envObject).forEach((name) => {
       if (name.match(/^ASM_/)) {

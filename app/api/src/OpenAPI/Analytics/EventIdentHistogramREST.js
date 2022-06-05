@@ -1,8 +1,8 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-class CursorEntityPageViewREST {
+class EventIdentHistogramREST {
   constructor({
     Fastify,
-    CursorEntityPageViewRepository,
+    IdentHistogramRepository,
     ProjectValidityRepository,
   }) {
     /** @type {import('fastify').FastifyInstance} */
@@ -14,18 +14,18 @@ class CursorEntityPageViewREST {
     const e422 = Fastify.getGenericError(422);
 
     const apiUrl = this.fastify.openAPIBaseURL(
-      '/private/pageview/cursor-entity',
+      '/private/event/ident-histogram',
     );
 
     this.fastify.route({
       url: apiUrl,
       method: 'POST',
       schema: {
-        description: 'Get Specific Entity Page View By Cursor',
-        operationId: 'PageViewCursor',
-        tags: ['AnalyticsPageView'],
+        description: 'Event Identity histogram',
+        operationId: 'IdentHistogram',
+        tags: ['AnalyticsEvent'],
         body: {
-          $ref: 'PageViewCursor#',
+          $ref: 'IdentHistogram#',
         },
         headers: {
           type: 'object',
@@ -76,7 +76,7 @@ class CursorEntityPageViewREST {
         /** @type {Object} */
 
         const { body } = req;
-        const result = await CursorEntityPageViewRepository.getCursorEntityPv({
+        const result = await IdentHistogramRepository.getEIdentHistogram({
           ...body,
           publicToken: req.headers['x-public-token'],
         });
@@ -90,4 +90,4 @@ class CursorEntityPageViewREST {
   }
 }
 
-module.exports = CursorEntityPageViewREST;
+module.exports = EventIdentHistogramREST;

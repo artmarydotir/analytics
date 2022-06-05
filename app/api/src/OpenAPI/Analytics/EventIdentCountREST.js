@@ -1,10 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-class CursorEntityPageViewREST {
-  constructor({
-    Fastify,
-    CursorEntityPageViewRepository,
-    ProjectValidityRepository,
-  }) {
+class EventIdentCountREST {
+  constructor({ Fastify, IdentCountRepository, ProjectValidityRepository }) {
     /** @type {import('fastify').FastifyInstance} */
     this.fastify = Fastify.getFastify();
 
@@ -13,19 +9,17 @@ class CursorEntityPageViewREST {
     const e404 = Fastify.getGenericError(404);
     const e422 = Fastify.getGenericError(422);
 
-    const apiUrl = this.fastify.openAPIBaseURL(
-      '/private/pageview/cursor-entity',
-    );
+    const apiUrl = this.fastify.openAPIBaseURL('/private/event/ident-count');
 
     this.fastify.route({
       url: apiUrl,
       method: 'POST',
       schema: {
-        description: 'Get Specific Entity Page View By Cursor',
-        operationId: 'PageViewCursor',
-        tags: ['AnalyticsPageView'],
+        description: 'Event Identity count',
+        operationId: 'IdentCount',
+        tags: ['AnalyticsEvent'],
         body: {
-          $ref: 'PageViewCursor#',
+          $ref: 'IdentCount#',
         },
         headers: {
           type: 'object',
@@ -76,7 +70,7 @@ class CursorEntityPageViewREST {
         /** @type {Object} */
 
         const { body } = req;
-        const result = await CursorEntityPageViewRepository.getCursorEntityPv({
+        const result = await IdentCountRepository.getEIdentCount({
           ...body,
           publicToken: req.headers['x-public-token'],
         });
@@ -90,4 +84,4 @@ class CursorEntityPageViewREST {
   }
 }
 
-module.exports = CursorEntityPageViewREST;
+module.exports = EventIdentCountREST;
