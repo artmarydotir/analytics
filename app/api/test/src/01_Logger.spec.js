@@ -50,29 +50,33 @@ describe(__filename.replace(__dirname, ''), () => {
     expect(logger.processHandler()).toBeTruthy();
 
     await logger.toNDJSON('/tmp');
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
 
     logger.log({ foo: 'bar' });
     logger.processHandler().uncaughtException(new Error('uncaughtException'));
     logger.processHandler().warning(new Error('uncaughtException'));
-    logger
-      .processHandler()
-      .unhandledRejection(
-        new Error('unhandledRejection'),
-        new Promise((r) => setTimeout(r, 100)),
-      );
+    logger.processHandler().unhandledRejection(
+      new Error('unhandledRejection'),
+      new Promise((resolve) => {
+        setTimeout(resolve, 500);
+      }),
+    );
 
-    logger
-      .processHandler()
-      .rejectionHandled(new Promise((r) => setTimeout(r, 100)));
+    logger.processHandler().rejectionHandled(
+      new Promise((r) => {
+        setTimeout(r, 100);
+      }),
+    );
 
-    logger
-      .processHandler()
-      .multipleResolves(
-        'resolve',
-        new Promise((r) => setTimeout(r, 100)),
-        'value',
-      );
+    logger.processHandler().multipleResolves(
+      'resolve',
+      new Promise((r) => {
+        setTimeout(r, 100);
+      }),
+      'value',
+    );
 
     logger.fatal('fatal msg');
     logger.error('error msg');
@@ -116,7 +120,9 @@ describe(__filename.replace(__dirname, ''), () => {
     expect(logger.getEntriesLength()).toBeTruthy();
 
     await logger.toTCPServer('127.0.0.1', serverPort);
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => {
+      setTimeout(r, 500);
+    });
     expect(unicodeData.length > 0).toBe(true);
   });
 });

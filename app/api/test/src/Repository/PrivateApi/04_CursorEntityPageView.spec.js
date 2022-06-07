@@ -17,7 +17,9 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => {
+      setTimeout(r, 1000);
+    });
     await container.dispose();
   });
 
@@ -46,7 +48,7 @@ describe(__filename.replace(__dirname, ''), () => {
       cursorID: `${possiblePastInt}000000000`,
       entityModule: 'news',
     });
-    console.log(r2.result.items[0]);
+
     expect(r2.result.items).toBeInstanceOf(Array);
   });
 });

@@ -21,7 +21,6 @@ const init = require('./init');
 
     await app.listen(Config.ASM_APP_PORT, '0.0.0.0');
   } catch (e) {
-    console.log(e);
     process.exit(1);
   }
 })();

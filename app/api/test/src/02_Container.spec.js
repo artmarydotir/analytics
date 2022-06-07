@@ -16,7 +16,9 @@ describe(__filename.replace(__dirname, ''), () => {
     container = await initContainer(config);
   });
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
     await container.dispose();
   });
 

@@ -26,7 +26,9 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
     await container.dispose();
   });
 
@@ -84,6 +86,7 @@ describe(__filename.replace(__dirname, ''), () => {
         username: user.dataValues.username,
       }),
     ).toBeTruthy();
+
     await expect(
       process.returnActiveUserData({
         username: 'imnotexist',
@@ -99,12 +102,12 @@ describe(__filename.replace(__dirname, ''), () => {
     await expect(process.isUserExistByID(2500)).rejects.toThrowError();
 
     // Update password
-    const { found, generatedPassword } = await process.setGeneratedPassword({
+    const { found, psw } = await process.setGeneratedPassword({
       username: user.dataValues.username,
     });
 
     expect(found).toBeTruthy();
-    expect(generatedPassword).toBeTruthy();
+    expect(psw).toBeTruthy();
   });
 
   it('Generating Password Check', async () => {
