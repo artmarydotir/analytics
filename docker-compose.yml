@@ -21,7 +21,13 @@ services:
 
   # front and nginx
   analytic-web:
-    image: ghcr.io/artmarydotir/analytic-web:latest
+    # image: ghcr.io/artmarydotir/analytic-web:latest
+    build:
+    args:
+      - PROXY_HTTP=${PROXY_HTTP:-}
+    context: .
+    dockerfile: Dockerfile.web
+
     depends_on:
       - analytic-backend
     container_name: analytic-web
