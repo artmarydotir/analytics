@@ -34,7 +34,9 @@ class Redis {
         db: 2,
         keyPrefix: `${this.ns}:mqe:`,
       });
-      await new Promise((r) => setTimeout(r, 100));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
       this.connection = new IoRedis(this.uri, {
         db: 1,
         lazyConnect: true,

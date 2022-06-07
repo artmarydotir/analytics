@@ -17,7 +17,9 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
     await container.dispose();
   });
 
@@ -34,6 +36,6 @@ describe(__filename.replace(__dirname, ''), () => {
       // startDate: time.toISOString(),
     });
 
-    console.log(result);
+    expect(result.result).toBeInstanceOf(Array);
   });
 });

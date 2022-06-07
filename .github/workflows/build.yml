@@ -1,0 +1,78 @@
+name: test
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 👋🏽 Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Run Test
+        run: |
+          set -e
+
+          export TEST_CI_NAMESPACE="analytic"
+
+          ## Remove Dependencies ##
+          docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-captcha $TEST_CI_NAMESPACE-mail || true
+          docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-captcha $TEST_CI_NAMESPACE-mail || true
+          docker rmi $TEST_CI_NAMESPACE || true
+          docker network rm $TEST_CI_NAMESPACE || true
+
+          # build
+          docker build -f Dockerfile.ci -t $TEST_CI_NAMESPACE .
+
+          # network
+          docker network create $TEST_CI_NAMESPACE
+
+          ## Add Dependencies ##
+          docker run --name $TEST_CI_NAMESPACE-postgres --network=$TEST_CI_NAMESPACE -d postgres:13
+          docker run --name $TEST_CI_NAMESPACE-redis --network=$TEST_CI_NAMESPACE -d redis:6
+          docker run --name $TEST_CI_NAMESPACE-mail --network=$TEST_CI_NAMESPACE -d mailhog/mailhog
+          docker run --name $TEST_CI_NAMESPACE-captcha --network=$TEST_CI_NAMESPACE -d aasaam/rest-captcha
+
+          # wait for databases
+          sleep 12
+
+          docker run --name $TEST_CI_NAMESPACE --network=$TEST_CI_NAMESPACE \
+            -e ASM_REDIS_URI="redis://$TEST_CI_NAMESPACE-redis" \
+            -e ASM_POSTGRES_URI="postgres://pg-user:pg-password@analytic-postgres:5432/pg-db" \
+            -e ASM_PUBLIC_APP_TEST='true' \
+            -e ASM_SMTP_SENDER="noreply@gmail.com" \
+            -e ASM_SMTP_URI="smtp://username:password@$TEST_CI_NAMESPACE-mail:1025/?pool=true" \
+            $TEST_CI_NAMESPACE /app/api/ci.sh
+
+          ## Remove Dependencies ##
+          docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-mail $TEST_CI_NAMESPACE-captcha || true
+          docker rm $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-mail $TEST_CI_NAMESPACE-captcha || true
+          docker rmi $TEST_CI_NAMESPACE || true
+          docker network rm $TEST_CI_NAMESPACE || true
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Build and push
+        run: |
+          docker-compose -f docker-compose.prod.yml build
+          echo "List of docker images"
+          docker images
+          echo "OK"
+          docker tag analytics_web ghcr.io/aasaam/analytics-web:latest
+          docker tag analytics_backend ghcr.io/aasaam/analytics-backend:latest
+          docker push ghcr.io/aasaam/analytics-web:latest
+          docker push ghcr.io/aasaam/analytics-backend:latest

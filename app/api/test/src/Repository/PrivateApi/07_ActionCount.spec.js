@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-env jest */
 
 // @ts-ignore
@@ -17,7 +18,9 @@ describe(__filename.replace(__dirname, ''), () => {
   });
 
   afterAll(async () => {
-    await new Promise((r) => setTimeout(r, 100));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
     await container.dispose();
   });
 
@@ -26,6 +29,7 @@ describe(__filename.replace(__dirname, ''), () => {
 
     const time = new Date();
     time.setDate(time.getDate() - 150);
+
     const result = await actionCount.getCategoryCount({
       publicToken: 'project00001',
       category: 'news',
@@ -33,6 +37,6 @@ describe(__filename.replace(__dirname, ''), () => {
       limit: 200,
     });
 
-    console.log(result);
+    // console.log(result);
   });
 });

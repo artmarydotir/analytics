@@ -31,3 +31,11 @@ UPDATE users SET id = DEFAULT;
 docker exec -it analytic-redis redis-cli FLUSHALL
 
 docker-compose -f docker-compose.prod.yml build --build-arg PROXY_HTTP=192.168.1.218:3390
+
+<div>
+  <p align="center">
+    <img alt="aasaam software development group" width="64" src="https://raw.githubusercontent.com/aasaam/information/master/logo/aasaam.svg">
+    <br />
+    aasaam software development group
+  </p>
+</div>
