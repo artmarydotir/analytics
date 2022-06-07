@@ -17,6 +17,7 @@ services:
       ASM_AUTH_REFRESH_COOKIE: ${ASM_AUTH_REFRESH_COOKIE:-analytic-auth-refresh}
       ASM_PUBLIC_AUTH_TOKEN_TTL: ${ASM_PUBLIC_AUTH_TOKEN_TTL:-900}
       ASM_PUBLIC_AUTH_REFRESH_TOKEN_TTL: ${ASM_PUBLIC_AUTH_REFRESH_TOKEN_TTL:-43200}
+      ASM_CLICKHOUSE_SERVERS: ${ASM_CLICKHOUSE_SERVERS:-}
 
   # front and nginx
   analytic-web:
@@ -49,7 +50,6 @@ services:
       - /nginx-tmpfs:rw,nodev,nosuid,noexec,noatime,size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-192}m
     volumes:
       - ./nginx/templates/default.prod.conf.template:/etc/nginx/templates/default.conf.template
-      # - ./app/front-cp/dist:/web-app
 
   # databases
   analytic-redis:
