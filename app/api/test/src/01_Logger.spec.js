@@ -60,7 +60,7 @@ describe(__filename.replace(__dirname, ''), () => {
     logger.processHandler().unhandledRejection(
       new Error('unhandledRejection'),
       new Promise((resolve) => {
-        setTimeout(resolve, 500);
+        setTimeout(resolve, 100);
       }),
     );
 
