@@ -53,7 +53,8 @@ jobs:
             -e ASM_SMTP_SENDER="noreply@gmail.com" \
             -e ASM_SMTP_URI="smtp://username:password@$TEST_CI_NAMESPACE-mail:1025/?pool=true" \
             $TEST_CI_NAMESPACE /app/api/ci.sh
-            echo "OKKKKKKKKKKKKK"
+
+          echo "OKKKKKKKKKKKKK"
 
           ## Remove Dependencies ##
           docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-mail $TEST_CI_NAMESPACE-captcha || true
