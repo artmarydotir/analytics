@@ -4,13 +4,13 @@ FROM node:18-alpine
 RUN export DEBIAN_FRONTEND=noninteractive ; \
   export LANG=en_US.utf8 ; \
   export LC_ALL=C.UTF-8 ; \
-  apk update -y \
-  && apk autoremove -y \
-  && apk -y upgrade && apk add -y --no-install-recommends \
+  apk update \
+  && apk autoremove \
+  && apk upgrade && apk add --no-install-recommends \
     curl build-essential python3 ca-certificates pkg-config \
     build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
   && curl -sf https://gobinaries.com/tj/node-prune | sh \
-  && echo 'cache = "/tmp/npm"' > /root/.npmrc \
+  && echo 'cache = "/tmp/.yarn"' > /root/.npmrc \
   && npm -g update \
   && node-prune /usr/local/lib/node_modules \
   && mkdir /app \

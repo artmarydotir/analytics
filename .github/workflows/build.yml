@@ -32,7 +32,7 @@ jobs:
           docker network rm $TEST_CI_NAMESPACE || true
 
           # build
-          docker build -f Dockerfile.ci -t $TEST_CI_NAMESPACE .
+          # docker build -f Dockerfile.ci -t $TEST_CI_NAMESPACE .
 
           # network
           docker network create $TEST_CI_NAMESPACE
