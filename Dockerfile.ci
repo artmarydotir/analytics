@@ -5,8 +5,7 @@ RUN export DEBIAN_FRONTEND=noninteractive ; \
   export LANG=en_US.utf8 ; \
   export LC_ALL=C.UTF-8 ; \
   apk update \
-  && apk autoremove \
-  && apk upgrade && apk add --no-install-recommends \
+  && apk upgrade && apk add --no-cache --no-install-recommends \
     curl build-essential python3 ca-certificates pkg-config \
     build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
   && curl -sf https://gobinaries.com/tj/node-prune | sh \
