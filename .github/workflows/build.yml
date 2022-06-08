@@ -41,7 +41,7 @@ jobs:
           docker run --name $TEST_CI_NAMESPACE-postgres --network=$TEST_CI_NAMESPACE -d postgres:13
           docker run --name $TEST_CI_NAMESPACE-redis --network=$TEST_CI_NAMESPACE -d redis:6
           docker run --name $TEST_CI_NAMESPACE-mail --network=$TEST_CI_NAMESPACE -d mailhog/mailhog
-          docker run --name $TEST_CI_NAMESPACE-captcha --network=$TEST_CI_NAMESPACE -d aasaam/rest-captcha
+          docker run --name $TEST_CI_NAMESPACE-captcha --network=$TEST_CI_NAMESPACE -d ghcr.io/aasaam/rest-captcha:latest
 
           # wait for databases
           sleep 12

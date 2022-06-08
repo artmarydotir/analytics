@@ -64,7 +64,7 @@ services:
 
   analytic-rest-captcha:
     container_name: analytic-captcha
-    image: aasaam/rest-captcha
+    image: ghcr.io/aasaam/rest-captcha:latest
     command: -return-value
 
   analytic-postgres:
