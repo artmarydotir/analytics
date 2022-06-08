@@ -3,7 +3,7 @@ set -e
 
 yarn install
 
-./node_modules/.bin/depcheck . --ignores="@types/*,depcheck,typescript"
+./node_modules/.bin/depcheck . --ignores="@types/*,depcheck,typescript,pm2"
 
 npm run lint
 
