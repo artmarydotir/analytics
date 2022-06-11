@@ -75,7 +75,7 @@ jobs:
           echo "List of docker images"
           docker images
           echo "OK"
-          docker tag analytics_web ghcr.io/aasaam/analytics-web:latest
-          docker tag analytics_backend ghcr.io/aasaam/analytics-backend:latest
-          docker push ghcr.io/aasaam/analytics-web:latest
-          docker push ghcr.io/aasaam/analytics-backend:latest
+          docker tag analytics_analytic-web ghcr.io/artmarydotir/analytic-web:latest
+          docker tag analytics_analytic-backend ghcr.io/artmarydotir/analytic-backend
+          docker push ghcr.io/artmarydotir/analytic-web:latest
+          docker push ghcr.io/artmarydotir/analytic-backend

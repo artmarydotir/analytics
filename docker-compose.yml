@@ -21,7 +21,7 @@ services:
 
   # front and nginx
   analytic-web:
-    # image: ghcr.io/artmarydotir/analytic-web:latest
+    image: ghcr.io/artmarydotir/analytic-web:latest
     build:
     args:
       - PROXY_HTTP=${PROXY_HTTP:-}
