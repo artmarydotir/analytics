@@ -49,7 +49,7 @@ http {
     include /etc/nginx/common-server.conf;
 
     # http flood prevent
-    # limit_req zone=app_req_limit_per_ip burst=${ASM_NGINX_LIMIT_BURST} nodelay;
+    # limit_req zone=app_req_limait_per_ip burst=${ASM_NGINX_LIMIT_BURST} nodelay;
     # limit_conn app_conn_limit_per_ip ${ASM_NGINX_LIMIT_CONNECTION};
 
     location ${ASM_PUBLIC_BASE_URL} {
@@ -64,32 +64,6 @@ http {
       proxy_pass http://analytic-front-cp:${ASM_FRONT_CP_PORT};
     }
 
-
-
-    # backend: with auth token using backend appliction
-    location = ${ASM_PUBLIC_BASE_URL}api/upload-resumable-auth {
-      internal;
-
-      proxy_cache_methods GET HEAD POST;
-      proxy_pass_request_body off;
-      proxy_set_header Content-Length "";
-
-      include /etc/nginx/common-proxy.conf;
-      include /etc/nginx/common-protected.conf;
-      proxy_pass http://analytic-api:${ASM_APP_PORT};
-    }
-
-    # backend: normal upload
-    location ~ ^${ASM_PUBLIC_BASE_URL}api/upload-normal {
-      client_max_body_size ${ASM_PUBLIC_POST_UPLOADED_SIZE_BYTES};
-
-      include /etc/nginx/common-proxy.conf;
-      include /etc/nginx/common-protected.conf;
-      proxy_request_buffering off;
-      proxy_buffering off;
-      proxy_pass http://analytic-api:${ASM_APP_PORT};
-    }
-
     # backend
     location ${ASM_PUBLIC_BASE_URL}api {
       proxy_read_timeout 4h;
@@ -97,6 +71,5 @@ http {
       include /etc/nginx/common-protected.conf;
       proxy_pass http://analytic-api:${ASM_APP_PORT};
     }
-
   }
 }

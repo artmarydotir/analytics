@@ -22,12 +22,6 @@ services:
   # front and nginx
   analytic-web:
     image: ghcr.io/artmarydotir/analytic-web:latest
-    build:
-    args:
-      - PROXY_HTTP=${PROXY_HTTP:-}
-    context: .
-    dockerfile: Dockerfile.web
-
     depends_on:
       - analytic-backend
     container_name: analytic-web
@@ -54,8 +48,6 @@ services:
       ASM_PUBLIC_APP_LANG: ${ASM_PUBLIC_APP_LANG:-en}
     tmpfs:
       - /nginx-tmpfs:rw,nodev,nosuid,noexec,noatime,size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB:-192}m
-    volumes:
-      - ./nginx/templates/default.prod.conf.template:/etc/nginx/templates/default.conf.template
 
   # databases
   analytic-redis:
@@ -65,7 +57,7 @@ services:
   analytic-rest-captcha:
     container_name: analytic-captcha
     image: ghcr.io/aasaam/rest-captcha:latest
-    command: -return-value
+    command: run -return-value
 
   analytic-postgres:
     container_name: analytic-postgres

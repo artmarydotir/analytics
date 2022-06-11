@@ -90,7 +90,7 @@ services:
   analytic-rest-captcha:
     container_name: analytic-captcha
     image: aasaam/rest-captcha
-    command: -return-value
+    command: run -return-value
     ports:
       - 4000:4000
 
