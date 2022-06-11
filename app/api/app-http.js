@@ -2,6 +2,9 @@ const init = require('./init');
 
 (async function appHTTP() {
   try {
+    await new Promise((resolve) => {
+      setTimeout(resolve, Math.random() * 10000);
+    });
     const container = await init();
 
     const Config = container.resolve('Config');

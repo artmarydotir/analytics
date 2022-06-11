@@ -12,6 +12,7 @@ services:
 
     environment:
       ASM_PUBLIC_APP_TEST: "false"
+      ASM_AUTH_HMAC_SECRET: ${ASM_AUTH_HMAC_SECRET:-}
       ASM_PUBLIC_APP_NS: ${ASM_PUBLIC_APP_NS:-analytic}
       ASM_AUTH_COOKIE: ${ASM_AUTH_COOKIE:-analytic-auth-token}
       ASM_AUTH_REFRESH_COOKIE: ${ASM_AUTH_REFRESH_COOKIE:-analytic-auth-refresh}

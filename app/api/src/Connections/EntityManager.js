@@ -23,6 +23,7 @@ class EntityManager {
           this.Logger.debug(msg[0]);
         },
       });
+
       UserEntity(this.sequelize);
       ProjectEntity(this.sequelize);
       UserProjectEntity(this.sequelize);
