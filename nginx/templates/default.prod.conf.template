@@ -12,89 +12,17 @@ events {
 
 http {
 
-  default_type application/octet-stream;
-  include /etc/nginx/mime.types;
-  include /etc/nginx/http_context.conf;
+  userid_name ${ASM_PUBLIC_APP_NS}_hid;
 
-  aio threads=default;
-  client_body_timeout 15;
+  limit_req_zone $binary_remote_addr zone=app_req_limit_per_ip:16m rate=${ASM_NGINX_LIMIT_RPS}r/s;
+  limit_conn_zone $binary_remote_addr zone=app_conn_limit_per_ip:16m;
+  limit_conn_status 429;
 
-  client_max_body_size 4M;
-  client_body_buffer_size 4M;
+  # development access log
+  log_format dev_combined '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $server_port';
+  access_log /dev/stdout dev_combined;
 
-  directio 1m;
-  keepalive_requests 1024;
-  keepalive_timeout 30;
-  reset_timedout_connection on;
-  sendfile_max_chunk 1m;
-  sendfile on;
-  send_timeout 5;
-  server_tokens off;
-  tcp_nodelay on;
-  tcp_nopush on;
-  map_hash_bucket_size 256;
-
-  access_log off;
-
-  charset utf-8;
-  charset_types
-    application/atom+xml
-    application/dash+xml
-    application/javascript
-    application/json
-    application/ld+json
-    application/manifest+json
-    application/x-ndjson
-    application/rss+xml
-    application/vnd.apple.mpegurl
-    application/x-javascript
-    application/xml
-    image/svg+xml
-    text/css
-    text/javascript
-    text/plain
-    text/xml;
-
-  gzip on;
-  gzip_static on;
-  gzip_min_length 16;
-  gzip_comp_level 6;
-  gzip_vary on;
-  gzip_proxied any;
-  gzip_types
-    audio/mpegurl
-    video/mpegurl
-    application/atom+xml
-    application/dash+xml
-    application/dicom
-    application/javascript
-    application/json
-    application/ld+json
-    application/manifest+json
-    application/x-ndjson
-    application/rss+xml
-    application/vnd.apple.mpegurl
-    application/vnd.ms-fontobject
-    application/x-javascript
-    application/xml
-    font/opentype
-    font/truetype
-    font/ttf
-    image/gif
-    image/jpeg
-    image/png
-    image/svg+xml
-    image/x-icon
-    text/css
-    text/javascript
-    text/plain
-    text/x-component
-    text/xml;
-
-  open_file_cache max=512 inactive=180s;
-  open_file_cache_valid 120s;
-  open_file_cache_min_uses 2;
-  open_file_cache_errors on;
+  include /etc/nginx/common-http.conf;
 
   proxy_cache_path /nginx-tmpfs
     levels=1:2
@@ -103,18 +31,18 @@ http {
     max_size=${ASM_NGINX_TMPFS_CACHE_SIZE_MB}m
     inactive=30m;
 
-  proxy_cache off;
-  proxy_cache_methods GET HEAD;
-  proxy_cache_valid 200 301 1m;
-  proxy_cache_key $scheme$request_method$proxy_host$request_uri;
-  proxy_cache_use_stale error timeout invalid_header updating http_500 http_502 http_503 http_504;
-  proxy_request_buffering off;
-  proxy_buffers 8 16k;
-  proxy_buffer_size 16k;
-  proxy_http_version 1.1;
-
   server {
     listen 80 default_server;
+    listen 443 ssl http2 default_server;
+
+    ssl_certificate /cert/fullchan.pem;
+    ssl_certificate_key /cert/privkey.pem;
+    ssl_trusted_certificate /cert/ca.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:DockerNginx:10m;
+    ssl_session_tickets off;
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
 
     server_name _;
 
