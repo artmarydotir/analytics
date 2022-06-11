@@ -5,17 +5,16 @@ ARG PROXY_HTTP
 
 ADD app/api /app/api
 
-RUN export DEBIAN_FRONTEND=noninteractive ; \
-  export LANG=en_US.utf8 ; \
+RUN export LANG=en_US.utf8 ; \
   export LC_ALL=C.UTF-8 ; \
   export HTTP_PROXY=$PROXY_HTTP ; \
   export HTTPS_PROXY=$PROXY_HTTP ; \
   echo "You are using proxy: $PROXY_HTTP"; \
   cd /app/api && \
-  yarn install --production
+  yarn install --production &&  \
+  rm -rf test
 
 EXPOSE 3001/tcp
-
 STOPSIGNAL SIGTERM
 WORKDIR /app/api
 CMD ["./node_modules/.bin/pm2-runtime", "pm2.prod.config.js"]

@@ -22,6 +22,12 @@ services:
   # front and nginx
   analytic-web:
     image: ghcr.io/artmarydotir/analytic-web:latest
+    build:
+    args:
+      - PROXY_HTTP=${PROXY_HTTP:-}
+    context: .
+    dockerfile: Dockerfile.web
+
     depends_on:
       - analytic-backend
     container_name: analytic-web
@@ -58,7 +64,7 @@ services:
 
   analytic-rest-captcha:
     container_name: analytic-captcha
-    image: aasaam/rest-captcha
+    image: ghcr.io/aasaam/rest-captcha:latest
     command: -return-value
 
   analytic-postgres:

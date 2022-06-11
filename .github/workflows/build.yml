@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
   schedule:
     - cron: "0 0 * * 0"
 
@@ -40,7 +41,7 @@ jobs:
           docker run --name $TEST_CI_NAMESPACE-postgres --network=$TEST_CI_NAMESPACE -d postgres:13
           docker run --name $TEST_CI_NAMESPACE-redis --network=$TEST_CI_NAMESPACE -d redis:6
           docker run --name $TEST_CI_NAMESPACE-mail --network=$TEST_CI_NAMESPACE -d mailhog/mailhog
-          docker run --name $TEST_CI_NAMESPACE-captcha --network=$TEST_CI_NAMESPACE -d aasaam/rest-captcha
+          docker run --name $TEST_CI_NAMESPACE-captcha --network=$TEST_CI_NAMESPACE -d ghcr.io/aasaam/rest-captcha:latest
 
           # wait for databases
           sleep 12
@@ -51,7 +52,9 @@ jobs:
             -e ASM_PUBLIC_APP_TEST='true' \
             -e ASM_SMTP_SENDER="noreply@gmail.com" \
             -e ASM_SMTP_URI="smtp://username:password@$TEST_CI_NAMESPACE-mail:1025/?pool=true" \
-            $TEST_CI_NAMESPACE /app/api/ci.sh
+            $TEST_CI_NAMESPACE
+
+          echo "OKKKKKKKKKKKKK"
 
           ## Remove Dependencies ##
           docker stop $TEST_CI_NAMESPACE $TEST_CI_NAMESPACE-redis $TEST_CI_NAMESPACE-postgres $TEST_CI_NAMESPACE-mail $TEST_CI_NAMESPACE-captcha || true
@@ -72,7 +75,7 @@ jobs:
           echo "List of docker images"
           docker images
           echo "OK"
-          docker tag analytics_web ghcr.io/aasaam/analytics-web:latest
-          docker tag analytics_backend ghcr.io/aasaam/analytics-backend:latest
-          docker push ghcr.io/aasaam/analytics-web:latest
-          docker push ghcr.io/aasaam/analytics-backend:latest
+          docker tag analytics_analytic-web ghcr.io/artmarydotir/analytic-web:latest
+          docker tag analytics_analytic-backend ghcr.io/artmarydotir/analytic-backend
+          docker push ghcr.io/artmarydotir/analytic-web:latest
+          docker push ghcr.io/artmarydotir/analytic-backend
