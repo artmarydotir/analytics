@@ -37,6 +37,7 @@ describe(__filename.replace(__dirname, ''), () => {
       cascade: true,
       restartIdentity: true,
     });
+
     await User.destroy({
       where: {},
       truncate: true,

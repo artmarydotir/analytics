@@ -32,6 +32,28 @@ docker pull ghcr.io/artmarydotir/analytic-backend:latest
 docker-compose up -d
 ```
 
+### Databases Backup
+
+```
+-fc or -fp
+docker exec analytic-postgres pg_dump -U pg-user -Fp pg-db
+docker exec analytic-postgres pg_dump -U pg-user -Fp pg-db > /tmp/mary.sql
+
+
+```
+
+restore:
+
+```
+docker exec -it analytic-postgres psql -U pg-user -d template1 -c 'DROP DATABASE "pg-db" ;'
+docker exec -it analytic-postgres psql -U pg-user -d template1 -c 'CREATE DATABASE "pg-db" ;'
+
+if fc->
+cat /tmp/mary.sql | docker exec -i analytic-postgres pg_restore -U pg-user -d pg-db
+
+
+```
+
 <div>
   <p align="center">
     <img alt="aasaam software development group" width="64" src="https://raw.githubusercontent.com/aasaam/information/master/logo/aasaam.svg">
