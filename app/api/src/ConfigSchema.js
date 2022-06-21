@@ -48,6 +48,12 @@ const ConfigSchema = {
       minimum: 0,
     },
 
+    ASM_ZIP_PASSWORD: {
+      type: 'string',
+      description: 'Password for backup zip file.',
+      default: 'coffee_and_cream',
+    },
+
     ASM_DEFAULT_ADMIN_USERNAME: {
       type: 'string',
       description: 'Default administrator username',
