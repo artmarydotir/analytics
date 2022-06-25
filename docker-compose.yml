@@ -9,6 +9,8 @@ services:
       - analytic-rest-captcha
       - analytic-postgres
     container_name: analytic-backend
+    mounts:
+      - ./clickhouse-cert:/app/api/clickhouse-cert:ro
 
     environment:
       ASM_PUBLIC_APP_TEST: "false"
