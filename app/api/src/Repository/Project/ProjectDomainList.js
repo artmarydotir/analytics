@@ -67,14 +67,21 @@ class ProjectDomainList {
     });
 
     const result = {};
-    allProject.forEach((r) => {
-      if (!result[r.Project.dataValues.publicToken]) {
-        result[r.Project.dataValues.publicToken] = [];
+    allProject.forEach((project) => {
+      const { publicToken } = project.dataValues.Project;
+      const { domain, wildcardDomain } = project.dataValues;
+      if (!result[`${publicToken}`]) {
+        result[`${publicToken}`] = {
+          p: publicToken,
+          d: [],
+          w: [],
+        };
       }
-      if (r.domain) {
-        result[r.Project.dataValues.publicToken].push(r.domain);
-      } else if (r.wildcardDomain) {
-        result[r.Project.dataValues.publicToken].push(r.wildcardDomain);
+      if (domain) {
+        result[`${publicToken}`].d.push(domain);
+      }
+      if (wildcardDomain) {
+        result[`${publicToken}`].w.push(wildcardDomain);
       }
     });
 

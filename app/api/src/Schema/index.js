@@ -7,7 +7,7 @@ const { schema: UserRoles } = require('./UserRoles');
 const { schema: UserOption } = require('./UserOption');
 const { schema: ProjectOption } = require('./ProjectOption');
 const { schema: DomainOption } = require('./DomainOption');
-const { schema: ProjectDomainList } = require('./ProjectDomainList');
+// const { schema: ProjectDomainList } = require('./ProjectDomainList');
 const { schema: UserAuthType } = require('./UserAuthType');
 const { schema: UserSignIn } = require('./UserSignIn');
 const { schema: Captcha } = require('./Captcha');
@@ -32,7 +32,7 @@ module.exports = [
   UserOption,
   ProjectOption,
   DomainOption,
-  ProjectDomainList,
+  // ProjectDomainList,
   UserAuthType,
   UserSignIn,
   Captcha,
