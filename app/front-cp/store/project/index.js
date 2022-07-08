@@ -345,4 +345,42 @@ export const actions = {
       throw new Error('error');
     }
   },
+  // *****************get script*******************
+  async getScript({ commit }, id) {
+    try {
+      const { data } = await this.$axios.post(
+        `${window.applicationBaseURL}api/graphql/graphql`,
+        {
+          query: `query ($id: String!) {
+            ClientScript(
+              data: {
+                id: $id
+              }
+            )
+          }`,
+          variables: {
+            id,
+          },
+        },
+      );
+
+      const result = data.data.ClientScript;
+
+      if (result) {
+        return `<script>${result}</script>`;
+      }
+    } catch (error) {
+      const { data } = error.response;
+      commit(
+        'SET_NOTIFICATION',
+        {
+          show: true,
+          color: 'red',
+          message: data.errors,
+        },
+        { root: true },
+      );
+      throw error;
+    }
+  },
 };

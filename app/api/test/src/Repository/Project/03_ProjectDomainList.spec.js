@@ -107,6 +107,19 @@ describe(__filename.replace(__dirname, ''), () => {
       ],
     });
 
+    const newpr = await createProject.addProject({
+      title: 'my neww prrr',
+      primaryOwner: enableUser.id,
+      description: 'hello',
+      options: [1],
+      userAndRules: [
+        {
+          UserId: enableUser.dataValues.id,
+          rules: ['VIEWALL'],
+        },
+      ],
+    });
+
     await createDomain.addDomain({
       domain: 'enabledomain.com',
       wildcardDomain: '',
@@ -116,8 +129,19 @@ describe(__filename.replace(__dirname, ''), () => {
     });
 
     await createDomain.addDomain({
+      wildcardDomain: 'wtf.com',
+      options: [1],
+      projectId: newpr.id,
+    });
+
+    await createDomain.addDomain({
+      wildcardDomain: 'newwithsameproject.com',
+      options: [1],
+      projectId: newpr.id,
+    });
+
+    await createDomain.addDomain({
       domain: 'disabledomain.com',
-      wildcardDomain: '',
       description: 'disable domain there for list',
       options: [2],
       projectId: enableProject.id,
@@ -125,7 +149,6 @@ describe(__filename.replace(__dirname, ''), () => {
 
     await createDomain.addDomain({
       domain: 'domainwithdisableproject.com',
-      wildcardDomain: '',
       description: 'there for list',
       options: [1],
       projectId: disableProject.id,
@@ -142,6 +165,6 @@ describe(__filename.replace(__dirname, ''), () => {
     expect(await projectList.getProjectDomainList()).toBeTruthy();
     const c = await projectList.getProjectDomainList();
 
-    expect(Object.keys(c).length).toBe(1);
+    expect(Object.keys(c).length).toBe(2);
   });
 });

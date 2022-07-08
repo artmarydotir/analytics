@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const fs = require('fs');
 const { createContainer, asValue, asClass, Lifetime } = require('awilix');
 
 // logger
@@ -12,6 +13,14 @@ const graphqlResolvers = require('./GraphQL/resolvers');
 const Redis = require('./Connections/Redis');
 const ClickHouse = require('./Connections/ClickHouse');
 const EntityManager = require('./Connections/EntityManager');
+
+const ClickRootCa = fs.readFileSync('/app/api/clickhouse-cert/ca.pem');
+const ClickClientFullChain = fs.readFileSync(
+  '/app/api/clickhouse-cert/client-fullchain.pem',
+);
+const ClickClientKey = fs.readFileSync(
+  '/app/api/clickhouse-cert/client-key.pem',
+);
 
 /**
  * @param {import('./Config').Config} Config
@@ -29,6 +38,11 @@ const initContainer = async (Config) => {
 
     // logger
     Logger: asValue(LoggerInstance),
+
+    // ClickhouseCa
+    ClickRootCa: asValue(ClickRootCa),
+    ClickClientFullChain: asValue(ClickClientFullChain),
+    ClickClientKey: asValue(ClickClientKey),
   });
 
   // Redis

@@ -19,7 +19,11 @@
           {{ $t(generalAction.linkTitle) }}
         </v-btn>
       </v-card-title>
-
+      <CodeViewDialog
+        :dialog.sync="scriptDialog"
+        :title="$t('scriptData')"
+        :info="scriptData"
+      />
       <v-data-table
         single-select
         item-key="id"
@@ -128,6 +132,15 @@
           >
             mdi-delete
           </v-icon>
+
+          <v-icon
+            tag="button"
+            class="mr-1 ml-1"
+            color="green"
+            @click="generateScript(item.publicToken)"
+          >
+            mdi-code-tags
+          </v-icon>
         </template>
 
         <template v-slot:no-results>
@@ -192,6 +205,8 @@ export default {
       loading: false,
       filter: {},
       dialog: false,
+      scriptDialog: false,
+      scriptData: '',
       isDisabledMore: false,
     };
   },
@@ -280,6 +295,17 @@ export default {
       }
       if (err) {
         this.dialog = false;
+      }
+    },
+
+    async generateScript(id) {
+      const [, data] = await to(this.$store.dispatch('project/getScript', id));
+
+      if (data) {
+        this.scriptDialog = true;
+        this.scriptData = data;
+      } else {
+        // this.errorCallback();
       }
     },
   },

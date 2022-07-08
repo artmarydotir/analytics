@@ -96,24 +96,15 @@ describe(__filename.replace(__dirname, ''), () => {
 
     container.resolve('ProjectListREST');
 
-    const url = fastify.openAPIBaseURL('/collector/project-list');
-
-    const result1 = await fastify.inject({
-      url,
-      method: 'GET',
-    });
-
-    expect(result1.statusCode).toEqual(403);
+    const url = fastify.openAPIBaseURL(
+      `/collector/project-list?t=${encodeURIComponent(
+        container.resolve('Config').ASM_COLLECTOR_API_KEY,
+      )}`,
+    );
 
     const result2 = await fastify.inject({
       url,
       method: 'GET',
-      headers: {
-        'x-collector-api-key': `${
-          container.resolve('Config').ASM_COLLECTOR_API_KEY
-        }`,
-      },
-      payload: {},
     });
 
     expect(result2.statusCode).toEqual(200);

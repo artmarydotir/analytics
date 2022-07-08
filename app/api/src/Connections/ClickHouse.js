@@ -1,7 +1,7 @@
 const { ClickHouse } = require('clickhouse');
 
 class ClickH {
-  constructor({ Config }) {
+  constructor({ Config, ClickRootCa, ClickClientFullChain, ClickClientKey }) {
     this.selected =
       Config.ASM_CLICKHOUSE_SERVERS[
         Math.floor(Math.random() * Config.ASM_CLICKHOUSE_SERVERS.length)
@@ -12,6 +12,10 @@ class ClickH {
      * @private
      */
     this.connection = null;
+
+    this.ClickRootCa = ClickRootCa;
+    this.ClickClientFullChain = ClickClientFullChain;
+    this.ClickClientKey = ClickClientKey;
   }
 
   async checkConnection() {
@@ -45,6 +49,16 @@ class ClickH {
         config: {
           session_timeout: 1,
           database: uri.pathname.replace(/\//, ''),
+        },
+        // add ca certificate files to the connection
+        reqParams: {
+          agentOptions: {
+            key: this.ClickClientKey,
+            ca: [this.ClickRootCa],
+            cert: this.ClickClientFullChain,
+            maxVersion: 'TLSv1.3',
+            minVersion: 'TLSv1.2',
+          },
         },
         debug: uri.searchParams.has('debug'),
         format: 'json',

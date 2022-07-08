@@ -15,21 +15,27 @@ class ProjectListREST {
         description: 'Get all projects domain list',
         operationId: 'ListProject',
         tags: ['Collector'],
-        response: {
-          200: {
-            $ref: 'ProjectDomainList#',
+        querystring: {
+          type: 'object',
+          properties: {
+            t: {
+              type: 'string',
+            },
           },
+          required: ['t'],
+        },
+        response: {
           404: e404.getSchema(),
         },
       },
+
       preHandler: async (req, reply) => {
-        if (
-          req.headers['x-collector-api-key'] &&
-          req.headers['x-collector-api-key'] === Config.ASM_COLLECTOR_API_KEY
-        ) {
-          return true;
+        // @ts-ignore
+        if (req.query.t !== Config.ASM_COLLECTOR_API_KEY) {
+          return e403.reply(reply);
         }
-        return e403.reply(reply);
+
+        return true;
       },
       handler: async (req, reply) => {
         const result = await ProjectDomainListRepository.getProjectDomainList();

@@ -30,6 +30,9 @@ module.exports = {
   newPassword: 'رمزعبور جدید',
   repeatPassword: 'تکرار رمزعبور',
   changePassword: 'تغییر رمزعبور',
+  configTextShow: 'کد زیر را کپی کرده و در بالای صفحه استفاده کنید.',
+  copyText: 'کپی',
+  scriptData: 'اسکریپت آنالیتیک',
 
   // ## MENU
   dashboard: 'داشبورد',
@@ -76,7 +79,6 @@ module.exports = {
   areYouSureDelete: 'آیا از حذف این آیتم اطمینان دارید؟',
   deleteProject: 'حذف پروژه',
   nope: 'خیر',
-
   publicToken: 'کد عمومی',
   primaryOwner: 'صاحب اصلی پروژه',
   selectUserSearch: 'کاربر مورد نظر را جستجو کنید',

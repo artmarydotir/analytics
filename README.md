@@ -24,6 +24,7 @@
 export ASM_AUTH_HMAC_SECRET=`openssl rand -hex 32`
 echo ASM_AUTH_HMAC_SECRET=$ASM_AUTH_HMAC_SECRET > .env
 
+
 ```
 
 ```
@@ -32,10 +33,20 @@ docker pull ghcr.io/artmarydotir/analytic-backend:latest
 docker-compose up -d
 ```
 
+### for tls connection to clickhouse-server:
+
+put cert files in clickhouse-cert
+
+- ca.pem
+- client-fullchain.pem
+- client-key.pem
+
 ### Databases Backup
 
+backup:
+
 ```
--fc or -fp
+-fc or -fp // fc is custom file name
 docker exec analytic-postgres pg_dump -U pg-user -Fp pg-db
 docker exec analytic-postgres pg_dump -U pg-user -Fp pg-db > /tmp/mary.sql
 
@@ -48,7 +59,7 @@ restore:
 docker exec -it analytic-postgres psql -U pg-user -d template1 -c 'DROP DATABASE "pg-db" ;'
 docker exec -it analytic-postgres psql -U pg-user -d template1 -c 'CREATE DATABASE "pg-db" ;'
 
-if fc->
+if use fc switch in backup use pg_restore ->
 cat /tmp/mary.sql | docker exec -i analytic-postgres pg_restore -U pg-user -d pg-db
 
 

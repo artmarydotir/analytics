@@ -144,6 +144,10 @@ type OutputClientUserList {
 
 # ********** PROJECT *************
 
+input InputScript {
+  id: String!
+}
+
 input InputProjectCreate {
   title: String!
   description: String
@@ -389,6 +393,7 @@ type Query {
   ClientProjectList(args: InputGlobalList): OutputProjectOwnerList
   ProjectSimpleList(args: InputGlobalList): OutputSimpleProjectList
   ProjectShowPrivateToken(data: InputProjectShowPPToken): JSONObject
+  ClientScript(data: InputScript): String
 
   DomainList(args: InputDomainList): OutputDomainList
   DomainProfile(data: InputGlobalID): OutputDomainProfile
