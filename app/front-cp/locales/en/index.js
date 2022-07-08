@@ -27,7 +27,9 @@ module.exports = {
   last28days: 'Last 28 days',
   last90days: 'Last 90 days',
   audienceOverview: 'Audience Overview',
-
+  configTextShow: 'Copy this code and paste it into the header of your site.',
+  copyText: 'Copy',
+  scriptData: 'Analytic Script Code',
   // ## Login
   email: 'Email',
   password: 'Password',

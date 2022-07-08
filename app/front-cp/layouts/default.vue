@@ -22,7 +22,7 @@ export default {
     };
   },
   head() {
-    const i18nSeo = this.$nuxtI18nSeo();
+    const i18nSeo = this.$nuxtI18nHead({ addSeoAttributes: true });
     return {
       htmlAttrs: {
         dir: rtlLanguages.includes(this.$i18n.locale) ? 'rtl' : 'ltr',

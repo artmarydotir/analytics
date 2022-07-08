@@ -32,6 +32,10 @@ const ConfigSchema = {
     // 'ASM_CAPTCHA_URI',
   ],
   properties: {
+    ASM_COLLECTOR_SERVER_HOST: {
+      type: 'string',
+      default: 'localhost',
+    },
     ASM_CLICKHOUSE_SERVERS: {
       type: 'string',
       // @ts-ignore
